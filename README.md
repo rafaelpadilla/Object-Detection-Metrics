@@ -191,7 +191,7 @@ The Average Precision (AP) is the AUC obtained by the interpolated precision. Th
 <img src="https://github.com/rafaelpadilla/Object-Detection-Metrics/blob/master/aux_images/interpolated_precision-AUC.png" align="center"/>
 </p>
 
-Calculating the total area, we have the AV:  
+Calculating the total area, we have the AP:  
 
 ![](http://latex.codecogs.com/gif.latex?AP%20%3D%20A1%20&plus;%20A2%20&plus;%20A3)  
 ![](http://latex.codecogs.com/gif.latex?AP%20%3D%200.1333*0.6666%20&plus;%20%5Cleft%20%28%200.4-0.1333%20%5Cright%20%29*0.4285%20&plus;%20%5Cleft%20%28%200.4666-0.4%20%5Cright%20%29*0.3043)  
