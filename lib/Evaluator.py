@@ -96,7 +96,7 @@ class Evaluator:
             ret.append(r)
         return ret
     
-    def PlotPrecisionRecallCurve(self, classId, dictGroundTruth, dictDetected, IOUThreshold=0.5, showAP=False, showInterpolatedPrecision=False, savePath=None):
+    def PlotPrecisionRecallCurve(self, classId, dictGroundTruth, dictDetected, IOUThreshold=0.5, showAP=False, showInterpolatedPrecision=False, savePath=None, showGraphic=True):
         results = self.GetPascalVOCMetrics(dictGroundTruth, dictDetected, IOUThreshold)
 
         result = None
@@ -128,8 +128,9 @@ class Evaluator:
         plt.legend(shadow=True)
         plt.grid()
         if savePath != None:
-            plt.savefig(savePath)            
-        plt.show()
+            plt.savefig(savePath)
+        if showGraphic == True:
+            plt.show()
         
         ret ={}
         ret['class'] = classId
