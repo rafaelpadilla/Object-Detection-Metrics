@@ -55,17 +55,26 @@ def convertToRelativeValues(size, box):
 # size => (width, height) of the image
 # box => (centerX, centerY, w, h) of the bounding box relative to the image
 def convertToAbsoluteValues(size, box):
-    # w_box = round(size[0] * box[2])
-    # h_box = round(size[1] * box[3])
+    w_box = round(size[0] * box[2])
+    h_box = round(size[1] * box[3])
     
     xIn = round(((2*float(box[0]) - float(box[2]))*size[0]/2))
     yIn = round(((2*float(box[1]) - float(box[3]))*size[1]/2))
 
     xEnd = xIn + round(float(box[2])*size[0])
     yEnd = yIn + round(float(box[3])*size[1])
+
+    if xIn < 0:
+        xIn = 0
+    if yIn < 0:
+        yIn = 0
+    if xEnd >= size[0]:
+        xEnd = size[0]-1
+    if yEnd >= size[1]:
+        yEnd = size[1]-1
     return (xIn,yIn,xEnd,yEnd)
 
-def add_bb_into_image(image, detection, color=(255,0,0), thickness=2, label=None):
+def add_bb_into_image(image, bb, color=(255,0,0), thickness=2, label=None):
     r = int(color[0])
     g = int(color[1])
     b = int(color[2])
@@ -74,7 +83,7 @@ def add_bb_into_image(image, detection, color=(255,0,0), thickness=2, label=None
     fontScale = 0.5
     fontThickness = 1
 
-    x1,y1,x2,y2 = detection.getAbsoluteBoundingBox(BBFormat.XYX2Y2)
+    x1,y1,x2,y2 = bb.getAbsoluteBoundingBox(BBFormat.XYX2Y2)
     x1 = int(x1)
     y1 = int(y1)
     x2 = int(x2)

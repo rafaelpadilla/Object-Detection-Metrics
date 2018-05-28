@@ -76,10 +76,10 @@ class Evaluator:
                 else:
                     FP[d]=1 # count as false positive
             # compute precision, recall and average precision
-            FP=np.cumsum(FP)
-            TP=np.cumsum(TP)
-            rec=TP/npos
-            prec=np.divide(TP,(FP+TP))
+            acc_FP=np.cumsum(FP)
+            acc_TP=np.cumsum(TP)
+            rec=acc_TP/npos
+            prec=np.divide(acc_TP,(acc_FP+acc_TP))
             [ap, mpre, mrec, ii] = Evaluator.CalculateAveragePrecision(rec, prec)
             # add class result in the dictionary to be returned
             r = {
@@ -88,12 +88,15 @@ class Evaluator:
                 'recall': rec,
                 'AP': ap,
                 'interpolated precision': mpre,
-                'interpolated recall': mrec
+                'interpolated recall': mrec,
+                'total positives': npos,
+                'total TP': np.sum(TP),
+                'total FP': np.sum(FP)                
                 }
             ret.append(r)
         return ret
     
-    def PlotPrecisionRecallCurve(self, classId, dictGroundTruth, dictDetected, IOUThreshold=0.5, showAP=False, showInterpolatedPrecision=False):
+    def PlotPrecisionRecallCurve(self, classId, dictGroundTruth, dictDetected, IOUThreshold=0.5, showAP=False, showInterpolatedPrecision=False, savePath=None):
         results = self.GetPascalVOCMetrics(dictGroundTruth, dictDetected, IOUThreshold)
 
         result = None
@@ -109,6 +112,10 @@ class Evaluator:
         average_precision = result['AP']
         mpre = result['interpolated precision']
         mrec = result['interpolated recall']
+        npos = result['total positives']
+        total_tp = result['total TP']
+        total_fp = result['total FP']
+
         plt.plot(recall, precision, label='Precision')
         if showInterpolatedPrecision:
             plt.plot(mrec, mpre, '--r' , label='Interpolated precision')
@@ -120,6 +127,8 @@ class Evaluator:
             plt.title('Precision x Recall curve \nClass: %d' % classId)
         plt.legend(shadow=True)
         plt.grid()
+        if savePath != None:
+            plt.savefig(savePath)            
         plt.show()
         
         ret ={}
@@ -129,6 +138,9 @@ class Evaluator:
         ret['AP'] = average_precision
         ret['interpolated precision'] = mpre
         ret['interpolated recall'] = mrec
+        ret['total positives'] = npos
+        ret['total TP'] = total_tp
+        ret['total FP'] = total_fp
         return ret
 
     @staticmethod

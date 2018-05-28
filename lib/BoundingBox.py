@@ -27,25 +27,33 @@ class BoundingBox:
         self._classId = classId
         # If relative coordinates, convert to absolute values
         if (typeCoordinates == CoordinatesType.Relative):
-            (self._x,self._y,self._w,self._h) = convertToAbsoluteValues((x,y,w,h),imgSize)
+            (self._x,self._y,self._w,self._h) = convertToAbsoluteValues(imgSize, (x,y,w,h))
             self._width_img = imgSize[0]
             self._height_img =  imgSize[1]
+            if format==BBFormat.XYWH:
+                self._x2 = self._w
+                self._y2 = self._h
+                self._w = self._x2-self._x
+                self._h = self._y2-self._y
+            else:
+                # Needed to implement
+                raise IOError('To implement')
         else:
             self._x = x
             self._y = y
-        if format==BBFormat.XYWH:
-            self._w = w
-            self._h = h
-            self._x2 = self._x+self._w
-            self._y2 = self._y+self._h
-        else:
-            self._x2 = w
-            self._y2 = h
-            self._w = self._x2-self._x
-            self._h = self._y2+self._y
-
-        self._width_img = None
-        self._height_img =  None
+            if format==BBFormat.XYWH:
+                self._w = w
+                self._h = h
+                self._x2 = self._x+self._w
+                self._y2 = self._y+self._h
+            else:
+                self._x2 = w
+                self._y2 = h
+                self._w = self._x2-self._x
+                self._h = self._y2+self._y
+        if imgSize == None:
+            self._width_img = None
+            self._height_img =  None
 
     def getAbsoluteBoundingBox(self, format=BBFormat.XYWH):
         if format == BBFormat.XYWH:
