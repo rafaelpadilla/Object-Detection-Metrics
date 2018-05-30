@@ -202,6 +202,61 @@ If you want to reproduce these results, see the **Sample 1**.
 
 <!--In order to evaluate your detections, you just need a simple list of `Detection` objects. A `Detection` object is a very simple class containing the class id, class probability and bounding boxes coordinates of the detected objects. This same structure is used for the groundtruth detections.-->
 
+## How to use this project
+
+This project is very easy to use. If you want obtain metrics for your object detection algorithm, you are in the right place.  
+
+First, you need to import the `Evaluator` package and create the object `Evaluator()`:
+
+```python
+from Evaluator import *
+
+# Create an evaluator object in order to obtain the metrics
+evaluator = Evaluator()
+```
+Don't forget to put the content of the folder `\lib` in the same folder of your code. You could also put it in a different folder and add it in your project as done by the `_init_paths.py` file in the sample code.
+
+With the ```evaluator``` object, you will have access to methods named `GetPascalVOCMetrics`, `PlotPrecisionRecallCurve`, etc.
+
+All of these methods needs information of your ground truth bounding boxes and detected bounding boxes. For that you need to use the class `BoundingBoxes`. The snippet below shows to create 6 ground truth bounding boxes belonging to 2 different images (img_0001 and img_0002) and their detections:
+
+```python
+# Creating the object of the class BoundingBoxes 
+allBoundingBoxes = BoundingBoxes()
+# Ground truth bounding boxes of img_0001.jpg
+gt_boundingBox_1 = BoundingBox(imageName='img_0001', idClass=0, 25, 16, 38, 56, bbType=BBType.GroundTruth, format=BBFormat.XYWH)
+gt_boundingBox_2 = BoundingBox(imageName='img_0001', idClass=0, 129, 123, 41, 62, bbType=BBType.GroundTruth, format=BBFormat.XYWH)
+gt_boundingBox_3 = BoundingBox(imageName='img_0001', idClass=1, 30, 48, 40, 38, bbType=BBType.GroundTruth, format=BBFormat.XYWH)
+gt_boundingBox_4 = BoundingBox(imageName='img_0001', idClass=1, 15, 10, 56, 70, bbType=BBType.GroundTruth, format=BBFormat.XYWH)
+# Ground truth bounding boxes of img_0002.jpg
+gt_boundingBox_5 = BoundingBox(imageName='img_0002', idClass=0, 25, 16, 38, 56, bbType=BBType.GroundTruth, format=BBFormat.XYWH)
+gt_boundingBox_8 = BoundingBox(imageName='img_0002', idClass=1, 15, 10, 56, 70, bbType=BBType.GroundTruth, format=BBFormat.XYWH)
+# Detected bounding boxes of img_0001.jpg
+detected_boundingBox_1 = BoundingBox(imageName='img_0001', idClass=0, 90, 78, 101, 58, bbType=BBType.Detected, format=BBFormat.XYWH)
+detected_boundingBox_2 = BoundingBox(imageName='img_0001', idClass=1, 85, 17, 49, 60, bbType=BBType.Detected, format=BBFormat.XYWH)
+# Detected bounding boxes of img_0002.jpg
+detected_boundingBox_3 = BoundingBox(imageName='img_0002', idClass=1, 27, 18, 45, 60, bbType=BBType.Detected, format=BBFormat.XYWH)
+
+# Add all bounding boxes to the BoundingBoxes object:
+allBoundingBoxes.add(gt_boundingBox_1)
+allBoundingBoxes.add(gt_boundingBox_2)
+allBoundingBoxes.add(gt_boundingBox_3)
+allBoundingBoxes.add(gt_boundingBox_4)
+allBoundingBoxes.add(gt_boundingBox_5)
+allBoundingBoxes.add(gt_boundingBox_6)
+allBoundingBoxes.add(detected_boundingBox_1)
+allBoundingBoxes.add(detected_boundingBox_2)
+allBoundingBoxes.add(detected_boundingBox_3)
+```
+
+Be aware of some points:  
+
+* Create your bounding boxes using the constructor of the `BoundingBox` class. The 3rd and 4th parameters are the most top-left x and y coordinates  of the bounding box. The 5th and 6th parameters can be either the most bottom-right x and y coordinates of the bounding box or the with and height of the bounding box. If for your bounding box you want to identify it as x1,y1,x2,y2 coordinates, you need to pass `format=BBFormat.XYX2Y2`. If you want to identify it as x,y,width,height, you need to pass `format=BBFormat.XYWH`.
+* Use the tag `bbType=BBType.GroundTruth` to identify your bounding box as being ground truth. If it is a detection, use `bbType=BBType.Detected`.
+* Be consistent with the `imageName` parameter. Bounding boxes with `imageName='img_0001'` and `imageName='img0001'` belong to two different images. 
+* The code is all commented. [Here](https://github.com/rafaelpadilla/Object-Detection-Metrics/blob/master/lib/BoundingBox.py#L4) you can see all parameters needed by the constructor of the `BoundingBox` class.
+
+**Of course you won't build your bounding boxes one by one as done in this example.** You should read your detections within a loop and create your bounding boxes inside of it. The [sample_1.py](https://github.com/rafaelpadilla/Object-Detection-Metrics/blob/master/samples/sample_1.py) reads our detections from 2 different folders, one containing 
 
 ## References
 
