@@ -9,21 +9,21 @@ In the topics below you can find an overview of the most popular metrics and com
 
 ## Different competitions, different metrics  
 
-* **[PASCAL VOC challenge](http://host.robots.ox.ac.uk/pascal/VOC/)** offers a Matlab script in order to evaluate the quality of detected objects. A documentation explaining their criteria for object detection metrics can be accessed [here](http://host.robots.ox.ac.uk/pascal/VOC/voc2012/htmldoc/devkit_doc.html#SECTION00050000000000000000). Participants of the competition can use the Matlab script to measure the accuracy of their detections before submitting their results. The current metrics used by the current VOC PASCAL object detection challenge are the **Precision/Recall curve** and **Average Precision**.  
+* **[PASCAL VOC challenge](http://host.robots.ox.ac.uk/pascal/VOC/)** offers a Matlab script in order to evaluate the quality of the detected objects. Participants of the competition can use the provided Matlab script to measure the accuracy of their detections before submitting their results. A documentation explaining their criteria for object detection metrics can be accessed [here](http://host.robots.ox.ac.uk/pascal/VOC/voc2012/htmldoc/devkit_doc.html#SECTION00050000000000000000) The current metrics used by the current VOC PASCAL object detection challenge are the **Precision/Recall curve** and **Average Precision**.  
 The PASCAL VOC Matlab evaluation code reads the ground truth bounding boxes from XML files, requiring changes in the code if you want to apply it to other datasets or to your speficic cases. Even though projects such as [Faster-RCNN](https://github.com/rbgirshick/py-faster-rcnn) implement VOC PASCAL evaluation metrics, it is also necessary to convert the detected bounding boxes into their specific format. [Tensorflow](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/evaluation_protocols.md) framework also has their PASCAL VOC metrics implementation.  
 
-* **[COCO challenge](https://competitions.codalab.org/competitions/5181)** uses different metrics to evaluate the accuracy of object detection of different algorithms. [Here](http://cocodataset.org/#detection-eval) you can find a documentation explaining the 12 metrics used for characterizing the performance of an object detector on COCO. This competition offers python and matlab codes so users can verify their scores before submitting the results. It is also necessary to convert the results in a [format](http://cocodataset.org/#format-results) required by the competition.  
+* **[COCO challenge](https://competitions.codalab.org/competitions/5181)** uses different metrics to evaluate the accuracy of object detection of different algorithms. [Here](http://cocodataset.org/#detection-eval) you can find a documentation explaining the 12 metrics used for characterizing the performance of an object detector on COCO. This competition offers Python and Matlab codes so users can verify their scores before submitting the results. It is also necessary to convert the results to a [format](http://cocodataset.org/#format-results) required by the competition.  
 
 * **[Google Open Images Dataset V4 competition](https://storage.googleapis.com/openimages/web/challenge.html)** also uses mean Average Precision (mAP) over the 500 classes to evaluate the object detection task. 
 
-* **[ImageNet Object Localization Challenge](https://www.kaggle.com/c/imagenet-object-detection-challenge)** defines an error for each image, considering the class and the overlapping region between ground truth and detected boxes. The total error is computed as the average of all min errors of all the images in the test dataset. [Here](https://www.kaggle.com/c/imagenet-object-localization-challenge#evaluation) are more details about their evaluation method.  
+* **[ImageNet Object Localization Challenge](https://www.kaggle.com/c/imagenet-object-detection-challenge)** defines an error for each image considering the class and the overlapping region between ground truth and detected boxes. The total error is computed as the average of all min errors among all test dataset images. [Here](https://www.kaggle.com/c/imagenet-object-localization-challenge#evaluation) are more details about their evaluation method.  
 
 ## Important definitions  
 
 ### Intersection Over Union (IOU)
 
-Intersection Over Union (IOU) is measure based on Jaccard Index that evaluates the overlap between two bounding boxes. It requires a ground truth bounding box ![](http://latex.codecogs.com/gif.latex?B_%7Bgt%7D) and a predicted bounding box ![](http://latex.codecogs.com/gif.latex?B_p). With it we can tell if a detection is valid (True Positive) or not (False Positive).  
-IOU is given by the overlapping area between the predicted bounding box and the ground truth bounding box divided by the area of union between the bounding boxes:  
+Intersection Over Union (IOU) is measure based on Jaccard Index that evaluates the overlap between two bounding boxes. It requires a ground truth bounding box ![](http://latex.codecogs.com/gif.latex?B_%7Bgt%7D) and a predicted bounding box ![](http://latex.codecogs.com/gif.latex?B_p). By applying the IOU we can tell if a detection is valid (True Positive) or not (False Positive).  
+IOU is given by the overlapping area between the predicted bounding box and the ground truth bounding box divided by the area of union between them:  
 
 <p align="center"> 
 <img src="http://latex.codecogs.com/gif.latex?%5Ctext%7BIOU%7D%20%3D%20%5Cfrac%7B%5Ctext%7Barea%7D%20%5Cleft%28B_p%20%5Ccap%20B_%7Bgt%7D%5Cright%29%7D%7B%5Ctext%7Barea%7D%20%5Cleft%28B_p%20%5Ccup%20B_%7Bgt%7D%5Cright%29%7D">
@@ -48,7 +48,7 @@ _threshold_: depending on the metric, it is usually set as 50%, 75% or 95%.
 
 ### Precision
 
-Precision is ability of a model to identify **only** the relevant objects. It is the percentage of positive predictions that are correct and is given by:
+Precision is the ability of a model to identify **only** the relevant objects. It is the percentage of positive predictions that are correct and is given by:
 
 <p align="center"> 
 <img src="http://latex.codecogs.com/gif.latex?Precision%20%3D%20%5Cfrac%7BTP%7D%7BTP&plus;FP%7D%3D%5Cfrac%7BTP%7D%7B%5Ctext%7Ball%20detections%7D%7D">
@@ -56,7 +56,7 @@ Precision is ability of a model to identify **only** the relevant objects. It is
 
 ### Recall 
 
-Recall is ability of a model to find all the relevant cases (all ground truth bounding boxes). It is the percentage of true positive detected among all relevant ground truths and is given by:
+Recall is the ability of a model to find all the relevant cases (all ground truth bounding boxes). It is the percentage of true positive detected among all relevant ground truths and is given by:
 
 <p align="center"> 
 <img src="http://latex.codecogs.com/gif.latex?Recall%20%3D%20%5Cfrac%7BTP%7D%7BTP&plus;FN%7D%3D%5Cfrac%7BFN%7D%7B%5Ctext%7Ball%20ground%20truths%7D%7D">
@@ -64,9 +64,9 @@ Recall is ability of a model to find all the relevant cases (all ground truth bo
 
 ## Metrics
 
-### Precision x Recall curves
+### Precision x Recall curve
 
-The Precision x Recall curve is a good way to evaluate the performance of an object detector as the confidence is changed. There is a curve for each object class. An object detector of a particular class is considered good if its prediction stays high as recall increases, which means that if you vary the confidence threshold the precision and recall will still be high. Another way to identify a good object detector is to look for a detector that can identify only relevant objects (0 False Positives = high precision), finding all ground truth objects (0 False Negatives = high recall). A poor object detector needs to increase the number of detected objects (increasing False Positives = lower precision) in order to retrieve all ground truth objects (high recall). That's why the Precision x Recall curve usually starts with high precision values, decreasing as recall increases.
+The Precision x Recall curve is a good way to evaluate the performance of an object detector as the confidence is changed. There is a curve for each object class. An object detector of a particular class is considered good if its prediction stays high as recall increases, which means that if you vary the confidence threshold, the precision and recall will still be high. Another way to identify a good object detector is to look for a detector that can identify only relevant objects (0 False Positives = high precision), finding all ground truth objects (0 False Negatives = high recall). A poor object detector needs to increase the number of detected objects (increasing False Positives = lower precision) in order to retrieve all ground truth objects (high recall). That's why the Precision x Recall curve usually starts with high precision values, decreasing as recall increases.
 This kind of curve is used by the VOC PASCAL 2012 challenge and is available in our implementation.  
 
 ### Average Precision
@@ -97,7 +97,7 @@ An example helps us understand better the concept of the interpolated average pr
 <p align="center">
 <img src="https://github.com/rafaelpadilla/Object-Detection-Metrics/blob/master/aux_images/samples_1.png" align="center"/></p>
   
-There is a total of 7 images with 15 ground truth objects representented by the green bounding boxes and 24 detected objects represented by the red bounding boxes. Each detected object has a confidence level and is identified by a letter (A,B,...,Y).  
+There are 7 images with 15 ground truth objects representented by the green bounding boxes and 24 detected objects represented by the red bounding boxes. Each detected object has a confidence level and is identified by a letter (A,B,...,Y).  
 The following table shows the bounding boxes with their corresponding confidences. The last column identifies the detections as TP or FP. In this example a TP is considered if IOU ![](http://latex.codecogs.com/gif.latex?%5Cgeq) 30%, otherwise it is a FP. By looking at the images above we can roughly tell if the detections are TP or FP.
 
 <!--- Table 1 --->
@@ -133,7 +133,7 @@ The following table shows the bounding boxes with their corresponding confidence
 | Image 7 |	Y	| 95% | FP |
 --->
 
-In some images there are more than one detection overlapping a ground truth. In those cases the detection with the highest IOU is taken, discarding the other detections. This rule is also applied by the VOC PASCAL 2012 metric: "e.g. 5 detections of a single object is counted as 1 correct detection and 4 false detections”.
+In some images there are more than one detection overlapping a ground truth. For those cases the detection with the highest IOU is taken, discarding the other detections. This rule is applied by the VOC PASCAL 2012 metric: "e.g. 5 detections of a single object is counted as 1 correct detection and 4 false detections”.
 
 The Precision x Recall curve is plotted by calculating the precision and recall values of the accumulated TP or FP detections. For this, first we need to order the detections by their confidences, then we calculate the precision and recall for each accumulated detection as shown in the table below: 
 
@@ -184,7 +184,7 @@ As seen before, the idea of the interpolated average precision is to average the
 <img src="https://github.com/rafaelpadilla/Object-Detection-Metrics/blob/master/aux_images/interpolated_precision.png" align="center"/>
 </p>
 
-The Average Precision (AP) is the AUC obtained by the interpolated precision. The intention is to reduce the impact of the wiggles in the Precision x Recall curve. We split the AUC into 3 areas (A1, A2 and A3) as shown below:
+The Average Precision (AP) is the AUC obtained by the interpolated precision. The intention is to reduce the impact of the wiggles in the Precision x Recall curve. We divide the AUC into 3 areas (A1, A2 and A3) as shown below:
   
 <!--- interpolated precision AUC --->
 <p align="center">
@@ -198,13 +198,13 @@ Calculating the total area, we have the AP:
 ![](http://latex.codecogs.com/gif.latex?%5Cboldsymbol%7BAP%20%3D%200.2234%7D)
 
 
-If you want to reproduce these results, see the **Sample 1**.
+If you want to reproduce these results, see the **[Sample 1 source code](https://github.com/rafaelpadilla/Object-Detection-Metrics/blob/master/samples/sample_1.py)**.
 
 <!--In order to evaluate your detections, you just need a simple list of `Detection` objects. A `Detection` object is a very simple class containing the class id, class probability and bounding boxes coordinates of the detected objects. This same structure is used for the groundtruth detections.-->
 
 ## How to use this project
 
-This project is very easy to use. If you want obtain metrics for your object detection algorithm, you are in the right place.  
+This project is very easy to use. If you want to evaluate your algorithm with the most used object detection metrics, you are in the right place.  
 
 First, you need to import the `Evaluator` package and create the object `Evaluator()`:
 
@@ -216,13 +216,17 @@ evaluator = Evaluator()
 ```
 Don't forget to put the content of the folder `\lib` in the same folder of your code. You could also put it in a different folder and add it in your project as done by the `_init_paths.py` [file](https://github.com/rafaelpadilla/Object-Detection-Metrics/blob/master/samples/_init_paths.py) in the sample code.
 
-With the ```evaluator``` object, you will have access to methods that retrieve the metrics (`GetPascalVOCMetrics`, `PlotPrecisionRecallCurve`, etc).
+With the ```evaluator``` object, you will have access to methods that retrieve the metrics:
 
-All methods that retreive metrics need information of your bounding boxes (ground truth and detected). The class `BoundingBoxes` represents a set of all bounding boxes. Each bounding box is represented by the class `BoundingBox`. The snippet below shows the creation of the bounding boxes of two images (img_0001 and img_0002). In this example there are 6 ground truth bounding boxes (4 belonging to img_0001 and 2 belonging to img_0002), and 3 detections (2 belonging to img_0001 and 2 belonging to img_0002). Img_0001 ground truths contain bounding boxes of 3 classes (idClass=0, idClass=1 and idClass=2). Img_0002 ground truths contain bounding boxes of 2 classes (idClass=0 and idClass=1):
+| Method | Description | Parameters | Returns |
+|------|-----------|----------|-------|
+|  GetPascalVOCMetrics | Get the metrics used by the VOC Pascal 2012 challenge | `boundingboxes`: Object of the class `BoundingBoxes` representing ground truth and detected bounding boxes; `IOUThreshold`: IOU threshold indicating which detections will be considered TP or FP (default value = 0.5); | List of dictionaries. Each dictionary contains information and metrics of each class. The keys of each dictionary are:  `dict['class']`: class representing the current dictionary; `dict['precision']`: array with the precision values; `dict['recall']`: array with the recall values; `dict['AP']`: **average precision**; `dict['interpolated precision']`: interpolated precision values; `dict['interpolated recall']`: interpolated recall values; `dict['total positives']`: total number of ground truth positives; `dict['total TP']`: total number of True Positive detections; `dict['total FP']`: total number of False Negative detections; |
+PlotPrecisionRecallCurve |	Plot the Precision x Recall curve for a given class | `classId`: The class that will be plot; `boundingBoxes`: Object of the class `BoundingBoxes` representing ground truth and detected bounding boxes; `IOUThreshold`: IOU threshold indicating which detections will be considered TP or FP (default value = 0.5); `showAP`: if True, the average precision value will be shown in the title of the graph (default = False); `showInterpolatedPrecision`: if True, it will show in the plot the interpolated precision (default = False); `savePath`: if informed, the plot will be saved as an image in this path (ex: `/home/mywork/ap.png`) (default = None); `showGraphic`: if True, the plot will be shown (default = True) | The dictionary containing information and metric about the class. The keys of the dictionary are: `dict['class']`: class representing the current dictionary; `dict['precision']`: array with the precision values; `dict['recall']`: array with the recall values; `dict['AP']`: **average precision**; `dict['interpolated precision']`: interpolated precision values; `dict['interpolated recall']`: interpolated recall values; `dict['total positives']`: total number of ground truth positives; `dict['total TP']`: total number of True Positive detections; `dict['total FP']`: total number of False Negative detections |
+
+All methods that retreive metrics need you to inform the bounding boxes (ground truth and detected). Those bounding boxes are represented by an object of the class `BoundingBoxes` . Each bounding box is defined by the class `BoundingBox`. **The snippet below shows the creation of the bounding boxes** of two images (img_0001 and img_0002). In this example there are 6 ground truth bounding boxes (4 belonging to img_0001 and 2 belonging to img_0002) and 3 detections (2 belonging to img_0001 and 2 belonging to img_0002). Img_0001 ground truths contain bounding boxes of 3 classes (classes 0, 1 and 2). Img_0002 ground truths contain bounding boxes of 2 classes (classes 0 and 1):
 
 ```python
-# Creating the object of the class BoundingBoxes 
-allBoundingBoxes = BoundingBoxes()
+# Defining bounding boxes
 # Ground truth bounding boxes of img_0001.jpg
 gt_boundingBox_1 = BoundingBox(imageName='img_0001', idClass=0, 25, 16, 38, 56, bbType=BBType.GroundTruth, format=BBFormat.XYWH)
 gt_boundingBox_2 = BoundingBox(imageName='img_0001', idClass=0, 129, 123, 41, 62, bbType=BBType.GroundTruth, format=BBFormat.XYWH)
@@ -237,26 +241,28 @@ detected_boundingBox_2 = BoundingBox(imageName='img_0001', idClass=1, 85, 17, 49
 # Detected bounding boxes of img_0002.jpg
 detected_boundingBox_3 = BoundingBox(imageName='img_0002', idClass=1, 27, 18, 45, 60, bbType=BBType.Detected, format=BBFormat.XYWH)
 
+# Creating the object of the class BoundingBoxes 
+myBoundingBoxes = BoundingBoxes()
 # Add all bounding boxes to the BoundingBoxes object:
-allBoundingBoxes.add(gt_boundingBox_1)
-allBoundingBoxes.add(gt_boundingBox_2)
-allBoundingBoxes.add(gt_boundingBox_3)
-allBoundingBoxes.add(gt_boundingBox_4)
-allBoundingBoxes.add(gt_boundingBox_5)
-allBoundingBoxes.add(gt_boundingBox_6)
-allBoundingBoxes.add(detected_boundingBox_1)
-allBoundingBoxes.add(detected_boundingBox_2)
-allBoundingBoxes.add(detected_boundingBox_3)
+myBoundingBoxes.add(gt_boundingBox_1)
+myBoundingBoxes.add(gt_boundingBox_2)
+myBoundingBoxes.add(gt_boundingBox_3)
+myBoundingBoxes.add(gt_boundingBox_4)
+myBoundingBoxes.add(gt_boundingBox_5)
+myBoundingBoxes.add(gt_boundingBox_6)
+myBoundingBoxes.add(detected_boundingBox_1)
+myBoundingBoxes.add(detected_boundingBox_2)
+myBoundingBoxes.add(detected_boundingBox_3)
 ```
 
-Be aware of some points:  
+Some important points:  
 
-* Create your bounding boxes using the constructor of the `BoundingBox` class. The 3rd and 4th parameters represent the most top-left x and y coordinates  of the bounding box. The 5th and 6th parameters can be either the most bottom-right x and y coordinates of the bounding box or the with and height of the bounding box. If your bounding boxes are identified as x1, y1, x2, y2 coordinates, you need to pass `format=BBFormat.XYX2Y2`. If you want to identify it as x, y, width, height, you need to pass `format=BBFormat.XYWH`.
+* Create your bounding boxes using the constructor of the `BoundingBox` class. The 3rd and 4th parameters represent the most top-left x and y coordinates  of the bounding box. The 5th and 6th parameters can be either the most bottom-right x and y coordinates of the bounding box or the width and height of the bounding box. If your bounding box is identified as x1, y1, x2, y2 coordinates, you need to pass `format=BBFormat.XYX2Y2`. If you want to identify it as x, y, width, height, you need to pass `format=BBFormat.XYWH`.
 * Use the tag `bbType=BBType.GroundTruth` to identify your bounding box as being ground truth. If it is a detection, use `bbType=BBType.Detected`.
-* Be consistent with the `imageName` parameter. For example: bounding boxes with `imageName='img_0001'` and `imageName='img0001'` belong to two different images. 
+* Be consistent with the `imageName` parameter. For example: bounding boxes with `imageName='img_0001'` and `imageName='img0001'` are from two different images. 
 * The code is all commented. [Here](https://github.com/rafaelpadilla/Object-Detection-Metrics/blob/master/lib/BoundingBox.py#L4) you can see all parameters needed by the constructor of the `BoundingBox` class.
 
-**Of course you won't build your bounding boxes one by one as done in this example.** You should read your detections within a loop and create your bounding boxes inside of it. The [sample_1.py](https://github.com/rafaelpadilla/Object-Detection-Metrics/blob/master/samples/sample_1.py) reads detections from 2 different folders, one containing .txt files with ground truths and the other containing .txt files with detections. Take this [sample code](https://github.com/rafaelpadilla/Object-Detection-Metrics/blob/master/samples/sample_1.py) as a reference.
+**Of course you won't build your bounding boxes one by one as done in this example.** You should read your detections within a loop and create your bounding boxes inside of it. [sample_1.py](https://github.com/rafaelpadilla/Object-Detection-Metrics/blob/master/samples/sample_1.py) reads detections from 2 different folders, one containing .txt files with ground truths and the other containing .txt files with detections. Check this [sample code](https://github.com/rafaelpadilla/Object-Detection-Metrics/blob/master/samples/sample_1.py) as a reference.
 
 You 
 
