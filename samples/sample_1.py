@@ -26,11 +26,12 @@ def getBoundingBoxes():
     folderGT = os.path.join(currentPath,'groundtruths')
     os.chdir(folderGT)
     files = glob.glob("*.txt")
+    # files.sort()
     # Class representing bounding boxes (ground truths and detections)
     allBoundingBoxes = BoundingBoxes()
     # Read GT detections from txt file
     # Each line of the files in the groundtruths folder represents a ground truth bounding box (bounding boxes that a detector should detect)
-    # Each value of each line is  "class_id, x, y, x2, y2" respectively
+    # Each value of each line is  "class_id, x, y, width, height" respectively
     # Class_id represents the class of the bounding box
     # x, y represents the most top-left coordinates of the bounding box
     # x2, y2 represents the most bottom-right coordinates of the bounding box
@@ -54,9 +55,10 @@ def getBoundingBoxes():
     folderGT = os.path.join(currentPath,'detections')
     os.chdir(folderGT)
     files = glob.glob("*.txt")
+    # files.sort()
     # Read detections from txt file
     # Each line of the files in the detections folder represents a detected bounding box.
-    # Each value of each line is  "class_id, confidence, x, y, x2, y2" respectively
+    # Each value of each line is  "class_id, confidence, x, y, width, height" respectively
     # Class_id represents the class of the detected bounding box
     # Confidence represents the confidence (from 0 to 1) that this detection belongs to the class_id.
     # x, y represents the most top-left coordinates of the bounding box
@@ -127,6 +129,4 @@ for mc in metricsPerClass:
     recall = mc['recall']
     average_precision = mc['AP']
     ipre = mc['interpolated precision']
-    irec = mc['interpolated recall']    
-
-Aqui
+    irec = mc['interpolated recall']

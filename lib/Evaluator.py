@@ -8,33 +8,42 @@ import sys
 
 class Evaluator:
     
-    def GetPascalVOCMetrics(self, dictGroundTruth, dictDetected, IOUThreshold=0.5):
+    def GetPascalVOCMetrics(self, boundingboxes, IOUThreshold=0.5):
+        """Get the metrics used by the VOC Pascal 2012 challenge.
+        Get
+        Args:
+            boundingboxes: Object of the class BoundingBoxes representing ground truth and detected bounding boxes;
+            IOUThreshold: IOU threshold indicating which detections will be considered TP or FP (default value = 0.5).
+        Returns:
+            A list of dictionaries. Each dictionary contains information and metrics of each class. 
+            The keys of each dictionary are: 
+            dict['class']: class representing the current dictionary; 
+            dict['precision']: array with the precision values;
+            dict['recall']: array with the recall values;
+            dict['AP']: average precision;
+            dict['interpolated precision']: interpolated precision values;
+            dict['interpolated recall']: interpolated recall values;
+            dict['total positives']: total number of ground truth positives;
+            dict['total TP']: total number of True Positive detections;
+            dict['total FP']: total number of False Negative detections;
+        """
         ret = [] # list containing metrics (precision, recall, average precision) of each class
-        # dictionary with classId, precision array, recall array, average precision
         # List with all ground truths (Ex: [imageName, class, confidence=1, (bb coordinates XYX2Y2)])
         groundTruths = [] 
         # List with all detections (Ex: [imageName, class, confidence, (bb coordinates XYX2Y2)])
         detections = []
         # Get all classes
         classes = []
-        # Loop through dictionary of ground truth bounding boxes
-        for key in dictGroundTruth.keys(): 
-            boundingboxes = dictGroundTruth[key].getBoundingBoxes()
-            for bb in boundingboxes:
-                # [imageName, class, confidence, (bb coordinates XYX2Y2)]
-                groundTruths.append([key, bb.getClassId(), 1, bb.getAbsoluteBoundingBox(BBFormat.XYX2Y2)])
-                # get class
-                if bb.getClassId() not in classes:
-                    classes.append(bb.getClassId())
-        # Loop through dictionary of ground truth bounding boxes
-        for key in dictDetected.keys(): 
-            boundingboxes = dictDetected[key].getBoundingBoxes()
-            for bb in boundingboxes:
-                # [imageName, class, confidence, (bb coordinates XYX2Y2)]
-                detections.append([key, bb.getClassId(), bb.getConfidence(), bb.getAbsoluteBoundingBox(BBFormat.XYX2Y2)])
-                # get class
-                if bb.getClassId() not in classes:
-                    classes.append(bb.getClassId())
+        # Loop through all bounding boxes and separate them into GTs and detections
+        for bb in boundingboxes.getBoundingBoxes():
+            # [imageName, class, confidence, (bb coordinates XYX2Y2)]
+            if bb.getBBType() == BBType.GroundTruth:
+                groundTruths.append([bb.getImageName(), bb.getClassId(), 1, bb.getAbsoluteBoundingBox(BBFormat.XYX2Y2)])
+            else:
+                detections.append([bb.getImageName(), bb.getClassId(), bb.getConfidence(), bb.getAbsoluteBoundingBox(BBFormat.XYX2Y2)])
+            # get class
+            if bb.getClassId() not in classes:
+                classes.append(bb.getClassId())
         classes = sorted(classes)
         ## Precision x Recall is obtained individually by each class
         # Loop through by classes
@@ -71,10 +80,12 @@ class Evaluator:
                 if iouMax>=IOUThreshold:
                     if det[dects[d][0]][jmax] == 0:
                         TP[d]=1  # count as true positive
+                        # print("TP")
                     det[dects[d][0]][jmax]=1 # flag as already 'seen'
                 # - A detected "cat" is overlaped with a GT "cat" with IOU >= IOUThreshold.
                 else:
                     FP[d]=1 # count as false positive
+                    # print("FP")
             # compute precision, recall and average precision
             acc_FP=np.cumsum(FP)
             acc_TP=np.cumsum(TP)
@@ -95,10 +106,31 @@ class Evaluator:
                 }
             ret.append(r)
         return ret
-    
-    def PlotPrecisionRecallCurve(self, classId, dictGroundTruth, dictDetected, IOUThreshold=0.5, showAP=False, showInterpolatedPrecision=False, savePath=None, showGraphic=True):
-        results = self.GetPascalVOCMetrics(dictGroundTruth, dictDetected, IOUThreshold)
 
+    def PlotPrecisionRecallCurve(self, classId, boundingBoxes, IOUThreshold=0.5, showAP=False, showInterpolatedPrecision=False, savePath=None, showGraphic=True):
+        """PlotPrecisionRecallCurve
+        Plot the Precision x Recall curve for a given class.
+        Args:
+            classId: The class that will be plot; 
+            boundingBoxes: Object of the class BoundingBoxes representing ground truth and detected bounding boxes; 
+            IOUThreshold (optional): IOU threshold indicating which detections will be considered TP or FP (default value = 0.5); 
+            showAP (optional): if True, the average precision value will be shown in the title of the graph (default = False); 
+            showInterpolatedPrecision (optional): if True, it will show in the plot the interpolated precision (default = False); 
+            savePath (optional): if informed, the plot will be saved as an image in this path (ex: /home/mywork/ap.png) (default = None); 
+            showGraphic (optional): if True, the plot will be shown (default = True)	
+        Returns:
+            A dictionary containing information and metric about the class. The keys of the dictionary are:
+            dict['class']: class representing the current dictionary; 
+            dict['precision']: array with the precision values;
+            dict['recall']: array with the recall values;
+            dict['AP']: average precision;
+            dict['interpolated precision']: interpolated precision values;
+            dict['interpolated recall']: interpolated recall values;
+            dict['total positives']: total number of ground truth positives;
+            dict['total TP']: total number of True Positive detections;
+            dict['total FP']: total number of False Negative detections;
+        """
+        results = self.GetPascalVOCMetrics(boundingBoxes, IOUThreshold)
         result = None
         for res in results:
             if res['class'] == classId:
@@ -122,7 +154,7 @@ class Evaluator:
         plt.xlabel('recall')
         plt.ylabel('precision')
         if showAP:
-            plt.title('Precision x Recall curve \nClass: %d, AP: %.4f' % (classId, average_precision))
+            plt.title('Precision x Recall curve \nClass: %d, AP: %.5f' % (classId, average_precision))
         else:
             plt.title('Precision x Recall curve \nClass: %d' % classId)
         plt.legend(shadow=True)
@@ -165,7 +197,6 @@ class Evaluator:
             ap = ap + np.sum((mrec[i]-mrec[i-1])*mpre[i])
         return [ap, mpre[1:len(mpre)-1], mrec[1:len(mpre)-1], ii]
 
-
     # For each detections, calculate IOU with reference
     @staticmethod
     def _getAllIOUs(reference, detections):
@@ -183,17 +214,6 @@ class Evaluator:
         # cv2.waitKey(0)
         # cv2.destroyWindow("comparing")
         return sorted(ret, key=lambda i: i[0], reverse=True)# sort by iou (from highest to lowest)
-
-    @staticmethod
-    def Teste(gts, detections):
-        img = np.zeros((200,200,3), np.uint8)
-        for d in gts:
-            img = add_bb_into_image(img, d, color=(0,255,0), thickness=2)
-        for d in detections:
-            img = add_bb_into_image(img, d, color=(255,0,0), thickness=2)
-        cv2.imshow("comparing",img)
-        cv2.waitKey(0)
-        cv2.destroyWindow("comparing")
 
     @staticmethod
     def iou(boxA, boxB):
