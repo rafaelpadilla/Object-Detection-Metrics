@@ -1,6 +1,6 @@
 ###########################################################################################
 #                                                                                         #
-# This sample shows how to evaluate object detections appling the following metrics:      #
+# This sample shows how to evaluate object detections applying the following metrics:      #
 #  * Precision x Recall curve       ---->       used by VOC PASCAL 2012)                  #
 #  * Average Precision (AP)         ---->       used by VOC PASCAL 2012)                  #
 #                                                                                         #
@@ -26,7 +26,7 @@ def getBoundingBoxes():
     folderGT = os.path.join(currentPath,'groundtruths')
     os.chdir(folderGT)
     files = glob.glob("*.txt")
-    # files.sort()
+    files.sort()
     # Class representing bounding boxes (ground truths and detections)
     allBoundingBoxes = BoundingBoxes()
     # Read GT detections from txt file
@@ -52,10 +52,10 @@ def getBoundingBoxes():
             allBoundingBoxes.addBoundingBox(bb)
         fh1.close()
     # Read detections
-    folderGT = os.path.join(currentPath,'detections')
-    os.chdir(folderGT)
+    folderDet = os.path.join(currentPath,'detections')
+    os.chdir(folderDet)
     files = glob.glob("*.txt")
-    # files.sort()
+    files.sort()
     # Read detections from txt file
     # Each line of the files in the detections folder represents a detected bounding box.
     # Each value of each line is  "class_id, confidence, x, y, width, height" respectively
@@ -64,7 +64,8 @@ def getBoundingBoxes():
     # x, y represents the most top-left coordinates of the bounding box
     # x2, y2 represents the most bottom-right coordinates of the bounding box
     for f in files:
-        nameOfImage = f.replace("_det.txt","")
+        # nameOfImage = f.replace("_det.txt","")
+        nameOfImage = f.replace(".txt","")
         # Read detections from txt file
         fh1 = open(f, "r")
         for line in fh1:
