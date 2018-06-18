@@ -144,8 +144,8 @@ The Precision x Recall curve is plotted by calculating the precision and recall 
 <!---
 | Images | Detections | Confidences |  TP | FP | Acc TP | Acc FP | Precision | Recall |
 |:------:|:----------:|:-----------:|:---:|:--:|:------:|:------:|:---------:|:------:|
-| Image 7 |	Y	| 95% | 0 | 1 | 0 | 1 | 0       | 0      |
-| Image 5 |	R	| 95% | 1 | 0 | 1 | 1 | 0.5     | 0.0666 |
+| Image 5 |	R	| 95% | 1 | 0 | 1 | 0 | 1       | 0.0666 |
+| Image 7 |	Y	| 95% | 0 | 1 | 1 | 1 | 0.5     | 0.6666 |
 | Image 3 |	J	| 91% | 1 | 0 | 2 | 1 | 0.6666  | 0.1333 |
 | Image 1 | A | 88% | 0 | 1 | 2 | 2 | 0.5     | 0.1333 |
 | Image 6 |	U	| 84% | 0 | 1 | 2 | 3 | 0.4     | 0.1333 |
@@ -158,10 +158,10 @@ The Precision x Recall curve is plotted by calculating the precision and recall 
 | Image 5 |	P	| 62% | 1 | 0 | 4 | 8 | 0.3333  | 0.2666 |
 | Image 2 |	E	| 54% | 1 | 0 | 5 | 8 | 0.3846  | 0.3333 |
 | Image 7 |	X	| 48% | 1 | 0 | 6 | 8 | 0.4285  | 0.4    |
-| Image 6 |	T	| 45% | 0 | 1 | 6 | 9 | 0.4     | 0.4    |
-| Image 4 |	N	| 45% | 0 | 1 | 6 | 10 | 0.375  | 0.4    |
-| Image 5 |	Q	| 44% | 0 | 1 | 6 | 11 | 0.3529 | 0.4    |
-| Image 3 |	K	| 44% | 0 | 1 | 6 | 12 | 0.3333 | 0.4    |
+| Image 4 |	N	| 45% | 0 | 1 | 6 | 9 | 0.7     | 0.4    |
+| Image 6 |	T	| 45% | 0 | 1 | 6 | 10 | 0.375  | 0.4    |
+| Image 3 |	K	| 44% | 0 | 1 | 6 | 11 | 0.3529 | 0.4    |
+| Image 5 |	Q	| 44% | 0 | 1 | 6 | 12 | 0.3333 | 0.4    |
 | Image 6 |	V	| 43% | 0 | 1 | 6 | 13 | 0.3157 | 0.4    |
 | Image 3 |	I	| 38% | 0 | 1 | 6 | 14 | 0.3    | 0.4    |
 | Image 4 |	L	| 35% | 0 | 1 | 6 | 15 | 0.2857 | 0.4    |
@@ -177,7 +177,7 @@ The Precision x Recall curve is plotted by calculating the precision and recall 
 <img src="https://github.com/rafaelpadilla/Object-Detection-Metrics/blob/master/aux_images/precision_recall_example_1.png" align="center"/>
 </p>
  
-As seen before, the idea of the interpolated average precision is to average the precisions at a set of 11 recall levels (0,0.1,...,1). The interpolated precision values are obtained by taking the maximum precision whose recall value is greater than its current recall value. We can visually obtain those values by looking at the recalls starting from the highest (0.4666) to the lowest (0) and, as we decrease the recall, we annotate the precision values that are the highest as shown in the image below:
+As seen before, the idea of the interpolated average precision is to average the precisions at a set of 11 recall levels (0,0.1,...,1). The interpolated precision values are obtained by taking the maximum precision whose recall value is greater than its current recall value. We can visually obtain those values by looking at the recalls starting from the highest (0.4666) to the lowest (0.0666) and, as we decrease the recall, we annotate the precision values that are the highest as shown in the image below:
 
 <!--- interpolated precision curve --->
 <p align="center">
@@ -195,7 +195,7 @@ Calculating the total area, we have the AP:
 
 ![](http://latex.codecogs.com/gif.latex?AP%20%3D%20A1%20&plus;%20A2%20&plus;%20A3)  
 ![](http://latex.codecogs.com/gif.latex?AP%20%3D%200.1333*0.6666%20&plus;%20%5Cleft%20%28%200.4-0.1333%20%5Cright%20%29*0.4285%20&plus;%20%5Cleft%20%28%200.4666-0.4%20%5Cright%20%29*0.3043)  
-![](http://latex.codecogs.com/gif.latex?%5Cboldsymbol%7BAP%20%3D%200.2234%7D)
+![](http://latex.codecogs.com/gif.latex?%5Cmathbf%7BAP%20%3D%2024.57%5C%25%7D)
 
 
 If you want to reproduce these results, see the **[Sample 1 source code](https://github.com/rafaelpadilla/Object-Detection-Metrics/blob/master/samples/sample_1.py)**.
