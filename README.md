@@ -95,14 +95,14 @@ An example helps us understand better the concept of the interpolated average pr
   
 <!--- Image samples 1 --->
 <p align="center">
-<img src="https://github.com/rafaelpadilla/Object-Detection-Metrics/blob/master/aux_images/samples_1.png" align="center"/></p>
+<img src="https://github.com/rafaelpadilla/Object-Detection-Metrics/blob/master/aux_images/samples_1_v2.png" align="center"/></p>
   
 There are 7 images with 15 ground truth objects representented by the green bounding boxes and 24 detected objects represented by the red bounding boxes. Each detected object has a confidence level and is identified by a letter (A,B,...,Y).  
 The following table shows the bounding boxes with their corresponding confidences. The last column identifies the detections as TP or FP. In this example a TP is considered if IOU ![](http://latex.codecogs.com/gif.latex?%5Cgeq) 30%, otherwise it is a FP. By looking at the images above we can roughly tell if the detections are TP or FP.
 
 <!--- Table 1 --->
 <p align="center">
-<img src="https://github.com/rafaelpadilla/Object-Detection-Metrics/blob/master/aux_images/table_1.png" align="center"/></p>
+<img src="https://github.com/rafaelpadilla/Object-Detection-Metrics/blob/master/aux_images/table_1_v2.png" align="center"/></p>
 
 <!---
 | Images | Detections | Confidences | TP or FP |
@@ -139,7 +139,7 @@ The Precision x Recall curve is plotted by calculating the precision and recall 
 
 <!--- Table 2 --->
 <p align="center">
-<img src="https://github.com/rafaelpadilla/Object-Detection-Metrics/blob/master/aux_images/table_2.png" align="center"/></p>
+<img src="https://github.com/rafaelpadilla/Object-Detection-Metrics/blob/master/aux_images/table_2_v2.png" align="center"/></p>
 
 <!---
 | Images | Detections | Confidences |  TP | FP | Acc TP | Acc FP | Precision | Recall |
@@ -174,28 +174,36 @@ The Precision x Recall curve is plotted by calculating the precision and recall 
  
  <!--- Precision x Recall graph --->
 <p align="center">
-<img src="https://github.com/rafaelpadilla/Object-Detection-Metrics/blob/master/aux_images/precision_recall_example_1.png" align="center"/>
+<img src="https://github.com/rafaelpadilla/Object-Detection-Metrics/blob/master/aux_images/precision_recall_example_1_v2.png" align="center"/>
 </p>
  
 As seen before, the idea of the interpolated average precision is to average the precisions at a set of 11 recall levels (0,0.1,...,1). The interpolated precision values are obtained by taking the maximum precision whose recall value is greater than its current recall value. We can visually obtain those values by looking at the recalls starting from the highest (0.4666) to the lowest (0.0666) and, as we decrease the recall, we annotate the precision values that are the highest as shown in the image below:
 
 <!--- interpolated precision curve --->
 <p align="center">
-<img src="https://github.com/rafaelpadilla/Object-Detection-Metrics/blob/master/aux_images/interpolated_precision.png" align="center"/>
+<img src="https://github.com/rafaelpadilla/Object-Detection-Metrics/blob/master/aux_images/interpolated_precision_v2.png" align="center"/>
 </p>
 
 The Average Precision (AP) is the AUC obtained by the interpolated precision. The intention is to reduce the impact of the wiggles in the Precision x Recall curve. We divide the AUC into 3 areas (A1, A2 and A3) as shown below:
   
 <!--- interpolated precision AUC --->
 <p align="center">
-<img src="https://github.com/rafaelpadilla/Object-Detection-Metrics/blob/master/aux_images/interpolated_precision-AUC.png" align="center"/>
+<img src="https://github.com/rafaelpadilla/Object-Detection-Metrics/blob/master/aux_images/interpolated_precision-AUC_v2.png" align="center"/>
 </p>
 
 Calculating the total area, we have the AP:  
 
-![](http://latex.codecogs.com/gif.latex?AP%20%3D%20A1%20&plus;%20A2%20&plus;%20A3)  
-![](http://latex.codecogs.com/gif.latex?AP%20%3D%200.1333*0.6666%20&plus;%20%5Cleft%20%28%200.4-0.1333%20%5Cright%20%29*0.4285%20&plus;%20%5Cleft%20%28%200.4666-0.4%20%5Cright%20%29*0.3043)  
-![](http://latex.codecogs.com/gif.latex?%5Cmathbf%7BAP%20%3D%2024.57%5C%25%7D)
+![](http://latex.codecogs.com/gif.latex?AP%20%3D%20A1%20&plus;%20A2%20&plus;%20A3%20&plus;%20A4)  
+  
+![](http://latex.codecogs.com/gif.latex?%5Ctext%7Bwith%3A%7D)  
+![](http://latex.codecogs.com/gif.latex?A1%20%3D%20%280.0666-0%29%5Ctimes1%20%3D%5Cmathbf%7B0.0666%7D)  
+![](http://latex.codecogs.com/gif.latex?A2%20%3D%20%280.1333-0.0666%29%5Ctimes0.6666%3D%5Cmathbf%7B0.04446222%7D)  
+![](http://latex.codecogs.com/gif.latex?A3%20%3D%20%280.4-0.1333%29%5Ctimes0.4285%20%3D%5Cmathbf%7B0.11428095%7D)  
+![](http://latex.codecogs.com/gif.latex?A4%20%3D%20%280.4666-0.4%29%5Ctimes0.3043%20%3D%5Cmathbf%7B0.02026638%7D)  
+   
+![](http://latex.codecogs.com/gif.latex?AP%20%3D%200.0666&plus;0.04446222&plus;0.11428095&plus;0.02026638)  
+![](http://latex.codecogs.com/gif.latex?AP%20%3D%200.24560955)  
+![](http://latex.codecogs.com/gif.latex?AP%20%3D%20%5Cmathbf%7B24.56%5C%25%7D)  
 
 
 If you want to reproduce these results, see the **[Sample 1 source code](https://github.com/rafaelpadilla/Object-Detection-Metrics/blob/master/samples/sample_1.py)**.
