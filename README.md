@@ -247,7 +247,7 @@ Follow the steps below to start evaluating your detections:
   person 91 42 338 500
   ```
     
-If you prefer, you could also have your bounding boxes in the format: `<class_name> <left> <top> <width> <height>` (see [here](#asterisk) how to use it). In this case, your "2008_000034.txt" would be represented as:
+If you prefer, you could also have your bounding boxes in the format: `<class_name> <left> <top> <width> <height>` (see here [**\***](#asterisk) how to use it). In this case, your "2008_000034.txt" would be represented as:
   ```
   bottle 6 234 39 128
   person 1 156 102 180
@@ -259,7 +259,7 @@ If you prefer, you could also have your bounding boxes in the format: `<class_na
 
 - Create a separate detection text file for each image in the folder **detections/**.
 - The names of the detection files must match their correspond ground truth (e.g. "detections/2008_000182.txt" represents the detections of the ground truth: "groundtruths/2008_000182.txt").
-- In these files each line should be in the following format: `<class_name> <confidence> <left> <top> <right> <bottom>` (see [here](#asterisk) how to use it).
+- In these files each line should be in the following format: `<class_name> <confidence> <left> <top> <right> <bottom>` (see here [**\***](#asterisk) how to use it).
 - E.g. "2008_000034.txt":
     ```
     bottle 0.14981 80 1 295 500  
@@ -273,26 +273,6 @@ Also if you prefer, you could have your bounding boxes in the format: `<class_na
 
 ### Optional arguments
 
-<table style="width:100%">
-  <tr>
-    <th>Argument</th>
-    <th>Description</th> 
-    <th>Example</th>
-    <th>Default</th>
-  </tr>
-  <tr>
-    <td><i>-h --help</i></td>
-    <td>show help </td> 
-    <td>`python pascalvoc.py -h`</td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td>Eve</td>
-    <td>Jackson</td> 
-    <td>94</td>
-  </tr>
-</table>
-
 Optional arguments:
 
 | Argument &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| Description | Example | Default |
@@ -302,8 +282,8 @@ Optional arguments:
 | `-gt`,<br>`--gtfolder` | folder that contains the ground truth bounding boxes files | `python pascalvoc.py -gt /home/whatever/my_groundtruths/` | `/Object-Detection-Metrics/groundtruths`|  
 | `-det`,<br>`--detfolder` | folder that contains your detected bounding boxes files | `python pascalvoc.py -det /home/whatever/my_detections/` | `/Object-Detection-Metrics/detections/`|  
 | `-t`,<br>`--threshold` | IOU thershold that tells if a detection is TP or FP | `python pascalvoc.py -t 0.75` | `0.50` |  
-| `-gtformat` | format of the coordinates of the ground truth bounding boxes (**\***) | `python pascalvoc.py -gtformat xyrb` | `xywh` |
-| `-detformat` | format of the coordinates of the detected bounding boxes (**\***) | `python pascalvoc.py -detformat xyrb` | `xywh` | |  
+| `-gtformat` | format of the coordinates of the ground truth bounding boxes [**\***](#asterisk) | `python pascalvoc.py -gtformat xyrb` | `xywh` |
+| `-detformat` | format of the coordinates of the detected bounding boxes [**\***](#asterisk) | `python pascalvoc.py -detformat xyrb` | `xywh` | |  
 | `-gtcoords` | reference of the ground truth bounding bounding box coordinates.<br>If the annotated coordinates are relative to the image size (as used in YOLO), set it to `rel`.<br>If the coordinates are absolute values, not depending to the image size, set it to `abs` |  `python pascalvoc.py -gtcoords rel` | `abs` |  
 | `-detcoords` | reference of the detected bounding bounding box coordinates.<br>If the coordinates are relative to the image size (as used in YOLO), set it to `rel`.<br>If the coordinates are absolute values, not depending to the image size, set it to `abs` | `python pascalvoc.py -detcoords rel` | `abs` |  
 | `-imgsize ` | image size in the format `width,height` <int,int>.<br>Required if `-gtcoords` or `-detcoords` is set to `rel` | `python pascalvoc.py -imgsize 600,400` |  
