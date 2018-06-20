@@ -38,19 +38,35 @@ The snippet below shows the creation of bounding boxes of 3 different images (00
 
 ```python
 # Ground truth bounding boxes of 000001.jpg
-gt_boundingBox_1 = BoundingBox(imageName='000001', classId='dog', x=0.34419263456090654, y=0.611, w=0.4164305949008499, h=0.262, typeCoordinates=CoordinatesType.Relative, bbType=BBType.GroundTruth, format=BBFormat.XYWH, imgSize=(353,500))
-gt_boundingBox_2 = BoundingBox(imageName='000001', classId='person', x=0.509915014164306, y=0.51, w=0.9745042492917847, h=0.972, typeCoordinates=CoordinatesType.Relative, bbType=BBType.GroundTruth, format=BBFormat.XYWH, imgSize=(353,500))
+gt_boundingBox_1 = BoundingBox(imageName='000001', classId='dog', x=0.34419263456090654, y=0.611, 
+                               w=0.4164305949008499, h=0.262, typeCoordinates=CoordinatesType.Relative,
+                               bbType=BBType.GroundTruth, format=BBFormat.XYWH, imgSize=(353,500))
+gt_boundingBox_2 = BoundingBox(imageName='000001', classId='person', x=0.509915014164306, y=0.51, 
+                               w=0.9745042492917847, h=0.972, typeCoordinates=CoordinatesType.Relative,
+                               bbType=BBType.GroundTruth, format=BBFormat.XYWH, imgSize=(353,500))
 # Ground truth bounding boxes of 000002.jpg
-gt_boundingBox_3 = BoundingBox(imageName='000002', classId='train', x=0.5164179104477612, y=0.501, w=0.20298507462686569, h=0.202, typeCoordinates=CoordinatesType.Relative, bbType=BBType.GroundTruth, format=BBFormat.XYWH, imgSize=(335,500))
+gt_boundingBox_3 = BoundingBox(imageName='000002', classId='train', x=0.5164179104477612, y=0.501, 
+                               w=0.20298507462686569, h=0.202, typeCoordinates=CoordinatesType.Relative,
+                               bbType=BBType.GroundTruth, format=BBFormat.XYWH, imgSize=(335,500))
 # Ground truth bounding boxes of 000003.jpg
-gt_boundingBox_4 = BoundingBox(imageName='000003', classId='bench', x=0.338, y=0.4666666666666667, w=0.184, h=0.10666666666666666, typeCoordinates=CoordinatesType.Relative, bbType=BBType.GroundTruth, format=BBFormat.XYWH, imgSize=(500,375))
-gt_boundingBox_5 = BoundingBox(imageName='000003', classId='bench', x=0.546, y=0.48133333333333334, w=0.136, h=0.13066666666666665, typeCoordinates=CoordinatesType.Relative, bbType=BBType.GroundTruth, format=BBFormat.XYWH, imgSize=(500,375))
+gt_boundingBox_4 = BoundingBox(imageName='000003', classId='bench', x=0.338, y=0.4666666666666667, 
+                               w=0.184, h=0.10666666666666666, typeCoordinates=CoordinatesType.Relative, 
+                               bbType=BBType.GroundTruth, format=BBFormat.XYWH, imgSize=(500,375))
+gt_boundingBox_5 = BoundingBox(imageName='000003', classId='bench', x=0.546, y=0.48133333333333334,
+                               w=0.136, h=0.13066666666666665, typeCoordinates=CoordinatesType.Relative,
+                               bbType=BBType.GroundTruth, format=BBFormat.XYWH, imgSize=(500,375))
 # Detected bounding boxes of 000001.jpg
-detected_boundingBox_1 = BoundingBox(imageName='000001', classId='person', classConfidence= 0.893202, x=52, y=4, w=352, h=442, typeCoordinates=CoordinatesType.Absolute, bbType=BBType.Detected, format=BBFormat.XYX2Y2, imgSize=(353,500))
+detected_boundingBox_1 = BoundingBox(imageName='000001', classId='person', classConfidence= 0.893202, 
+                                     x=52, y=4, w=352, h=442, typeCoordinates=CoordinatesType.Absolute, 
+                                     bbType=BBType.Detected, format=BBFormat.XYX2Y2, imgSize=(353,500))
 # Detected bounding boxes of 000002.jpg
-detected_boundingBox_2 = BoundingBox(imageName='000002', classId='train', classConfidence=0.863700, x=140, y=195, w=209, h=293, typeCoordinates=CoordinatesType.Absolute, bbType=BBType.Detected, format=BBFormat.XYX2Y2, imgSize=(335,500))
+detected_boundingBox_2 = BoundingBox(imageName='000002', classId='train', classConfidence=0.863700, 
+                                     x=140, y=195, w=209, h=293, typeCoordinates=CoordinatesType.Absolute,
+                                     bbType=BBType.Detected, format=BBFormat.XYX2Y2, imgSize=(335,500))
 # Detected bounding boxes of 000003.jpg
-detected_boundingBox_3 = BoundingBox(imageName='000003', classId='bench', classConfidence=0.278000, x=388, y=288, w=493, h=331,  typeCoordinates=CoordinatesType.Absolute, bbType=BBType.Detected, format=BBFormat.XYX2Y2, imgSize=(500,375))
+detected_boundingBox_3 = BoundingBox(imageName='000003', classId='bench', classConfidence=0.278000, 
+                                     x=388, y=288, w=493, h=331, typeCoordinates=CoordinatesType.Absolute,
+                                     bbType=BBType.Detected, format=BBFormat.XYX2Y2, imgSize=(500,375))
 ```
 
 The object `BoundingBoxes` represents a collection of the bounding boxes (ground truth and detected). Evaluation methods of the class `Evaluator` use the `BoundingBoxes` object to apply the metrics. The following code shows how to add the bounding boxes to the collection:
