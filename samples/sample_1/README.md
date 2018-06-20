@@ -1,3 +1,11 @@
+# Sample 1
+
+This sample was created for those who want to understand more about the core functions of this project. If you just want to evaluate your detections dealing with a high level interface, just check the instructions [here](https://github.com/rafaelpadilla/Object-Detection-Metrics/blob/master/README.md#how-to-use-this-project).
+
+### Instructions
+
+The example below shows how to evaluate object detections using Pascal VOC metrics creating **manually** ground truth and detected bounding box coordinates.  
+
 First, you need to import the `Evaluator` package and create the object `Evaluator()`:
 
 ```python
