@@ -1,8 +1,88 @@
 # Sample 2
 
-This sample was created for those who want to understand more about the core functions of this project. If you just want to evaluate your detections dealing with a high level interface, just check the instructions [here](https://github.com/rafaelpadilla/Object-Detection-Metrics/blob/master/README.md#how-to-use-this-project).
+This sample was created for those who want to understand more about the metric functions of this project. If you just want to evaluate your detections dealing with a high level interface, just check the instructions [here](https://github.com/rafaelpadilla/Object-Detection-Metrics/blob/master/README.md#how-to-use-this-project).
 
-### Instructions
+### Evaluation Metrics
+
+First we need to represent each bounding box with the class `BoundingBox`. The function `getBoundingBoxes` reads .txt files containing the coordinates of the [detected](https://github.com/rafaelpadilla/Object-Detection-Metrics/tree/master/samples/sample_2/detections) and [ground truth](https://github.com/rafaelpadilla/Object-Detection-Metrics/tree/master/samples/sample_2/groundtruths) bounding boxes:
+
+```python
+def getBoundingBoxes():
+    """Read txt files containing bounding boxes (ground truth and detections)."""
+    allBoundingBoxes = BoundingBoxes()
+    import glob
+    import os
+    # Read ground truths
+    currentPath = os.path.dirname(os.path.abspath(__file__))
+    folderGT = os.path.join(currentPath,'groundtruths')
+    os.chdir(folderGT)
+    files = glob.glob("*.txt")
+    files.sort()
+    # Class representing bounding boxes (ground truths and detections)
+    allBoundingBoxes = BoundingBoxes()
+    # Read GT detections from txt file
+    # Each line of the files in the groundtruths folder represents a ground truth bounding box (bounding boxes that a detector should detect)
+    # Each value of each line is  "class_id, x, y, width, height" respectively
+    # Class_id represents the class of the bounding box
+    # x, y represents the most top-left coordinates of the bounding box
+    # x2, y2 represents the most bottom-right coordinates of the bounding box
+    for f in files:
+        nameOfImage = f.replace(".txt","")
+        fh1 = open(f, "r")
+        for line in fh1:
+            line = line.replace("\n","")
+            if line.replace(' ','') == '':
+                continue
+            splitLine = line.split(" ")
+            idClass = splitLine[0] #class
+            x = float(splitLine[1]) #confidence
+            y = float(splitLine[2])
+            w = float(splitLine[3])
+            h = float(splitLine[4])
+            bb = BoundingBox(nameOfImage,idClass,x,y,w,h,CoordinatesType.Absolute, (200,200), BBType.GroundTruth, format=BBFormat.XYWH)
+            allBoundingBoxes.addBoundingBox(bb)
+        fh1.close()
+    # Read detections
+    folderDet = os.path.join(currentPath,'detections')
+    os.chdir(folderDet)
+    files = glob.glob("*.txt")
+    files.sort()
+    # Read detections from txt file
+    # Each line of the files in the detections folder represents a detected bounding box.
+    # Each value of each line is  "class_id, confidence, x, y, width, height" respectively
+    # Class_id represents the class of the detected bounding box
+    # Confidence represents the confidence (from 0 to 1) that this detection belongs to the class_id.
+    # x, y represents the most top-left coordinates of the bounding box
+    # x2, y2 represents the most bottom-right coordinates of the bounding box
+    for f in files:
+        # nameOfImage = f.replace("_det.txt","")
+        nameOfImage = f.replace(".txt","")
+        # Read detections from txt file
+        fh1 = open(f, "r")
+        for line in fh1:
+            line = line.replace("\n","")
+            if line.replace(' ','') == '':
+                continue            
+            splitLine = line.split(" ")
+            idClass = splitLine[0] #class
+            confidence = float(splitLine[1]) #confidence
+            x = float(splitLine[2])
+            y = float(splitLine[3])
+            w = float(splitLine[4])
+            h = float(splitLine[5])
+            bb = BoundingBox(nameOfImage, idClass,x,y,w,h,CoordinatesType.Absolute, (200,200), BBType.Detected, confidence, format=BBFormat.XYWH)
+            allBoundingBoxes.addBoundingBox(bb)
+        fh1.close()
+    return allBoundingBoxes
+```
+
+Note that the text files contain one bounding box per line in the format:
+
+ **\<class of the object> \<left> \<top> \<width> \<height>**: For ground truth files.
+  
+  **\<class of the object> \<confidence> \<left> \<top> \<width> \<height>**: For detection files.
+
+#### Pascal VOC
 
 The example below shows how to evaluate object detections using Pascal VOC metrics creating **manually** ground truth and detected bounding box coordinates.  
 
