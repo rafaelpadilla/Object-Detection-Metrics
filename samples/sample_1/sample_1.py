@@ -12,9 +12,9 @@
 ###########################################################################################
 
 import _init_paths
+from utils import *
 from BoundingBox import BoundingBox
 from BoundingBoxes import BoundingBoxes
-from Evaluator import *
 
 #################################
 #### Defining bounding boxes ####
@@ -25,8 +25,8 @@ gt_boundingBox_2 = BoundingBox(imageName='000001', classId='person', x=0.5099150
 # Ground truth bounding boxes of 000002.jpg
 gt_boundingBox_3 = BoundingBox(imageName='000002', classId='train', x=0.5164179104477612, y=0.501, w=0.20298507462686569, h=0.202, typeCoordinates=CoordinatesType.Relative, bbType=BBType.GroundTruth, format=BBFormat.XYWH, imgSize=(335,500))
 # Ground truth bounding boxes of 000003.jpg
-gt_boundingBox_4 = BoundingBox(imageName='000003', classId='sofa', x=0.338, y=0.4666666666666667, w=0.184, h=0.10666666666666666, typeCoordinates=CoordinatesType.Relative, bbType=BBType.GroundTruth, format=BBFormat.XYWH, imgSize=(500,375))
-gt_boundingBox_5 = BoundingBox(imageName='000003', classId='chair', x=0.546, y=0.48133333333333334, w=0.136, h=0.13066666666666665, typeCoordinates=CoordinatesType.Relative, bbType=BBType.GroundTruth, format=BBFormat.XYWH, imgSize=(500,375))
+gt_boundingBox_4 = BoundingBox(imageName='000003', classId='bench', x=0.338, y=0.4666666666666667, w=0.184, h=0.10666666666666666, typeCoordinates=CoordinatesType.Relative, bbType=BBType.GroundTruth, format=BBFormat.XYWH, imgSize=(500,375))
+gt_boundingBox_5 = BoundingBox(imageName='000003', classId='bench', x=0.546, y=0.48133333333333334, w=0.136, h=0.13066666666666665, typeCoordinates=CoordinatesType.Relative, bbType=BBType.GroundTruth, format=BBFormat.XYWH, imgSize=(500,375))
 # Detected bounding boxes of 000001.jpg
 detected_boundingBox_1 = BoundingBox(imageName='000001', classId='person', classConfidence= 0.893202, x=52, y=4, w=352, h=442, typeCoordinates=CoordinatesType.Absolute, bbType=BBType.Detected, format=BBFormat.XYX2Y2, imgSize=(353,500))
 # Detected bounding boxes of 000002.jpg
@@ -53,11 +53,11 @@ import numpy as np
 import os
 currentPath = os.path.dirname(os.path.realpath(__file__))
 gtImages = ['000001', '000002', '000003']
-for image in gtImages:
-    im = cv2.imread(os.path.join(currentPath,'images','groundtruths',image)+'.jpg')
+for imageName in gtImages:
+    im = cv2.imread(os.path.join(currentPath,'images','groundtruths',imageName)+'.jpg')
     # Add bounding boxes
-    im = myBoundingBoxes.drawAllBoundingBoxes(im, image)
-    # cv2.imshow(image+'.jpg', im)
+    im = myBoundingBoxes.drawAllBoundingBoxes(im, imageName)
+    # cv2.imshow(imageName+'.jpg', im)
     # cv2.waitKey(0)
-    cv2.imwrite(os.path.join(currentPath,'images',image+'.jpg'),im)
-    print('Image %s created successfully!' % image)
+    cv2.imwrite(os.path.join(currentPath,'images',imageName+'.jpg'),im)
+    print('Image %s created successfully!' % imageName)
