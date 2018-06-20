@@ -1,3 +1,13 @@
+###########################################################################################
+#                                                                                         #
+# Evaluator class: Implements the most popular metrics for object detection               #
+#                                                                                         #
+# Developed by: Rafael Padilla (rafael.padilla@smt.ufrj.br)                               #
+#        SMT - Signal Multimedia and Telecommunications Lab                               #
+#        COPPE - Universidade Federal do Rio de Janeiro                                   #
+#        Last modification: May 24th 2018                                                 #
+###########################################################################################
+
 from BoundingBox import *
 from BoundingBoxes import *
 import matplotlib.pyplot as plt
@@ -63,7 +73,7 @@ class Evaluator:
             det = Counter([cc[0] for cc in gts])
             for key,val in det.items():
                 det[key] = np.zeros(val)
-            # print("Evaluating class: %d (%d detections)" % (c, len(dects)))
+            # print("Evaluating class: %s (%d detections)" % (str(c), len(dects)))
             # Loop through detections
             for d in range(len(dects)):
                 # print('dect %s => %s' % (dects[d][0], dects[d][3],))
@@ -148,17 +158,52 @@ class Evaluator:
         total_tp = result['total TP']
         total_fp = result['total FP']
 
-        plt.plot(recall, precision, label='Precision')
         if showInterpolatedPrecision:
             plt.plot(mrec, mpre, '--r' , label='Interpolated precision')
+        plt.plot(recall, precision, label='Precision')
         plt.xlabel('recall')
         plt.ylabel('precision')
         if showAP:
-            plt.title('Precision x Recall curve \nClass: %d, AP: %.5f' % (classId, average_precision))
+            ap_str = "{0:.2f}%".format(average_precision*100)
+            plt.title('Precision x Recall curve \nClass: %s, AP: %s' % (str(classId), ap_str))
+            # plt.title('Precision x Recall curve \nClass: %s, AP: %.4f' % (str(classId), average_precision))
         else:
             plt.title('Precision x Recall curve \nClass: %d' % classId)
         plt.legend(shadow=True)
         plt.grid()
+
+        ############################################################
+        # Uncomment the following block to create plot with points #
+        ############################################################
+        # plt.plot(recall, precision, 'bo')
+        # labels = ['R', 'Y', 'J', 'A', 'U', 'C', 'M', 'F', 'D', 'B', 'H', 'P', 'E', 'X', 'N', 'T', 'K', 'Q', 'V', 'I', 'L', 'S', 'G', 'O']
+        # dicPosition = {}
+        # dicPosition['left_zero'] = (-30,0)
+        # dicPosition['left_zero_slight'] = (-30,-10)
+        # dicPosition['right_zero'] = (30,0)
+        # dicPosition['left_up'] = (-30,20)
+        # dicPosition['left_down'] = (-30,-25)
+        # dicPosition['right_up'] = (20,20)
+        # dicPosition['right_down'] = (20,-20)
+        # dicPosition['up_zero'] = (0,30)
+        # dicPosition['up_right'] = (0,30)
+        # dicPosition['left_zero_long'] = (-60,-2)
+        # dicPosition['down_zero'] = (-2,-30)
+        # vecPositions = [dicPosition['left_down'], dicPosition['left_zero'], dicPosition['right_zero'], dicPosition['right_zero'], #'R', 'Y', 'J', 'A', 
+        #                 dicPosition['left_up'], dicPosition['left_up'], dicPosition['right_up'], dicPosition['left_up'], # 'U', 'C', 'M', 'F', 
+        #                 dicPosition['left_zero'], dicPosition['right_up'], dicPosition['right_down'], dicPosition['down_zero'], #'D', 'B', 'H', 'P'
+        #                 dicPosition['left_up'], dicPosition['up_zero'], dicPosition['right_up'], dicPosition['left_up'], # 'E', 'X', 'N', 'T',
+        #                 dicPosition['left_zero'], dicPosition['right_zero'], dicPosition['left_zero_long'], dicPosition['left_zero_slight'], # 'K', 'Q', 'V', 'I',
+        #                 dicPosition['right_down'], dicPosition['left_down'], dicPosition['right_up'], dicPosition['down_zero']] # 'L', 'S', 'G', 'O'
+        # for idx in range(len(labels)):
+        #     box = dict(boxstyle='round,pad=.5',facecolor='yellow',alpha=0.5)
+        #     plt.annotate(labels[idx], 
+        #                 xy=(recall[idx],precision[idx]), xycoords='data',
+        #                 xytext=vecPositions[idx], textcoords='offset points',
+        #                 arrowprops=dict(arrowstyle="->", connectionstyle="arc3"),
+        #                 bbox=box)
+
+
         if savePath != None:
             plt.savefig(savePath)
         if showGraphic == True:
@@ -195,7 +240,8 @@ class Evaluator:
         ap = 0
         for i in ii:
             ap = ap + np.sum((mrec[i]-mrec[i-1])*mpre[i])
-        return [ap, mpre[1:len(mpre)-1], mrec[1:len(mpre)-1], ii]
+        # return [ap, mpre[1:len(mpre)-1], mrec[1:len(mpre)-1], ii]
+        return [ap, mpre[0:len(mpre)-1], mrec[0:len(mpre)-1], ii]
 
     # For each detections, calculate IOU with reference
     @staticmethod

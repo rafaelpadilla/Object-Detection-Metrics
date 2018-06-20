@@ -1,19 +1,20 @@
 from utils import *
 
 class BoundingBox:
-    def __init__(self, imageName, classId, x, y, w, h, typeCoordinates = CoordinatesType.Relative, imgSize = None, bbType=BBType.GroundTruth, classConfidence=None, format=BBFormat.XYWH):
+    def __init__(self, imageName, classId, x, y, w, h, typeCoordinates = CoordinatesType.Absolute, imgSize = None, bbType=BBType.GroundTruth, classConfidence=None, format=BBFormat.XYWH):
         """Constructor.
         Args:
             imageName: String representing the image name.
-            classId: Integer value representing class id.
+            classId: String value representing class id.
             x: Float value representing the X upper-left coordinate of the bounding box.
             y: Float value representing the Y upper-left coordinate of the bounding box.
             w: Float value representing the width bounding box.
             h: Float value representing the height bounding box.
-            typeCoordinates: (optional) Enum (Relative or Absolute) represents if the bounding box coordinates (x,y,w,h) are absolute or relative to size of the image. Default: 'Relative'.
+            typeCoordinates: (optional) Enum (Relative or Absolute) represents if the bounding box coordinates (x,y,w,h) are absolute or relative to size of the image. Default: 'Absolute'.
             imgSize: (optional) 2D vector (width, height)=>(int, int) represents the size of the image of the bounding box. If typeCoordinates is 'Relative', imgSize is required.
             bbType: (optional) Enum (Groundtruth or Detection) identifies if the bounding box represents a ground truth or a detection. If it is a detection, the classConfidence has to be informed.
             classConfidence: (optional) Float value representing the confidence of the detected class. If detectionType is Detection, classConfidence needs to be informed.
+            format: (optional) Enum (BBFormat.XYWH or BBFormat.XYX2Y2) indicating the format of the coordinates of the bounding boxes. BBFormat.XYWH: <left> <top> <width> <height>  BBFormat.XYX2Y2: <left> <top> <right> <bottom>.
         """
         self._imageName = imageName
         self._typeCoordinates = typeCoordinates
@@ -21,8 +22,8 @@ class BoundingBox:
             raise IOError('Parameter \'imgSize\' is required. It is necessary to inform the image size.')
         if bbType == BBType.Detected and classConfidence == None:
             raise IOError('For bbType=\'Detection\', it is necessary to inform the classConfidence value.')
-        if classConfidence != None and (classConfidence < 0 or classConfidence > 1):
-            raise IOError('classConfidence value must be a real value between 0 and 1.')
+        # if classConfidence != None and (classConfidence < 0 or classConfidence > 1):
+            # raise IOError('classConfidence value must be a real value between 0 and 1. Value: %f' % classConfidence)
 
         self._classConfidence = classConfidence
         self._bbType = bbType
