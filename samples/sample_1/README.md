@@ -1,10 +1,12 @@
 # Sample 1
 
-This sample was created the application of the classes **BoundingBox** and **BoundingBoxes**. Those objects represent your detections and ground truth boxes.  
+This sample was created to illustrate the usage of the classes **BoundingBox** and **BoundingBoxes**. Objects of the class `BoundingBox` are an abstraction of the detections or the ground truth boxes. The object of the class `BoundingBoxes` is used by evaluation methods and represents a collection of bounding boxes.
+
+The full code can be accessed [here](https://github.com/rafaelpadilla/Object-Detection-Metrics/blob/master/samples/sample_1/sample_1.py).
 
 If you just want to evaluate your detections dealing with a high level interface, just check the instructions [here](https://github.com/rafaelpadilla/Object-Detection-Metrics/blob/master/README.md#how-to-use-this-project).
 
-### Instructions
+### The code
 
 The classes BoudingBox and BoundingBoxes are in the `lib/` folder. The file `_init_paths.py` imports these contents into our example. The file `utils.py` contains basically enumerators and useful functions. The code below shows how to import them:  
 
@@ -16,7 +18,7 @@ from BoundingBoxes import BoundingBoxes
 ```
 Don't forget to put the content of the folder `\lib` in the same folder of your code.
 
-All bounding boxes (detected and ground truth) are represented by objects of the class `BoundingBox`. Each bounding box must be created using the constructor. Use the parameter `bbType` to identify if the box is a ground truth or a detected one. The parameter `imageName` determines the image that the box belongs to. All the parameters used to create the object are:  
+All bounding boxes (detected and ground truth) are represented by objects of the class `BoundingBox`. Each bounding box is created using the constructor. Use the parameter `bbType` to identify if the box is a ground truth or a detected one. The parameter `imageName` determines the image that the box belongs to. All the parameters used to create the object are:  
 
 * `imageName`: String representing the image name.
 * `classId`: String value representing class id (e.g. 'house', 'dog', 'person')
@@ -32,7 +34,7 @@ All bounding boxes (detected and ground truth) are represented by objects of the
 
 **Attention**: The bounding boxes of the same image (detections or ground truth) must have have the same `imageName`. 
 
-The snippet below shows the creation of the bounding boxes of 3 different images (000001.jpg, 000002.jpg and 000003.jpg) containing 2, 1 and 1 ground truth objects to be detected respectively. There are 3 detected bounding boxes, one at each image.
+The snippet below shows the creation of bounding boxes of 3 different images (000001.jpg, 000002.jpg and 000003.jpg) containing 2, 1 and 1 ground truth objects to be detected respectively. There are 3 detected bounding boxes, one at each image. The images are available in the folder [sample_1/images/detections/](https://github.com/rafaelpadilla/Object-Detection-Metrics/tree/master/samples/sample_1/images/detections) and [sample_1/images/groundtruths/](https://github.com/rafaelpadilla/Object-Detection-Metrics/tree/master/samples/sample_1/images/groundtruths).
 
 ```python
 # Ground truth bounding boxes of 000001.jpg
