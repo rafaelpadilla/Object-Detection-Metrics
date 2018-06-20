@@ -1,65 +1,98 @@
 # Sample 1
 
-This sample was created for those who want to understand more about the core functions of this project. If you just want to evaluate your detections dealing with a high level interface, just check the instructions [here](https://github.com/rafaelpadilla/Object-Detection-Metrics/blob/master/README.md#how-to-use-this-project).
+This sample was created the application of the classes **BoundingBox** and **BoundingBoxes**. Those objects represent your detections and ground truth boxes.  
+
+If you just want to evaluate your detections dealing with a high level interface, just check the instructions [here](https://github.com/rafaelpadilla/Object-Detection-Metrics/blob/master/README.md#how-to-use-this-project).
 
 ### Instructions
 
-The example below shows how to evaluate object detections using Pascal VOC metrics creating **manually** ground truth and detected bounding box coordinates.  
-
-First, you need to import the `Evaluator` package and create the object `Evaluator()`:
+The classes BoudingBox and BoundingBoxes are in the `lib/` folder. The file `_init_paths.py` imports these contents into our example. The file `utils.py` contains basically enumerators and useful functions. The code below shows how to import them:  
 
 ```python
-from Evaluator import *
-
-# Create an evaluator object in order to obtain the metrics
-evaluator = Evaluator()
+import _init_paths
+from utils import *
+from BoundingBox import BoundingBox
+from BoundingBoxes import BoundingBoxes
 ```
-Don't forget to put the content of the folder `\lib` in the same folder of your code. You could also put it in a different folder and add it in your project as done by the `_init_paths.py` [file](https://github.com/rafaelpadilla/Object-Detection-Metrics/blob/master/samples/_init_paths.py) in the sample code.
+Don't forget to put the content of the folder `\lib` in the same folder of your code.
 
-With the ```evaluator``` object, you will have access to methods that retrieve the metrics:
+All bounding boxes (detected and ground truth) are represented by objects of the class `BoundingBox`. Each bounding box must be created using the constructor. Use the parameter `bbType` to identify if the box is a ground truth or a detected one. The parameter `imageName` determines the image that the box belongs to. All the parameters used to create the object are:  
 
-| Method | Description | Parameters | Returns |
-|------|-----------|----------|-------|
-|  GetPascalVOCMetrics | Get the metrics used by the VOC Pascal 2012 challenge | `boundingboxes`: Object of the class `BoundingBoxes` representing ground truth and detected bounding boxes; `IOUThreshold`: IOU threshold indicating which detections will be considered TP or FP (default value = 0.5); | List of dictionaries. Each dictionary contains information and metrics of each class. The keys of each dictionary are:  `dict['class']`: class representing the current dictionary; `dict['precision']`: array with the precision values; `dict['recall']`: array with the recall values; `dict['AP']`: **average precision**; `dict['interpolated precision']`: interpolated precision values; `dict['interpolated recall']`: interpolated recall values; `dict['total positives']`: total number of ground truth positives; `dict['total TP']`: total number of True Positive detections; `dict['total FP']`: total number of False Negative detections; |
-PlotPrecisionRecallCurve |	Plot the Precision x Recall curve for a given class | `classId`: The class that will be plot; `boundingBoxes`: Object of the class `BoundingBoxes` representing ground truth and detected bounding boxes; `IOUThreshold`: IOU threshold indicating which detections will be considered TP or FP (default value = 0.5); `showAP`: if True, the average precision value will be shown in the title of the graph (default = False); `showInterpolatedPrecision`: if True, it will show in the plot the interpolated precision (default = False); `savePath`: if informed, the plot will be saved as an image in this path (ex: `/home/mywork/ap.png`) (default = None); `showGraphic`: if True, the plot will be shown (default = True) | The dictionary containing information and metric about the class. The keys of the dictionary are: `dict['class']`: class representing the current dictionary; `dict['precision']`: array with the precision values; `dict['recall']`: array with the recall values; `dict['AP']`: **average precision**; `dict['interpolated precision']`: interpolated precision values; `dict['interpolated recall']`: interpolated recall values; `dict['total positives']`: total number of ground truth positives; `dict['total TP']`: total number of True Positive detections; `dict['total FP']`: total number of False Negative detections |
+* `imageName`: String representing the image name.
+* `classId`: String value representing class id (e.g. 'house', 'dog', 'person')
+* `x`: Float value representing the X upper-left coordinate of the bounding box.
+* `y`: Float value representing the Y upper-left coordinate of the bounding box.
+* `w`: Float value representing the width bounding box. It can also be used to represent the X lower-right coordinate of the bounding box. For that, use the parameter `format=BBFormat.XYX2Y2`.
+* `h`: Float value representing the height bounding box. It can also be used to represent the Y lower-right coordinate of the bounding box. For that, use the parameter `format=BBFormat.XYX2Y2`.
+* `typeCoordinates`: (optional) Enum (`CoordinatesType.Relative` or `CoordinatesType.Absolute`) representing if the bounding box coordinates (x,y,w,h) are absolute or relative to size of the image. Default: 'Absolute'. Some projects like YOLO identifies the detected bounding boxes as being relative to the image size, it may be useful for cases like that. Note that if the coordinate type is relative, the `imgSize` parameter is required.
+* `imgSize`: (optional) 2D vector (width, height)=>(int, int) representing the size of the image of the bounding box. If `typeCoordinates=CoordinatesType.Relative`, the parameter `imgSize` is required.
+* `bbType`: (optional) Enum (`bbType=BBType.Groundtruth` or `bbType=BBType.Detection`) identifies if the bounding box represents a ground truth or a detection. Not that if it is a detection, the classConfidence has to be informed.
+* `classConfidence`: (optional) Float value representing the confidence of the detected class. If detectionType is Detection, classConfidence needs to be informed.
+* `format`: (optional) Enum (`BBFormat.XYWH` or `BBFormat.XYX2Y2`) indicating the format of the coordinates of the bounding boxes. If `format=BBFormat.XYWH`, the parameters `x`,`y`,`w` and `h` are: \<left>, \<top>, \<width> and \<height> respectively. If `format=BBFormat.XYX2Y2`, the parameters `x`,`y`,`w` and `h` are: \<left>, \<top>, \<right> and \<bottom> respectively.
 
-All methods that retreive metrics need you to inform the bounding boxes (ground truth and detected). Those bounding boxes are represented by an object of the class `BoundingBoxes` . Each bounding box is defined by the class `BoundingBox`. **The snippet below shows the creation of the bounding boxes** of two images (img_0001 and img_0002). In this example there are 6 ground truth bounding boxes (4 belonging to img_0001 and 2 belonging to img_0002) and 3 detections (2 belonging to img_0001 and 2 belonging to img_0002). Img_0001 ground truths contain bounding boxes of 3 classes (classes 0, 1 and 2). Img_0002 ground truths contain bounding boxes of 2 classes (classes 0 and 1):
+**Attention**: The bounding boxes of the same image (detections or ground truth) must have have the same `imageName`. 
+
+The snippet below shows the creation of the bounding boxes of 3 different images (000001.jpg, 000002.jpg and 000003.jpg) containing 2, 1 and 1 ground truth objects to be detected respectively. There are 3 detected bounding boxes, one at each image.
 
 ```python
-# Defining bounding boxes
-# Ground truth bounding boxes of img_0001.jpg
-gt_boundingBox_1 = BoundingBox(imageName='img_0001', idClass=0, 25, 16, 38, 56, bbType=BBType.GroundTruth, format=BBFormat.XYWH)
-gt_boundingBox_2 = BoundingBox(imageName='img_0001', idClass=0, 129, 123, 41, 62, bbType=BBType.GroundTruth, format=BBFormat.XYWH)
-gt_boundingBox_3 = BoundingBox(imageName='img_0001', idClass=1, 30, 48, 40, 38, bbType=BBType.GroundTruth, format=BBFormat.XYWH)
-gt_boundingBox_4 = BoundingBox(imageName='img_0001', idClass=2, 15, 10, 56, 70, bbType=BBType.GroundTruth, format=BBFormat.XYWH)
-# Ground truth bounding boxes of img_0002.jpg
-gt_boundingBox_5 = BoundingBox(imageName='img_0002', idClass=0, 25, 16, 38, 56, bbType=BBType.GroundTruth, format=BBFormat.XYWH)
-gt_boundingBox_8 = BoundingBox(imageName='img_0002', idClass=1, 15, 10, 56, 70, bbType=BBType.GroundTruth, format=BBFormat.XYWH)
-# Detected bounding boxes of img_0001.jpg
-detected_boundingBox_1 = BoundingBox(imageName='img_0001', idClass=0, 90, 78, 101, 58, bbType=BBType.Detected, format=BBFormat.XYWH)
-detected_boundingBox_2 = BoundingBox(imageName='img_0001', idClass=1, 85, 17, 49, 60, bbType=BBType.Detected, format=BBFormat.XYWH)
-# Detected bounding boxes of img_0002.jpg
-detected_boundingBox_3 = BoundingBox(imageName='img_0002', idClass=1, 27, 18, 45, 60, bbType=BBType.Detected, format=BBFormat.XYWH)
+# Ground truth bounding boxes of 000001.jpg
+gt_boundingBox_1 = BoundingBox(imageName='000001', classId='dog', x=0.34419263456090654, y=0.611, w=0.4164305949008499, h=0.262, typeCoordinates=CoordinatesType.Relative, bbType=BBType.GroundTruth, format=BBFormat.XYWH, imgSize=(353,500))
+gt_boundingBox_2 = BoundingBox(imageName='000001', classId='person', x=0.509915014164306, y=0.51, w=0.9745042492917847, h=0.972, typeCoordinates=CoordinatesType.Relative, bbType=BBType.GroundTruth, format=BBFormat.XYWH, imgSize=(353,500))
+# Ground truth bounding boxes of 000002.jpg
+gt_boundingBox_3 = BoundingBox(imageName='000002', classId='train', x=0.5164179104477612, y=0.501, w=0.20298507462686569, h=0.202, typeCoordinates=CoordinatesType.Relative, bbType=BBType.GroundTruth, format=BBFormat.XYWH, imgSize=(335,500))
+# Ground truth bounding boxes of 000003.jpg
+gt_boundingBox_4 = BoundingBox(imageName='000003', classId='bench', x=0.338, y=0.4666666666666667, w=0.184, h=0.10666666666666666, typeCoordinates=CoordinatesType.Relative, bbType=BBType.GroundTruth, format=BBFormat.XYWH, imgSize=(500,375))
+gt_boundingBox_5 = BoundingBox(imageName='000003', classId='bench', x=0.546, y=0.48133333333333334, w=0.136, h=0.13066666666666665, typeCoordinates=CoordinatesType.Relative, bbType=BBType.GroundTruth, format=BBFormat.XYWH, imgSize=(500,375))
+# Detected bounding boxes of 000001.jpg
+detected_boundingBox_1 = BoundingBox(imageName='000001', classId='person', classConfidence= 0.893202, x=52, y=4, w=352, h=442, typeCoordinates=CoordinatesType.Absolute, bbType=BBType.Detected, format=BBFormat.XYX2Y2, imgSize=(353,500))
+# Detected bounding boxes of 000002.jpg
+detected_boundingBox_2 = BoundingBox(imageName='000002', classId='train', classConfidence=0.863700, x=140, y=195, w=209, h=293, typeCoordinates=CoordinatesType.Absolute, bbType=BBType.Detected, format=BBFormat.XYX2Y2, imgSize=(335,500))
+# Detected bounding boxes of 000003.jpg
+detected_boundingBox_3 = BoundingBox(imageName='000003', classId='bench', classConfidence=0.278000, x=388, y=288, w=493, h=331,  typeCoordinates=CoordinatesType.Absolute, bbType=BBType.Detected, format=BBFormat.XYX2Y2, imgSize=(500,375))
+```
 
+The object `BoundingBoxes` represents a collection of the bounding boxes (ground truth and detected). Evaluation methods of the class `Evaluator` use the `BoundingBoxes` object to apply the metrics. The following code shows how to add the bounding boxes to the collection:
+
+```python
 # Creating the object of the class BoundingBoxes 
 myBoundingBoxes = BoundingBoxes()
 # Add all bounding boxes to the BoundingBoxes object:
-myBoundingBoxes.add(gt_boundingBox_1)
-myBoundingBoxes.add(gt_boundingBox_2)
-myBoundingBoxes.add(gt_boundingBox_3)
-myBoundingBoxes.add(gt_boundingBox_4)
-myBoundingBoxes.add(gt_boundingBox_5)
-myBoundingBoxes.add(gt_boundingBox_6)
-myBoundingBoxes.add(detected_boundingBox_1)
-myBoundingBoxes.add(detected_boundingBox_2)
-myBoundingBoxes.add(detected_boundingBox_3)
+myBoundingBoxes.addBoundingBox(gt_boundingBox_1)
+myBoundingBoxes.addBoundingBox(gt_boundingBox_2)
+myBoundingBoxes.addBoundingBox(gt_boundingBox_3)
+myBoundingBoxes.addBoundingBox(gt_boundingBox_4)
+myBoundingBoxes.addBoundingBox(gt_boundingBox_5)
+myBoundingBoxes.addBoundingBox(detected_boundingBox_1)
+myBoundingBoxes.addBoundingBox(detected_boundingBox_2)
+myBoundingBoxes.addBoundingBox(detected_boundingBox_3)
 ```
 
-Some important points:  
+You can use the method `drawAllBoundingBoxes(image, imageName)` to add ground truth bounding boxes (in green) and detected bounding boxes (in red) into your images:
 
-* Create your bounding boxes using the constructor of the `BoundingBox` class. The 3rd and 4th parameters represent the most top-left x and y coordinates  of the bounding box. The 5th and 6th parameters can be either the most bottom-right x and y coordinates of the bounding box or the width and height of the bounding box. If your bounding box is identified as x1, y1, x2, y2 coordinates, you need to pass `format=BBFormat.XYX2Y2`. If you want to identify it as x, y, width, height, you need to pass `format=BBFormat.XYWH`.
-* Use the tag `bbType=BBType.GroundTruth` to identify your bounding box as being ground truth. If it is a detection, use `bbType=BBType.Detected`.
-* Be consistent with the `imageName` parameter. For example: bounding boxes with `imageName='img_0001'` and `imageName='img0001'` are from two different images. 
-* The code is all commented. [Here](https://github.com/rafaelpadilla/Object-Detection-Metrics/blob/master/lib/BoundingBox.py#L4) you can see all parameters needed by the constructor of the `BoundingBox` class.
+```python
+import cv2
+import numpy as np
+import os
+currentPath = os.path.dirname(os.path.realpath(__file__))
+gtImages = ['000001', '000002', '000003']
+for imageName in gtImages:
+    im = cv2.imread(os.path.join(currentPath,'images','groundtruths',imageName)+'.jpg')
+    # Add bounding boxes
+    im = myBoundingBoxes.drawAllBoundingBoxes(im, imageName)
+    # Uncomment the lines below if you want to show the images
+    #cv2.imshow(imageName+'.jpg', im)
+    #cv2.waitKey(0)
+    cv2.imwrite(os.path.join(currentPath,'images',imageName+'.jpg'),im)
+    print('Image %s created successfully!' % imageName)
+```
 
-**Of course you won't build your bounding boxes one by one as done in this example.** You should read your detections within a loop and create your bounding boxes inside of it. [sample_1.py](https://github.com/rafaelpadilla/Object-Detection-Metrics/blob/master/samples/sample_1.py) reads detections from 2 different folders, one containing .txt files with ground truths and the other containing .txt files with detections. Check this [sample code](https://github.com/rafaelpadilla/Object-Detection-Metrics/blob/master/samples/sample_1.py) as a reference.
+Results: 
+
+<!--- Images with bounding boxes --->
+<p align="center">
+<img src="https://github.com/rafaelpadilla/Object-Detection-Metrics/blob/master/samples/sample_1/images/000001.jpg"   width="20%" align="center"/>/>
+<img src="https://github.com/rafaelpadilla/Object-Detection-Metrics/blob/master/samples/sample_1/images/000002.jpg" width="20%" align="center"/>/>
+<img src="https://github.com/rafaelpadilla/Object-Detection-Metrics/blob/master/samples/sample_1/images/000003.jpg" width="33%" align="center"/>/>
+  </p>
+
+**Of course you won't build your bounding boxes one by one as done in this example.** You should read your detections within a loop and create your bounding boxes inside of it. [Sample_2](https://github.com/rafaelpadilla/Object-Detection-Metrics/tree/master/samples/sample_2) demonstrates how to read detections from folders containing .txt files.
