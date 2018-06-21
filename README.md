@@ -18,7 +18,8 @@ In the topics below you can find an overview of the most popular metrics used in
 - [How to use this project](#how-to-use-this-project)
 - [References](#references)
 
-## Different competitions, different metrics <a name="different-competitions-different-metrics"></a> 
+<a name="different-competitions-different-metrics"></a> 
+## Different competitions, different metrics 
 
 * **[PASCAL VOC challenge](http://host.robots.ox.ac.uk/pascal/VOC/)** offers a Matlab script in order to evaluate the quality of the detected objects. Participants of the competition can use the provided Matlab script to measure the accuracy of their detections before submitting their results. A documentation explaining their criteria for object detection metrics can be accessed [here](http://host.robots.ox.ac.uk/pascal/VOC/voc2012/htmldoc/devkit_doc.html#SECTION00050000000000000000) The current metrics used by the current PASCAL VOC object detection challenge are the **Precision/Recall curve** and **Average Precision**.  
 The PASCAL VOC Matlab evaluation code reads the ground truth bounding boxes from XML files, requiring changes in the code if you want to apply it to other datasets or to your speficic cases. Even though projects such as [Faster-RCNN](https://github.com/rbgirshick/py-faster-rcnn) implement PASCAL VOC evaluation metrics, it is also necessary to convert the detected bounding boxes into their specific format. [Tensorflow](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/evaluation_protocols.md) framework also has their PASCAL VOC metrics implementation.  
