@@ -14,7 +14,7 @@ In the topics below you can find an overview of the most popular metrics used in
 - [Important definitions](#important-definitions)
 - [Metrics](#metrics)
   - [Precision x Recall curve](#precision-x-recall-curve)
-	- [Average Precision] (#average-precision)
+  - [Average Precision](#average-precision)
 - [How to use this project](#how-to-use-this-project)
 - [References](#references)
 
