@@ -1,16 +1,16 @@
 # Metrics for object detection
   
-The motivation of this project is the lack of consensus used by different works and implementations concerning the *evaluation metrics of the object detection problem*. Although on-line competitions use their own metrics to evaluate the task of object detection, just some of them offer reference code snippets to calculate the accuracy of the detected objects.  
+The motivation of this project is the lack of consensus used by different works and implementations concerning the **evaluation metrics of the object detection problem**. Although on-line competitions use their own metrics to evaluate the task of object detection, just some of them offer reference code snippets to calculate the accuracy of the detected objects.  
 Researchers who want to evaluate their work using different datasets than those offered by the competitions, need to implement their own version of the metrics. Sometimes a wrong or different implementation can create different and biased results. Ideally, in order to have trustworthy benchmarking among different approaches, it is necessary to have a flexible implementation that can be used by everyone regardless the dataset used.  
 
-This project aims to provide easy-to-use functions implementing the same metrics used by the the most popular competitions of object detection. Our implementation does not require modifications of your detection model to complicated input formats, avoiding conversions to XML or JSON files. We simplified the input data (ground truth bounding boxes and detected bounding boxes) and gathered in a single project the main metrics used by the academia and challenges. Our implementation was carefully compared against the official implementations and our results are exactly the same.   
+**This project provides easy-to-use functions implementing the same metrics used by the the most popular competitions of object detection**. Our implementation does not require modifications of your detection model to complicated input formats, avoiding conversions to XML or JSON files. We simplified the input data (ground truth bounding boxes and detected bounding boxes) and gathered in a single project the main metrics used by the academia and challenges. Our implementation was carefully compared against the official implementations and our results are exactly the same.   
 
 In the topics below you can find an overview of the most popular metrics used in different competitions and works, as well as samples showing how to use our code.
 
 ## Table of contents
 
 - [Motivation](#metrics-for-object-detection)
-- [Different competitions, different metrics](#different-competitions,-different-metrics)
+- [Different competitions, different metrics](#different-competitions-different-metrics)
 - [Important definitions](#important-definitions)
 - [Metrics](#metrics)
   - [Precision x Recall curve](#precision-x-recall-curve)
@@ -18,7 +18,7 @@ In the topics below you can find an overview of the most popular metrics used in
 - [How to use this project](#how-to-use-this-project)
 - [References](#references)
 
-## Different competitions, different metrics  
+## Different competitions, different metrics <a name="different-competitions-different-metrics"></a> 
 
 * **[PASCAL VOC challenge](http://host.robots.ox.ac.uk/pascal/VOC/)** offers a Matlab script in order to evaluate the quality of the detected objects. Participants of the competition can use the provided Matlab script to measure the accuracy of their detections before submitting their results. A documentation explaining their criteria for object detection metrics can be accessed [here](http://host.robots.ox.ac.uk/pascal/VOC/voc2012/htmldoc/devkit_doc.html#SECTION00050000000000000000) The current metrics used by the current PASCAL VOC object detection challenge are the **Precision/Recall curve** and **Average Precision**.  
 The PASCAL VOC Matlab evaluation code reads the ground truth bounding boxes from XML files, requiring changes in the code if you want to apply it to other datasets or to your speficic cases. Even though projects such as [Faster-RCNN](https://github.com/rbgirshick/py-faster-rcnn) implement PASCAL VOC evaluation metrics, it is also necessary to convert the detected bounding boxes into their specific format. [Tensorflow](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/evaluation_protocols.md) framework also has their PASCAL VOC metrics implementation.  
