@@ -1,10 +1,10 @@
 ###########################################################################################
 #                                                                                         #
-# This sample shows how to evaluate object detections applying the following metrics:      #
+# This sample shows how to evaluate object detections applying the following metrics:     #
 #  * Precision x Recall curve       ---->       used by VOC PASCAL 2012)                  #
 #  * Average Precision (AP)         ---->       used by VOC PASCAL 2012)                  #
 #                                                                                         #
-# Developed by: Rafael Padilla                                                            #
+# Developed by: Rafael Padilla (rafael.padilla@smt.ufrj.br)                               #
 #        SMT - Signal Multimedia and Telecommunications Lab                               #
 #        COPPE - Universidade Federal do Rio de Janeiro                                   #
 #        Last modification: May 24th 2018                                                 #
@@ -17,8 +17,8 @@ from Evaluator import *
 import matplotlib.pyplot as plt
 
 def getBoundingBoxes():
-    allBoundingBoxes = BoundingBoxes()
     """Read txt files containing bounding boxes (ground truth and detections)."""
+    allBoundingBoxes = BoundingBoxes()
     import glob
     import os
     # Read ground truths
@@ -43,8 +43,8 @@ def getBoundingBoxes():
             if line.replace(' ','') == '':
                 continue
             splitLine = line.split(" ")
-            idClass = int(splitLine[0]) #class
-            x = float(splitLine[1])
+            idClass = splitLine[0] #class
+            x = float(splitLine[1]) #confidence
             y = float(splitLine[2])
             w = float(splitLine[3])
             h = float(splitLine[4])
@@ -73,8 +73,8 @@ def getBoundingBoxes():
             if line.replace(' ','') == '':
                 continue            
             splitLine = line.split(" ")
-            idClass = int(splitLine[0]) #class
-            confidence = float(splitLine[1])
+            idClass = splitLine[0] #class
+            confidence = float(splitLine[1]) #confidence
             x = float(splitLine[2])
             y = float(splitLine[3])
             w = float(splitLine[4])
@@ -114,14 +114,15 @@ evaluator = Evaluator()
 # VOC PASCAL Metrics
 ##############################################################
 # Plot Precision x Recall curve
-evaluator.PlotPrecisionRecallCurve(0, # Class to show
+evaluator.PlotPrecisionRecallCurve('object', # Class to show
                                    boundingboxes, # Object containing all bounding boxes (ground truths and detections)
                                    IOUThreshold=0.3, # IOU threshold
                                    showAP=True, # Show Average Precision in the title of the plot
                                    showInterpolatedPrecision=False) # Don't plot the interpolated precision curve
 # Get metrics with PASCAL VOC metrics
 metricsPerClass = evaluator.GetPascalVOCMetrics(boundingboxes, # Object containing all bounding boxes (ground truths and detections)
-                                                IOUThreshold=.3) # IOU threshold
+                                                IOUThreshold=0.3) # IOU threshold
+print("Average precision values per class:\n")
 # Loop through classes to obtain their metrics
 for mc in metricsPerClass:
     # Get metric values per each class
@@ -131,3 +132,5 @@ for mc in metricsPerClass:
     average_precision = mc['AP']
     ipre = mc['interpolated precision']
     irec = mc['interpolated recall']
+    # Print AP per class
+    print('%s: %f' % (c, average_precision))

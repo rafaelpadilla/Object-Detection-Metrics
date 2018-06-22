@@ -18,5 +18,5 @@ def add_path(path):
 currentPath = os.path.dirname(os.path.realpath(__file__))
 
 # Add lib to PYTHONPATH
-libPath = os.path.join(currentPath, '..', '..', 'lib')
+libPath = os.path.join(currentPath, 'lib')
 add_path(libPath)
