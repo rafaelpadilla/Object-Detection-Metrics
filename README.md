@@ -1,3 +1,7 @@
+<p align="left"> 
+<img src="https://zenodo.org/badge/134606465.svg">
+</p>
+
 # Metrics for object detection
   
 The motivation of this project is the lack of consensus used by different works and implementations concerning the **evaluation metrics of the object detection problem**. Although on-line competitions use their own metrics to evaluate the task of object detection, just some of them offer reference code snippets to calculate the accuracy of the detected objects.  
