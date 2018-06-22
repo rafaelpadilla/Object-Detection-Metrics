@@ -236,7 +236,8 @@ Follow the steps below to start evaluating your detections:
 
 1. [Create the ground truth files](#create-the-ground-truth-files)
 2. [Create your detection files](#create-your-detection-files)
-3. For **Pascal VOC metrics**, run the code: `python pascalvoc.py`  
+3. For **Pascal VOC metrics**, run the command: `python pascalvoc.py`  
+   If you want to reproduce the example above, run the command: `python pascalvoc.py -t 0.3`
 4. (Optional) [You can use arguments to control the IOU threshold, bounding boxes format, etc.](#optional-arguments)
 
 ### Create the ground truth files
