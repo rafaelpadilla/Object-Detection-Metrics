@@ -55,7 +55,7 @@ class BoundingBox:
                 self._x2 = w
                 self._y2 = h
                 self._w = self._x2-self._x
-                self._h = self._y2+self._y
+                self._h = self._y2-self._y
         if imgSize == None:
             self._width_img = None
             self._height_img =  None
@@ -118,7 +118,7 @@ class BoundingBox:
     
     @staticmethod
     def clone(boundingBox):
-        absBB = boundingBox.getAbsoluteBoundingBox(format=BBFormat.XYWH)
+        absBB = boundingBox.getAbsoluteBoundingBox(format=boundingBox.getFormat())
         # return (self._x,self._y,self._x2,self._y2)
         newBoundingBox = BoundingBox(boundingBox.getImageName(), boundingBox.getClassId(), \
                                     absBB[0], absBB[1], absBB[2], absBB[3], \
