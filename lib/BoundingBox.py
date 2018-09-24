@@ -53,6 +53,7 @@ class BoundingBox:
         self._format = format
 
         # If relative coordinates, convert to absolute values
+        # For relative coords: (x,y,w,h)=(X_center/img_width , Y_center/img_height)
         if (typeCoordinates == CoordinatesType.Relative):
             (self._x, self._y, self._w, self._h) = convertToAbsoluteValues(imgSize, (x, y, w, h))
             self._width_img = imgSize[0]
@@ -63,8 +64,9 @@ class BoundingBox:
                 self._w = self._x2 - self._x
                 self._h = self._y2 - self._y
             else:
-                # Needed to implement
-                raise IOError('To implement')
+                raise IOError(
+                    'For relative coordinates, the format must be XYWH (x,y,width,height)')
+        # For absolute coords: (x,y,w,h)=real bb coords
         else:
             self._x = x
             self._y = y
@@ -145,11 +147,16 @@ class BoundingBox:
     def clone(boundingBox):
         absBB = boundingBox.getAbsoluteBoundingBox(format=BBFormat.XYWH)
         # return (self._x,self._y,self._x2,self._y2)
-        newBoundingBox = BoundingBox(boundingBox.getImageName(), boundingBox.getClassId(), \
-                                    absBB[0], absBB[1], absBB[2], absBB[3], \
-                                    typeCoordinates = boundingBox.getCoordinatesType(), \
-                                    imgSize = boundingBox.getImageSize(), \
-                                    bbType = boundingBox.getBBType(), \
-                                    classConfidence = boundingBox.getConfidence(), \
-                                    format = BBFormat.XYWH)
+        newBoundingBox = BoundingBox(
+            boundingBox.getImageName(),
+            boundingBox.getClassId(),
+            absBB[0],
+            absBB[1],
+            absBB[2],
+            absBB[3],
+            typeCoordinates=boundingBox.getCoordinatesType(),
+            imgSize=boundingBox.getImageSize(),
+            bbType=boundingBox.getBBType(),
+            classConfidence=boundingBox.getConfidence(),
+            format=BBFormat.XYWH)
         return newBoundingBox

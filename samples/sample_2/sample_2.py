@@ -14,7 +14,7 @@ import _init_paths
 from BoundingBox import BoundingBox
 from BoundingBoxes import BoundingBoxes
 from Evaluator import *
-import matplotlib.pyplot as plt
+
 
 def getBoundingBoxes():
     """Read txt files containing bounding boxes (ground truth and detections)."""
@@ -23,36 +23,46 @@ def getBoundingBoxes():
     import os
     # Read ground truths
     currentPath = os.path.dirname(os.path.abspath(__file__))
-    folderGT = os.path.join(currentPath,'groundtruths')
+    folderGT = os.path.join(currentPath, 'groundtruths')
     os.chdir(folderGT)
     files = glob.glob("*.txt")
     files.sort()
     # Class representing bounding boxes (ground truths and detections)
     allBoundingBoxes = BoundingBoxes()
     # Read GT detections from txt file
-    # Each line of the files in the groundtruths folder represents a ground truth bounding box (bounding boxes that a detector should detect)
+    # Each line of the files in the groundtruths folder represents a ground truth bounding box
+    # (bounding boxes that a detector should detect)
     # Each value of each line is  "class_id, x, y, width, height" respectively
     # Class_id represents the class of the bounding box
     # x, y represents the most top-left coordinates of the bounding box
     # x2, y2 represents the most bottom-right coordinates of the bounding box
     for f in files:
-        nameOfImage = f.replace(".txt","")
+        nameOfImage = f.replace(".txt", "")
         fh1 = open(f, "r")
         for line in fh1:
-            line = line.replace("\n","")
-            if line.replace(' ','') == '':
+            line = line.replace("\n", "")
+            if line.replace(' ', '') == '':
                 continue
             splitLine = line.split(" ")
-            idClass = splitLine[0] #class
-            x = float(splitLine[1]) #confidence
+            idClass = splitLine[0]  # class
+            x = float(splitLine[1])  # confidence
             y = float(splitLine[2])
             w = float(splitLine[3])
             h = float(splitLine[4])
-            bb = BoundingBox(nameOfImage,idClass,x,y,w,h,CoordinatesType.Absolute, (200,200), BBType.GroundTruth, format=BBFormat.XYWH)
+            bb = BoundingBox(
+                nameOfImage,
+                idClass,
+                x,
+                y,
+                w,
+                h,
+                CoordinatesType.Absolute, (200, 200),
+                BBType.GroundTruth,
+                format=BBFormat.XYWH)
             allBoundingBoxes.addBoundingBox(bb)
         fh1.close()
     # Read detections
-    folderDet = os.path.join(currentPath,'detections')
+    folderDet = os.path.join(currentPath, 'detections')
     os.chdir(folderDet)
     files = glob.glob("*.txt")
     files.sort()
@@ -60,29 +70,40 @@ def getBoundingBoxes():
     # Each line of the files in the detections folder represents a detected bounding box.
     # Each value of each line is  "class_id, confidence, x, y, width, height" respectively
     # Class_id represents the class of the detected bounding box
-    # Confidence represents the confidence (from 0 to 1) that this detection belongs to the class_id.
+    # Confidence represents confidence (from 0 to 1) that this detection belongs to the class_id.
     # x, y represents the most top-left coordinates of the bounding box
     # x2, y2 represents the most bottom-right coordinates of the bounding box
     for f in files:
         # nameOfImage = f.replace("_det.txt","")
-        nameOfImage = f.replace(".txt","")
+        nameOfImage = f.replace(".txt", "")
         # Read detections from txt file
         fh1 = open(f, "r")
         for line in fh1:
-            line = line.replace("\n","")
-            if line.replace(' ','') == '':
-                continue            
+            line = line.replace("\n", "")
+            if line.replace(' ', '') == '':
+                continue
             splitLine = line.split(" ")
-            idClass = splitLine[0] #class
-            confidence = float(splitLine[1]) #confidence
+            idClass = splitLine[0]  # class
+            confidence = float(splitLine[1])  # confidence
             x = float(splitLine[2])
             y = float(splitLine[3])
             w = float(splitLine[4])
             h = float(splitLine[5])
-            bb = BoundingBox(nameOfImage, idClass,x,y,w,h,CoordinatesType.Absolute, (200,200), BBType.Detected, confidence, format=BBFormat.XYWH)
+            bb = BoundingBox(
+                nameOfImage,
+                idClass,
+                x,
+                y,
+                w,
+                h,
+                CoordinatesType.Absolute, (200, 200),
+                BBType.Detected,
+                confidence,
+                format=BBFormat.XYWH)
             allBoundingBoxes.addBoundingBox(bb)
         fh1.close()
     return allBoundingBoxes
+
 
 def createImages(dictGroundTruth, dictDetected):
     """Create representative images with bounding boxes."""
@@ -91,11 +112,9 @@ def createImages(dictGroundTruth, dictDetected):
     # Define image size
     width = 200
     height = 200
-    # Create an empty image
-    _dict = {}
     # Loop through the dictionary with ground truth detections
     for key in dictGroundTruth:
-        image = np.zeros((height,width,3), np.uint8)
+        image = np.zeros((height, width, 3), np.uint8)
         gt_boundingboxes = dictGroundTruth[key]
         image = gt_boundingboxes.drawAllBoundingBoxes(image)
         detection_boundingboxes = dictDetected[key]
@@ -104,24 +123,27 @@ def createImages(dictGroundTruth, dictDetected):
         cv2.imshow(key, image)
         cv2.waitKey()
 
+
 # Read txt files containing bounding boxes (ground truth and detections)
 boundingboxes = getBoundingBoxes()
 # Uncomment the line below to generate images based on the bounding boxes
-#createImages(dictGroundTruth, dictDetected)
+# createImages(dictGroundTruth, dictDetected)
 # Create an evaluator object in order to obtain the metrics
 evaluator = Evaluator()
 ##############################################################
 # VOC PASCAL Metrics
 ##############################################################
 # Plot Precision x Recall curve
-evaluator.PlotPrecisionRecallCurve('object', # Class to show
-                                   boundingboxes, # Object containing all bounding boxes (ground truths and detections)
-                                   IOUThreshold=0.3, # IOU threshold
-                                   showAP=True, # Show Average Precision in the title of the plot
-                                   showInterpolatedPrecision=False) # Don't plot the interpolated precision curve
+evaluator.PlotPrecisionRecallCurve(
+    'object',  # Class to show
+    boundingboxes,  # Object containing all bounding boxes (ground truths and detections)
+    IOUThreshold=0.3,  # IOU threshold
+    showAP=True,  # Show Average Precision in the title of the plot
+    showInterpolatedPrecision=False)  # Don't plot the interpolated precision curve
 # Get metrics with PASCAL VOC metrics
-metricsPerClass = evaluator.GetPascalVOCMetrics(boundingboxes, # Object containing all bounding boxes (ground truths and detections)
-                                                IOUThreshold=0.3) # IOU threshold
+metricsPerClass = evaluator.GetPascalVOCMetrics(
+    boundingboxes,  # Object containing all bounding boxes (ground truths and detections)
+    IOUThreshold=0.3)  # IOU threshold
 print("Average precision values per class:\n")
 # Loop through classes to obtain their metrics
 for mc in metricsPerClass:
