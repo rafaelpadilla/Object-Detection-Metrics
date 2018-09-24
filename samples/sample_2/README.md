@@ -2,6 +2,15 @@
 
 This sample was created for those who want to understand more about the metric functions of this project. If you just want to evaluate your detections dealing with a high level interface, just check the instructions [here](https://github.com/rafaelpadilla/Object-Detection-Metrics/blob/master/README.md#how-to-use-this-project).
 
+In order to reproduce the results of this code **using the high level interface**, just navigate to the folder where the ```pascalvoc.py``` is and run the following command: ```python pascalvoc.py -t 0.3```
+
+or if you want to be more complete: ```python pascalvoc.py -gt groundtruths/ -det detections/ -t 0.3```
+
+or if you want to use [relative coordinates](https://github.com/rafaelpadilla/Object-Detection-Metrics/tree/master/detections_rel) (like retrieved results from YOLO), you need to inform that the detected coordinates are relative, specify the image size:
+```python pascalvoc.py -gt groundtruths/ -det detections_rel/ -detcoords rel  -imgsize 200,200 -t 0.3```
+
+Or if you want to play a little bit with this project, follow the steps below:
+
 ### Evaluation Metrics
 
 First we need to represent each bounding box with the class `BoundingBox`. The function `getBoundingBoxes` reads .txt files containing the coordinates of the [detected](https://github.com/rafaelpadilla/Object-Detection-Metrics/tree/master/samples/sample_2/detections) and [ground truth](https://github.com/rafaelpadilla/Object-Detection-Metrics/tree/master/samples/sample_2/groundtruths) bounding boxes and creates a `BoundingBox` object for each of them. Then, it gathers all boxes in the `BoundingBoxes` object and returns it:
