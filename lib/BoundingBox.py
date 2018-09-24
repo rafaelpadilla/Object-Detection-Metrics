@@ -151,5 +151,5 @@ class BoundingBox:
                                     imgSize = boundingBox.getImageSize(), \
                                     bbType = boundingBox.getBBType(), \
                                     classConfidence = boundingBox.getConfidence(), \
-                                    format = boundingBox.getFormat())
+                                    format = BBFormat.XYWH)
         return newBoundingBox
