@@ -14,6 +14,7 @@ import _init_paths
 from BoundingBox import BoundingBox
 from BoundingBoxes import BoundingBoxes
 from Evaluator import *
+from utils import *
 
 
 def getBoundingBoxes():
@@ -138,12 +139,14 @@ evaluator.PlotPrecisionRecallCurve(
     'object',  # Class to show
     boundingboxes,  # Object containing all bounding boxes (ground truths and detections)
     IOUThreshold=0.3,  # IOU threshold
+    method=MethodAveragePrecision.EveryPointInterpolation,  # As the official matlab code
     showAP=True,  # Show Average Precision in the title of the plot
-    showInterpolatedPrecision=False)  # Don't plot the interpolated precision curve
+    showInterpolatedPrecision=True)  # Don't plot the interpolated precision curve
 # Get metrics with PASCAL VOC metrics
 metricsPerClass = evaluator.GetPascalVOCMetrics(
     boundingboxes,  # Object containing all bounding boxes (ground truths and detections)
-    IOUThreshold=0.3)  # IOU threshold
+    IOUThreshold=0.3,  # IOU threshold
+    method=MethodAveragePrecision.EveryPointInterpolation)  # As the official matlab code
 print("Average precision values per class:\n")
 # Loop through classes to obtain their metrics
 for mc in metricsPerClass:
@@ -156,3 +159,4 @@ for mc in metricsPerClass:
     irec = mc['interpolated recall']
     # Print AP per class
     print('%s: %f' % (c, average_precision))
+a = 123

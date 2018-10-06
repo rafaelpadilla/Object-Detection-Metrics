@@ -1,5 +1,18 @@
-import cv2
 from enum import Enum
+
+import cv2
+
+
+class MethodAveragePrecision(Enum):
+    """
+    Class representing if the coordinates are relative to the
+    image size or are absolute values.
+
+        Developed by: Rafael Padilla
+        Last modification: Apr 28 2018
+    """
+    EveryPointInterpolation = 1
+    ElevenPointInterpolation = 2
 
 
 class CoordinatesType(Enum):

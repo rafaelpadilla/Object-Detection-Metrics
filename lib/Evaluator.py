@@ -8,24 +8,33 @@
 #        Last modification: May 24th 2018                                                 #
 ###########################################################################################
 
+import sys
+from collections import Counter
+
+import matplotlib.pyplot as plt
+import numpy as np
+
 from BoundingBox import *
 from BoundingBoxes import *
-import matplotlib.pyplot as plt
-from collections import Counter
 from utils import *
-import numpy as np
-import sys
 
 
 class Evaluator:
-    def GetPascalVOCMetrics(self, boundingboxes, IOUThreshold=0.5):
+    def GetPascalVOCMetrics(self,
+                            boundingboxes,
+                            IOUThreshold=0.5,
+                            method=MethodAveragePrecision.EveryPointInterpolation):
         """Get the metrics used by the VOC Pascal 2012 challenge.
         Get
         Args:
             boundingboxes: Object of the class BoundingBoxes representing ground truth and detected
             bounding boxes;
             IOUThreshold: IOU threshold indicating which detections will be considered TP or FP
-            (default value = 0.5).
+            (default value = 0.5);
+            method (default = EveryPointInterpolation): It can be calculated as the implementation
+            in the official PASCAL VOC toolkit (EveryPointInterpolation), or applying the 11-point
+            interpolatio as described in the paper "The PASCAL Visual Object Classes(VOC) Challenge"
+            or EveryPointInterpolation"  (ElevenPointInterpolation);
         Returns:
             A list of dictionaries. Each dictionary contains information and metrics of each class.
             The keys of each dictionary are:
@@ -112,7 +121,11 @@ class Evaluator:
             acc_TP = np.cumsum(TP)
             rec = acc_TP / npos
             prec = np.divide(acc_TP, (acc_FP + acc_TP))
-            [ap, mpre, mrec, ii] = Evaluator.CalculateAveragePrecision(rec, prec)
+            # Depending on the method, call the right implementation
+            if method == MethodAveragePrecision.EveryPointInterpolation:
+                [ap, mpre, mrec, ii] = Evaluator.CalculateAveragePrecision(rec, prec)
+            else:
+                [ap, mpre, mrec, _] = Evaluator.ElevenPointInterpolatedAP(rec, prec)
             # add class result in the dictionary to be returned
             r = {
                 'class': c,
@@ -132,6 +145,7 @@ class Evaluator:
                                  classId,
                                  boundingBoxes,
                                  IOUThreshold=0.5,
+                                 method=MethodAveragePrecision.EveryPointInterpolation,
                                  showAP=False,
                                  showInterpolatedPrecision=False,
                                  savePath=None,
@@ -144,6 +158,10 @@ class Evaluator:
             bounding boxes;
             IOUThreshold (optional): IOU threshold indicating which detections will be considered
             TP or FP (default value = 0.5);
+            method (default = EveryPointInterpolation): It can be calculated as the implementation
+            in the official PASCAL VOC toolkit (EveryPointInterpolation), or applying the 11-point
+            interpolatio as described in the paper "The PASCAL Visual Object Classes(VOC) Challenge"
+            or EveryPointInterpolation"  (ElevenPointInterpolation).
             showAP (optional): if True, the average precision value will be shown in the title of
             the graph (default = False);
             showInterpolatedPrecision (optional): if True, it will show in the plot the interpolated
@@ -164,7 +182,7 @@ class Evaluator:
             dict['total TP']: total number of True Positive detections;
             dict['total FP']: total number of False Negative detections;
         """
-        results = self.GetPascalVOCMetrics(boundingBoxes, IOUThreshold)
+        results = self.GetPascalVOCMetrics(boundingBoxes, IOUThreshold, method)
         result = None
         for res in results:
             if res['class'] == classId:
@@ -178,10 +196,64 @@ class Evaluator:
         average_precision = result['AP']
         mpre = result['interpolated precision']
         mrec = result['interpolated recall']
+        # npos = result['total positives']
+        # total_tp = result['total TP']
+        # total_fp = result['total FP']
+
+        if showInterpolatedPrecision:
+            if method == MethodAveragePrecision.EveryPointInterpolation:
+                plt.plot(mrec, mpre, '--r', label='Interpolated precision (every point)')
+            elif method == MethodAveragePrecision.ElevenPointInterpolation:
+                # Uncomment the line below if you want to plot the area
+                # plt.plot(mrec, mpre, 'or', label='11-point interpolated precision')
+                # Remove duplicates, getting only the highest precision of each recall value
+                nrec = []
+                nprec = []
+                for idx in range(len(mrec)):
+                    r = mrec[idx]
+                    if r not in nrec:
+                        idxEq = np.argwhere(mrec == r)
+                        nrec.append(r)
+                        nprec.append(max([mpre[int(id)] for id in idxEq]))
+                plt.plot(nrec, nprec, 'or', label='11-point interpolated precision')
+        plt.plot(recall, precision, label='Precision')
+        plt.xlabel('recall')
+        plt.ylabel('precision')
+        if showAP:
+            ap_str = "{0:.2f}%".format(average_precision * 100)
+            plt.title('Precision x Recall curve \nClass: %s, AP: %s' % (str(classId), ap_str))
+            # plt.title('Precision x Recall curve \nClass: %s, AP: %.4f' % (str(classId),
+            # average_precision))
+        else:
+            plt.title('Precision x Recall curve \nClass: %d' % classId)
+        plt.legend(shadow=True)
+        plt.grid()
+        plt.show()
+
+    def PlotPrecisionRecallCurve2(self,
+                                  classId,
+                                  boundingBoxes,
+                                  IOUThreshold=0.5,
+                                  showAP=False,
+                                  showInterpolatedPrecision=False,
+                                  savePath=None,
+                                  showGraphic=True):
+        results = self.GetPascalVOCMetrics(boundingBoxes, IOUThreshold)
+        result = None
+        for res in results:
+            if res['class'] == classId:
+                result = res
+                break
+        if result is None:
+            raise IOError('Error: Class %d could not be found.' % classId)
+        precision = result['precision']
+        recall = result['recall']
+        average_precision = result['AP']
+        mpre = result['interpolated precision']
+        mrec = result['interpolated recall']
         npos = result['total positives']
         total_tp = result['total TP']
         total_fp = result['total FP']
-
         if showInterpolatedPrecision:
             plt.plot(mrec, mpre, '--r', label='Interpolated precision')
         plt.plot(recall, precision, label='Precision')
@@ -287,6 +359,56 @@ class Evaluator:
             ap = ap + np.sum((mrec[i] - mrec[i - 1]) * mpre[i])
         # return [ap, mpre[1:len(mpre)-1], mrec[1:len(mpre)-1], ii]
         return [ap, mpre[0:len(mpre) - 1], mrec[0:len(mpre) - 1], ii]
+
+    @staticmethod
+    # 11-point interpolated average precision
+    def ElevenPointInterpolatedAP(rec, prec):
+        # def CalculateAveragePrecision2(rec, prec):
+        mrec = []
+        # mrec.append(0)
+        [mrec.append(e) for e in rec]
+        # mrec.append(1)
+        mpre = []
+        # mpre.append(0)
+        [mpre.append(e) for e in prec]
+        # mpre.append(0)
+        recallValues = np.linspace(0, 1, 11)
+        recallValues = list(recallValues[::-1])
+        rhoInterp = []
+        recallValid = []
+        # For each recallValues (0, 0.1, 0.2, ... , 1)
+        for r in recallValues:
+            # Obtain all recall values higher or equal than r
+            argGreaterRecalls = np.argwhere(mrec[:-1] >= r)
+            pmax = 0
+            # If there are recalls above r
+            if argGreaterRecalls.size != 0:
+                pmax = max(mpre[argGreaterRecalls.min():])
+            recallValid.append(r)
+            rhoInterp.append(pmax)
+        # By definition AP = sum(max(precision whose recall is above r))/11
+        ap = sum(rhoInterp) / 11
+        # Generating values for the plot
+        rvals = []
+        rvals.append(recallValid[0])
+        [rvals.append(e) for e in recallValid]
+        rvals.append(0)
+        pvals = []
+        pvals.append(0)
+        [pvals.append(e) for e in rhoInterp]
+        pvals.append(0)
+        # rhoInterp = rhoInterp[::-1]
+        cc = []
+        for i in range(len(rvals)):
+            p = (rvals[i], pvals[i - 1])
+            if p not in cc:
+                cc.append(p)
+            p = (rvals[i], pvals[i])
+            if p not in cc:
+                cc.append(p)
+        recallValues = [i[0] for i in cc]
+        rhoInterp = [i[1] for i in cc]
+        return [ap, rhoInterp, recallValues, None]
 
     # For each detections, calculate IOU with reference
     @staticmethod
