@@ -159,4 +159,3 @@ for mc in metricsPerClass:
     irec = mc['interpolated recall']
     # Print AP per class
     print('%s: %f' % (c, average_precision))
-a = 123

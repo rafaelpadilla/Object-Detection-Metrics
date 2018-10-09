@@ -5,7 +5,7 @@
 # Developed by: Rafael Padilla (rafael.padilla@smt.ufrj.br)                               #
 #        SMT - Signal Multimedia and Telecommunications Lab                               #
 #        COPPE - Universidade Federal do Rio de Janeiro                                   #
-#        Last modification: May 24th 2018                                                 #
+#        Last modification: Oct 9th 2018                                                 #
 ###########################################################################################
 
 import sys
@@ -196,9 +196,9 @@ class Evaluator:
         average_precision = result['AP']
         mpre = result['interpolated precision']
         mrec = result['interpolated recall']
-        # npos = result['total positives']
-        # total_tp = result['total TP']
-        # total_fp = result['total FP']
+        npos = result['total positives']
+        total_tp = result['total TP']
+        total_fp = result['total FP']
 
         if showInterpolatedPrecision:
             if method == MethodAveragePrecision.EveryPointInterpolation:
@@ -228,47 +228,6 @@ class Evaluator:
             plt.title('Precision x Recall curve \nClass: %d' % classId)
         plt.legend(shadow=True)
         plt.grid()
-        plt.show()
-
-    def PlotPrecisionRecallCurve2(self,
-                                  classId,
-                                  boundingBoxes,
-                                  IOUThreshold=0.5,
-                                  showAP=False,
-                                  showInterpolatedPrecision=False,
-                                  savePath=None,
-                                  showGraphic=True):
-        results = self.GetPascalVOCMetrics(boundingBoxes, IOUThreshold)
-        result = None
-        for res in results:
-            if res['class'] == classId:
-                result = res
-                break
-        if result is None:
-            raise IOError('Error: Class %d could not be found.' % classId)
-        precision = result['precision']
-        recall = result['recall']
-        average_precision = result['AP']
-        mpre = result['interpolated precision']
-        mrec = result['interpolated recall']
-        npos = result['total positives']
-        total_tp = result['total TP']
-        total_fp = result['total FP']
-        if showInterpolatedPrecision:
-            plt.plot(mrec, mpre, '--r', label='Interpolated precision')
-        plt.plot(recall, precision, label='Precision')
-        plt.xlabel('recall')
-        plt.ylabel('precision')
-        if showAP:
-            ap_str = "{0:.2f}%".format(average_precision * 100)
-            plt.title('Precision x Recall curve \nClass: %s, AP: %s' % (str(classId), ap_str))
-            # plt.title('Precision x Recall curve \nClass: %s, AP: %.4f' % (str(classId),
-            # average_precision))
-        else:
-            plt.title('Precision x Recall curve \nClass: %d' % classId)
-        plt.legend(shadow=True)
-        plt.grid()
-
         ############################################################
         # Uncomment the following block to create plot with points #
         ############################################################
@@ -320,12 +279,11 @@ class Evaluator:
         #                 xytext=vecPositions[idx], textcoords='offset points',
         #                 arrowprops=dict(arrowstyle="->", connectionstyle="arc3"),
         #                 bbox=box)
-
         if savePath is not None:
             plt.savefig(savePath)
         if showGraphic is True:
             plt.show()
-
+            # plt.waitforbuttonpress()
         ret = {}
         ret['class'] = classId
         ret['precision'] = precision

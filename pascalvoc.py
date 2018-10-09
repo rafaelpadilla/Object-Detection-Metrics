@@ -7,7 +7,7 @@
 # Developed by: Rafael Padilla (rafael.padilla@smt.ufrj.br)                               #
 #        SMT - Signal Multimedia and Telecommunications Lab                               #
 #        COPPE - Universidade Federal do Rio de Janeiro                                   #
-#        Last modification: May 24th 2018                                                 #
+#        Last modification: Oct 9th 2018                                                 #
 ###########################################################################################
 
 import _init_paths
@@ -81,7 +81,9 @@ def ValidatePaths(arg, nameArg, errors):
         errors.append('argument %s: invalid directory' % nameArg)
     elif os.path.isdir(arg) is False and os.path.isdir(os.path.join(currentPath, arg)) is False:
         errors.append('argument %s: directory does not exist \'%s\'' % (nameArg, arg))
-    elif os.path.isdir(os.path.join(currentPath, arg)) is True:
+    # elif os.path.isdir(os.path.join(currentPath, arg)) is True:
+    #     arg = os.path.join(currentPath, arg)
+    else:
         arg = os.path.join(currentPath, arg)
     return arg
 
@@ -161,6 +163,8 @@ def getBoundingBoxes(directory,
         fh1.close()
     return allBoundingBoxes, allClasses
 
+# Get current path to set default folders
+currentPath = os.path.dirname(os.path.abspath(__file__))
 
 VERSION = '0.1 (beta)'
 
@@ -178,12 +182,14 @@ parser.add_argument(
     '-gt',
     '--gtfolder',
     dest='gtFolder',
+    default=os.path.join(currentPath,'groundtruths'),
     metavar='',
     help='folder containing your ground truth bounding boxes')
 parser.add_argument(
     '-det',
     '--detfolder',
     dest='detFolder',
+    default=os.path.join(currentPath,'detections'),
     metavar='',
     help='folder containing your detected bounding boxes')
 # Optional
@@ -199,6 +205,7 @@ parser.add_argument(
     '-gtformat',
     dest='gtFormat',
     metavar='',
+    default='xywh',
     help='format of the coordinates of the ground truth bounding boxes: '
     '(\'xywh\': <left> <top> <width> <height>)'
     ' or (\'xyrb\': <left> <top> <right> <bottom>)')
@@ -206,17 +213,20 @@ parser.add_argument(
     '-detformat',
     dest='detFormat',
     metavar='',
+    default='xywh',
     help='format of the coordinates of the detected bounding boxes '
     '(\'xywh\': <left> <top> <width> <height>) '
     'or (\'xyrb\': <left> <top> <right> <bottom>)')
 parser.add_argument(
     '-gtcoords',
     dest='gtCoordinates',
+    default='abs',
     metavar='',
     help='reference of the ground truth bounding box coordinates: absolute '
     'values (\'abs\') or relative to its image size (\'rel\')')
 parser.add_argument(
     '-detcoords',
+    default='abs',
     dest='detCoordinates',
     metavar='',
     help='reference of the ground truth bounding box coordinates: '
@@ -227,7 +237,8 @@ parser.add_argument(
     metavar='',
     help='image size. Required if -gtcoords or -detcoords are \'rel\'')
 parser.add_argument(
-    '-sp', '--savepath', dest='savePath', metavar='', help='folder where the plots are saved')
+    '-sp', '--savepath', dest='savePath',
+    metavar='', help='folder where the plots are saved')
 parser.add_argument(
     '-np',
     '--noplot',
@@ -243,13 +254,11 @@ errors = []
 # Validate formats
 gtFormat = ValidateFormats(args.gtFormat, '-gtformat', errors)
 detFormat = ValidateFormats(args.detFormat, '-detformat', errors)
-# Validate mandatory (paths)
-currentPath = os.path.dirname(os.path.abspath(__file__))
 # Groundtruth folder
 if ValidateMandatoryArgs(args.gtFolder, '-gt/--gtfolder', errors):
     gtFolder = ValidatePaths(args.gtFolder, '-gt/--gtfolder', errors)
 else:
-    errors.pop()
+    # errors.pop()
     gtFolder = os.path.join(currentPath, 'groundtruths')
     if os.path.isdir(gtFolder) is False:
         errors.append('folder %s not found' % gtFolder)
@@ -265,14 +274,13 @@ if detCoordType == CoordinatesType.Relative:  # Image size is required
 if ValidateMandatoryArgs(args.detFolder, '-det/--detfolder', errors):
     detFolder = ValidatePaths(args.detFolder, '-det/--detfolder', errors)
 else:
-    errors.pop()
+    # errors.pop()
     detFolder = os.path.join(currentPath, 'detections')
     if os.path.isdir(detFolder) is False:
         errors.append('folder %s not found' % detFolder)
 # Validate savePath
 if args.savePath is not None:
     savePath = ValidatePaths(args.savePath, '-sp/--savepath', errors)
-    savePath = os.path.join(args.savePath, 'results')
 else:
     savePath = os.path.join(currentPath, 'results')
 # If error, show error messages
@@ -299,8 +307,10 @@ showPlot = args.showPlot
 # print('detCoordType = %s' % detCoordType)
 # print('showPlot %s' % showPlot)
 
+# Get groundtruth boxes
 allBoundingBoxes, allClasses = getBoundingBoxes(
     gtFolder, True, gtFormat, gtCoordType, imgSize=imgSize)
+# Get detected boxes
 allBoundingBoxes, allClasses = getBoundingBoxes(
     detFolder, False, detFormat, detCoordType, allBoundingBoxes, allClasses, imgSize=imgSize)
 allClasses.sort()
