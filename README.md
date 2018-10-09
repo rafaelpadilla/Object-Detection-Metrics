@@ -19,6 +19,8 @@ In the topics below you can find an overview of the most popular metrics used in
 - [Metrics](#metrics)
   - [Precision x Recall curve](#precision-x-recall-curve)
   - [Average Precision](#average-precision)
+    - [11-point interpolation](#11-point-interpolation)
+    - [Interpolating all  points](#interpolating-all-points)
 - [**How to use this project**](#how-to-use-this-project)
 - [References](#references)
 
@@ -84,16 +86,19 @@ In the topics below there are some comments on the most popular metrics used for
 
 ### Precision x Recall curve
 
-The Precision x Recall curve is a good way to evaluate the performance of an object detector as the confidence is changed. There is a curve for each object class. An object detector of a particular class is considered good if its precision stays high as recall increases, which means that if you vary the confidence threshold, the precision and recall will still be high. Another way to identify a good object detector is to look for a detector that can identify only relevant objects (0 False Positives = high precision), finding all ground truth objects (0 False Negatives = high recall).  
+The Precision x Recall curve is a good way to evaluate the performance of an object detector as the confidence is changed by plotting a curve for each object class. An object detector of a particular class is considered good if its precision stays high as recall increases, which means that if you vary the confidence threshold, the precision and recall will still be high. Another way to identify a good object detector is to look for a detector that can identify only relevant objects (0 False Positives = high precision), finding all ground truth objects (0 False Negatives = high recall).  
 
-A poor object detector needs to increase the number of detected objects (increasing False Positives = lower precision) in order to retrieve all ground truth objects (high recall). That's why the Precision x Recall curve usually starts with high precision values, decreasing as recall increases. You can see an example of the Prevision x Recall curve in the next topic (Average Precision).  
-This kind of curve is used by the PASCAL VOC 2012 challenge and is available in our implementation.  
+A poor object detector needs to increase the number of detected objects (increasing False Positives = lower precision) in order to retrieve all ground truth objects (high recall). That's why the Precision x Recall curve usually starts with high precision values, decreasing as recall increases. You can see an example of the Prevision x Recall curve in the next topic (Average Precision). This kind of curve is used by the PASCAL VOC 2012 challenge and is available in our implementation.  
 
 ### Average Precision
 
-Another way to compare the performance of object detectors is to calculate the area under the curve (AUC) of the Precision x Recall curve. As AP curves are often zigzag curves frequently going up and down, comparing different curves (different detectors) in the same plot usually is not an easy task - because the curves tend to cross each other much frequently. That's why Average Precision (AP), a numerical metric, can also help us compare different detectors. In practice AP is the precision averaged across all recall values between 0 and 1.  
+Another way to compare the performance of object detectors is to calculate the area under the curve (AUC) of the Precision x Recall curve. As AP curves are often zigzag curves going up and down, comparing different curves (different detectors) in the same plot usually is not an easy task - because the curves tend to cross each other much frequently. That's why Average Precision (AP), a numerical metric, can also help us compare different detectors. In practice AP is the precision averaged across all recall values between 0 and 1.  
 
-PASCAL VOC 2012 challenge uses the **interpolated average precision**. It tries to summarize the shape of the Precision x Recall curve by averaging the precision at a set of eleven equally spaced recall levels [0, 0.1, 0.2, ... , 1]:
+From 2010 on, the method of computing AP by the PASCAL VOC challenge has changed. Currently, **the interpolation performed by PASCAL VOC challenge uses all data points, rather than interpolating only 11 equally spaced points as stated in their [paper](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.157.5766&rep=rep1&type=pdf)**. As we want to reproduce their default implementation, our default code (as seen further) follows their most recent application (interpolating all data points). However, we also offer the 11-point interpolation approach. 
+
+#### 11-point interpolation
+
+The 11-point interpolation tries to summarize the shape of the Precision x Recall curve by averaging the precision at a set of eleven equally spaced recall levels [0, 0.1, 0.2, ... , 1]:
 
 <p align="center"> 
 <img src="http://latex.codecogs.com/gif.latex?AP%20%3D%20%5Cfrac%7B1%7D%7B11%7D%5Csum_%7Br%5Cin%5C%7B0%2C0.1%2C...%2C1%5C%7D%7D%5Crho_%7B%5Ctext%7Binterp%7D%5Cleft%20%28r%5Cright%20%29%7D">
@@ -107,7 +112,30 @@ with
 
 where ![](http://latex.codecogs.com/gif.latex?%5Crho%5Cleft%20%28%20%5Ctilde%7Br%7D%20%5Cright%20%29) is the measured precision at recall ![](http://latex.codecogs.com/gif.latex?%5Ctilde%7Br%7D).
 
-Instead of using the precision observed at each point, the AP is obtained by interpolating the precision at each level ![](http://latex.codecogs.com/gif.latex?r) taking the **maximum precision whose recall value is greater than ![](http://latex.codecogs.com/gif.latex?r)**.
+Instead of using the precision observed at each point, the AP is obtained by interpolating the precision only at the 11 levels ![](http://latex.codecogs.com/gif.latex?r) taking the **maximum precision whose recall value is greater than ![](http://latex.codecogs.com/gif.latex?r)**.
+
+#### Interpolating all points
+
+Instead of interpolating only in the 11 equally spaced points, you could interpolate through all points in such way that:
+
+<p align="center"> 
+<img src="http://latex.codecogs.com/gif.latex?%5Csum_%7Br%3D0%7D%5E%7B1%7D%20%5Cleft%20%28%20r_%7Bn&plus;1%7D%20-%20r_n%5Cright%20%29%20%5Crho_%7Binterp%7D%5Cleft%20%28%20r_%7Bn&plus;1%7D%20%5Cright%20%29">
+</p>
+
+ 
+with
+
+<p align="center"> 
+<img src="http://latex.codecogs.com/gif.latex?%5Crho_%7Binterp%7D%5Cleft%20%28%20r_%7Bn&plus;1%7D%20%5Cright%20%29%20%3D%20%5Cmax_%7B%5Ctilde%7Br%7D%3A%5Ctilde%7Br%7D%5Cgeq%20r_%7Bn&plus;1%7D%7D%5Crho%5Cleft%20%28%20%5Ctilde%7Br%7D%20%5Cright%20%29">
+</p>
+
+
+where ![](http://latex.codecogs.com/gif.latex?%5Crho%5Cleft%20%28%20%5Ctilde%7Br%7D%20%5Cright%20%29) is the measured precision at recall ![](http://latex.codecogs.com/gif.latex?%5Ctilde%7Br%7D).
+
+In this case, instead of using the precision observed at only few points, the AP is now obtained by interpolating the precision at **each level**, ![](http://latex.codecogs.com/gif.latex?r) taking the **maximum precision whose recall value is greater or equal than ![](http://latex.codecogs.com/gif.latex?r&plus;1)**. This way we calculate the estimated area under the curve.
+
+To make things more clear, we provided an example comparing both interpolations.
+
 
 #### An ilustrated example 
 
@@ -198,14 +226,34 @@ The Precision x Recall curve is plotted by calculating the precision and recall 
 <img src="https://github.com/rafaelpadilla/Object-Detection-Metrics/blob/master/aux_images/precision_recall_example_1_v2.png" align="center"/>
 </p>
  
-As seen before, the idea of the interpolated average precision is to average the precisions at a set of 11 recall levels (0,0.1,...,1). The interpolated precision values are obtained by taking the maximum precision whose recall value is greater than its current recall value. We can visually obtain those values by looking at the recalls starting from the highest (0.4666) to 0 (looking at the plot from right to left) and, as we decrease the recall, we annotate the precision values that are the highest as shown in the image below:
+As mentioned before, there are two different ways to measure the interpolted average precision: **11-point interpolation** and **interpolating all points**. Below we make a comparisson between them:
+
+#### Calculating the 11-point interpolation
+
+The idea of the 11-point interpolated average precision is to average the precisions at a set of 11 recall levels (0,0.1,...,1). The interpolated precision values are obtained by taking the maximum precision whose recall value is greater than its current recall value as follows: 
 
 <!--- interpolated precision curve --->
 <p align="center">
-<img src="https://github.com/rafaelpadilla/Object-Detection-Metrics/blob/master/aux_images/interpolated_precision_v2.png" align="center"/>
+<img src="https://github.com/rafaelpadilla/Object-Detection-Metrics/blob/master/aux_images/11-pointInterpolation.png" align="center"/>
 </p>
 
-The Average Precision (AP) is the AUC obtained by the interpolated precision. The intention is to reduce the impact of the wiggles in the Precision x Recall curve. We divide the AUC into 4 areas (A1, A2, A3 and A4) as shown below:
+By applying the 11-point interpolation, we have:  
+
+![](http://latex.codecogs.com/gif.latex?AP%20%3D%20%5Cfrac%7B1%7D%7B11%7D%5Csum_%7Br%5Cin%5C%7B0%2C0.1%2C...%2C1%5C%7D%7D%5Crho_%7B%5Ctext%7Binterp%7D%5Cleft%20%28r%5Cright%20%29%7D)  
+![](http://latex.codecogs.com/gif.latex?AP%20%3D%20%5Cfrac%7B1%7D%7B11%7D%20%5Cleft%20%28%201&plus;0.6666&plus;0.4285&plus;0.4285&plus;0.4285&plus;0&plus;0&plus;0&plus;0&plus;0&plus;0%20%5Cright%20%29)  
+![](http://latex.codecogs.com/gif.latex?AP%20%3D%2026.84%5C%25)
+
+
+#### Calculating the interpolation performed in all points
+
+By interpolating all points, the Average Precision (AP) can be interpreted as an approximated AUC of the Precision x Recall curve. The intention is to reduce the impact of the wiggles in the curve. By applying the equations presented before, we can obtain the areas as it will be demostrated here. We could also visually have the interpolated precision points by looking at the recalls starting from the highest (0.4666) to 0 (looking at the plot from right to left) and, as we decrease the recall, we collect the precision values that are the highest as shown in the image below:
+    
+<!--- interpolated precision AUC --->
+<p align="center">
+<img src="https://github.com/rafaelpadilla/Object-Detection-Metrics/blob/master/aux_images/interpolated_precision_v2.png" align="center"/>
+</p>
+  
+Looking at the plot above, we can divide the AUC into 4 areas (A1, A2, A3 and A4):
   
 <!--- interpolated precision AUC --->
 <p align="center">
@@ -226,8 +274,11 @@ Calculating the total area, we have the AP:
 ![](http://latex.codecogs.com/gif.latex?AP%20%3D%200.24560955)  
 ![](http://latex.codecogs.com/gif.latex?AP%20%3D%20%5Cmathbf%7B24.56%5C%25%7D)  
 
-If you want to reproduce these results, see the **[Sample 2](https://github.com/rafaelpadilla/Object-Detection-Metrics/tree/master/samples/sample_2/)**.
+The results between the two different interpolation methods are a little different: 24.56% and 26.84% by the every point interpolation and the 11-point interpolation respectively.  
 
+Our default implementation is the same as VOC PASCAL: every point interpolation. If you want to use the 11-point interpolation, change the functions that use the argument ```method=MethodAveragePrecision.EveryPointInterpolation``` to ```method=MethodAveragePrecision.ElevenPointInterpolation```.   
+
+If you want to reproduce these results, see the **[Sample 2](https://github.com/rafaelpadilla/Object-Detection-Metrics/tree/master/samples/sample_2/)**.
 <!--In order to evaluate your detections, you just need a simple list of `Detection` objects. A `Detection` object is a very simple class containing the class id, class probability and bounding boxes coordinates of the detected objects. This same structure is used for the groundtruth detections.-->
 
 ## How to use this project
