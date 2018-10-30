@@ -349,7 +349,7 @@ for c in allClasses:
         prec = ['%.2f' % p for p in precision]
         rec = ['%.2f' % r for r in recall]
         ap_str = "{0:.2f}%".format(ap * 100)
-        # ap_str = str('%.2f' % ap) #AQUI
+        # ap_str = "{0:.4f}%".format(ap * 100)
         print('AP: %s (%s)' % (ap_str, cl))
         f.write('\n\nClass: %s' % cl)
         f.write('\nAP: %s' % ap_str)

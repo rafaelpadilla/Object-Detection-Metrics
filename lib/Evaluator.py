@@ -110,8 +110,11 @@ class Evaluator:
                 if iouMax >= IOUThreshold:
                     if det[dects[d][0]][jmax] == 0:
                         TP[d] = 1  # count as true positive
+                        det[dects[d][0]][jmax] = 1  # flag as already 'seen'
                         # print("TP")
-                    det[dects[d][0]][jmax] = 1  # flag as already 'seen'
+                    else:
+                        FP[d] = 1  # count as false positive
+                        # print("FP")
                 # - A detected "cat" is overlaped with a GT "cat" with IOU >= IOUThreshold.
                 else:
                     FP[d] = 1  # count as false positive
@@ -221,9 +224,8 @@ class Evaluator:
         plt.ylabel('precision')
         if showAP:
             ap_str = "{0:.2f}%".format(average_precision * 100)
+            # ap_str = "{0:.4f}%".format(average_precision * 100)
             plt.title('Precision x Recall curve \nClass: %s, AP: %s' % (str(classId), ap_str))
-            # plt.title('Precision x Recall curve \nClass: %s, AP: %.4f' % (str(classId),
-            # average_precision))
         else:
             plt.title('Precision x Recall curve \nClass: %d' % classId)
         plt.legend(shadow=True)
