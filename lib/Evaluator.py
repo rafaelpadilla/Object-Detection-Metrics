@@ -8,6 +8,7 @@
 #        Last modification: Oct 9th 2018                                                 #
 ###########################################################################################
 
+import os
 import sys
 from collections import Counter
 
@@ -145,7 +146,6 @@ class Evaluator:
         return ret
 
     def PlotPrecisionRecallCurve(self,
-                                 classId,
                                  boundingBoxes,
                                  IOUThreshold=0.5,
                                  method=MethodAveragePrecision.EveryPointInterpolation,
@@ -156,7 +156,6 @@ class Evaluator:
         """PlotPrecisionRecallCurve
         Plot the Precision x Recall curve for a given class.
         Args:
-            classId: The class that will be plot;
             boundingBoxes: Object of the class BoundingBoxes representing ground truth and detected
             bounding boxes;
             IOUThreshold (optional): IOU threshold indicating which detections will be considered
@@ -173,8 +172,8 @@ class Evaluator:
             (ex: /home/mywork/ap.png) (default = None);
             showGraphic (optional): if True, the plot will be shown (default = True)
         Returns:
-            A dictionary containing information and metric about the class. The keys of the
-            dictionary are:
+            A list of dictionaries. Each dictionary contains information and metrics of each class.
+            The keys of each dictionary are:
             dict['class']: class representing the current dictionary;
             dict['precision']: array with the precision values;
             dict['recall']: array with the recall values;
@@ -187,116 +186,107 @@ class Evaluator:
         """
         results = self.GetPascalVOCMetrics(boundingBoxes, IOUThreshold, method)
         result = None
-        for res in results:
-            if res['class'] == classId:
-                result = res
-                break
-        if result is None:
-            raise IOError('Error: Class %d could not be found.' % classId)
+        # Each resut represents a class
+        for result in results:
+            if result is None:
+                raise IOError('Error: Class %d could not be found.' % classId)
 
-        precision = result['precision']
-        recall = result['recall']
-        average_precision = result['AP']
-        mpre = result['interpolated precision']
-        mrec = result['interpolated recall']
-        npos = result['total positives']
-        total_tp = result['total TP']
-        total_fp = result['total FP']
+            classId = result['class']
+            precision = result['precision']
+            recall = result['recall']
+            average_precision = result['AP']
+            mpre = result['interpolated precision']
+            mrec = result['interpolated recall']
+            npos = result['total positives']
+            total_tp = result['total TP']
+            total_fp = result['total FP']
 
-        if showInterpolatedPrecision:
-            if method == MethodAveragePrecision.EveryPointInterpolation:
-                plt.plot(mrec, mpre, '--r', label='Interpolated precision (every point)')
-            elif method == MethodAveragePrecision.ElevenPointInterpolation:
-                # Uncomment the line below if you want to plot the area
-                # plt.plot(mrec, mpre, 'or', label='11-point interpolated precision')
-                # Remove duplicates, getting only the highest precision of each recall value
-                nrec = []
-                nprec = []
-                for idx in range(len(mrec)):
-                    r = mrec[idx]
-                    if r not in nrec:
-                        idxEq = np.argwhere(mrec == r)
-                        nrec.append(r)
-                        nprec.append(max([mpre[int(id)] for id in idxEq]))
-                plt.plot(nrec, nprec, 'or', label='11-point interpolated precision')
-        plt.plot(recall, precision, label='Precision')
-        plt.xlabel('recall')
-        plt.ylabel('precision')
-        if showAP:
-            ap_str = "{0:.2f}%".format(average_precision * 100)
-            # ap_str = "{0:.4f}%".format(average_precision * 100)
-            plt.title('Precision x Recall curve \nClass: %s, AP: %s' % (str(classId), ap_str))
-        else:
-            plt.title('Precision x Recall curve \nClass: %d' % classId)
-        plt.legend(shadow=True)
-        plt.grid()
-        ############################################################
-        # Uncomment the following block to create plot with points #
-        ############################################################
-        # plt.plot(recall, precision, 'bo')
-        # labels = ['R', 'Y', 'J', 'A', 'U', 'C', 'M', 'F', 'D', 'B', 'H', 'P', 'E', 'X', 'N', 'T',
-        # 'K', 'Q', 'V', 'I', 'L', 'S', 'G', 'O']
-        # dicPosition = {}
-        # dicPosition['left_zero'] = (-30,0)
-        # dicPosition['left_zero_slight'] = (-30,-10)
-        # dicPosition['right_zero'] = (30,0)
-        # dicPosition['left_up'] = (-30,20)
-        # dicPosition['left_down'] = (-30,-25)
-        # dicPosition['right_up'] = (20,20)
-        # dicPosition['right_down'] = (20,-20)
-        # dicPosition['up_zero'] = (0,30)
-        # dicPosition['up_right'] = (0,30)
-        # dicPosition['left_zero_long'] = (-60,-2)
-        # dicPosition['down_zero'] = (-2,-30)
-        # vecPositions = [
-        #     dicPosition['left_down'],
-        #     dicPosition['left_zero'],
-        #     dicPosition['right_zero'],
-        #     dicPosition['right_zero'],  #'R', 'Y', 'J', 'A',
-        #     dicPosition['left_up'],
-        #     dicPosition['left_up'],
-        #     dicPosition['right_up'],
-        #     dicPosition['left_up'],  # 'U', 'C', 'M', 'F',
-        #     dicPosition['left_zero'],
-        #     dicPosition['right_up'],
-        #     dicPosition['right_down'],
-        #     dicPosition['down_zero'],  #'D', 'B', 'H', 'P'
-        #     dicPosition['left_up'],
-        #     dicPosition['up_zero'],
-        #     dicPosition['right_up'],
-        #     dicPosition['left_up'],  # 'E', 'X', 'N', 'T',
-        #     dicPosition['left_zero'],
-        #     dicPosition['right_zero'],
-        #     dicPosition['left_zero_long'],
-        #     dicPosition['left_zero_slight'],  # 'K', 'Q', 'V', 'I',
-        #     dicPosition['right_down'],
-        #     dicPosition['left_down'],
-        #     dicPosition['right_up'],
-        #     dicPosition['down_zero']
-        # ]  # 'L', 'S', 'G', 'O'
-        # for idx in range(len(labels)):
-        #     box = dict(boxstyle='round,pad=.5',facecolor='yellow',alpha=0.5)
-        #     plt.annotate(labels[idx],
-        #                 xy=(recall[idx],precision[idx]), xycoords='data',
-        #                 xytext=vecPositions[idx], textcoords='offset points',
-        #                 arrowprops=dict(arrowstyle="->", connectionstyle="arc3"),
-        #                 bbox=box)
-        if savePath is not None:
-            plt.savefig(savePath)
-        if showGraphic is True:
-            plt.show()
-            # plt.waitforbuttonpress()
-        ret = {}
-        ret['class'] = classId
-        ret['precision'] = precision
-        ret['recall'] = recall
-        ret['AP'] = average_precision
-        ret['interpolated precision'] = mpre
-        ret['interpolated recall'] = mrec
-        ret['total positives'] = npos
-        ret['total TP'] = total_tp
-        ret['total FP'] = total_fp
-        return ret
+            plt.close()
+            if showInterpolatedPrecision:
+                if method == MethodAveragePrecision.EveryPointInterpolation:
+                    plt.plot(mrec, mpre, '--r', label='Interpolated precision (every point)')
+                elif method == MethodAveragePrecision.ElevenPointInterpolation:
+                    # Uncomment the line below if you want to plot the area
+                    # plt.plot(mrec, mpre, 'or', label='11-point interpolated precision')
+                    # Remove duplicates, getting only the highest precision of each recall value
+                    nrec = []
+                    nprec = []
+                    for idx in range(len(mrec)):
+                        r = mrec[idx]
+                        if r not in nrec:
+                            idxEq = np.argwhere(mrec == r)
+                            nrec.append(r)
+                            nprec.append(max([mpre[int(id)] for id in idxEq]))
+                    plt.plot(nrec, nprec, 'or', label='11-point interpolated precision')
+            plt.plot(recall, precision, label='Precision')
+            plt.xlabel('recall')
+            plt.ylabel('precision')
+            if showAP:
+                ap_str = "{0:.2f}%".format(average_precision * 100)
+                # ap_str = "{0:.4f}%".format(average_precision * 100)
+                plt.title('Precision x Recall curve \nClass: %s, AP: %s' % (str(classId), ap_str))
+            else:
+                plt.title('Precision x Recall curve \nClass: %d' % classId)
+            plt.legend(shadow=True)
+            plt.grid()
+            ############################################################
+            # Uncomment the following block to create plot with points #
+            ############################################################
+            # plt.plot(recall, precision, 'bo')
+            # labels = ['R', 'Y', 'J', 'A', 'U', 'C', 'M', 'F', 'D', 'B', 'H', 'P', 'E', 'X', 'N', 'T',
+            # 'K', 'Q', 'V', 'I', 'L', 'S', 'G', 'O']
+            # dicPosition = {}
+            # dicPosition['left_zero'] = (-30,0)
+            # dicPosition['left_zero_slight'] = (-30,-10)
+            # dicPosition['right_zero'] = (30,0)
+            # dicPosition['left_up'] = (-30,20)
+            # dicPosition['left_down'] = (-30,-25)
+            # dicPosition['right_up'] = (20,20)
+            # dicPosition['right_down'] = (20,-20)
+            # dicPosition['up_zero'] = (0,30)
+            # dicPosition['up_right'] = (0,30)
+            # dicPosition['left_zero_long'] = (-60,-2)
+            # dicPosition['down_zero'] = (-2,-30)
+            # vecPositions = [
+            #     dicPosition['left_down'],
+            #     dicPosition['left_zero'],
+            #     dicPosition['right_zero'],
+            #     dicPosition['right_zero'],  #'R', 'Y', 'J', 'A',
+            #     dicPosition['left_up'],
+            #     dicPosition['left_up'],
+            #     dicPosition['right_up'],
+            #     dicPosition['left_up'],  # 'U', 'C', 'M', 'F',
+            #     dicPosition['left_zero'],
+            #     dicPosition['right_up'],
+            #     dicPosition['right_down'],
+            #     dicPosition['down_zero'],  #'D', 'B', 'H', 'P'
+            #     dicPosition['left_up'],
+            #     dicPosition['up_zero'],
+            #     dicPosition['right_up'],
+            #     dicPosition['left_up'],  # 'E', 'X', 'N', 'T',
+            #     dicPosition['left_zero'],
+            #     dicPosition['right_zero'],
+            #     dicPosition['left_zero_long'],
+            #     dicPosition['left_zero_slight'],  # 'K', 'Q', 'V', 'I',
+            #     dicPosition['right_down'],
+            #     dicPosition['left_down'],
+            #     dicPosition['right_up'],
+            #     dicPosition['down_zero']
+            # ]  # 'L', 'S', 'G', 'O'
+            # for idx in range(len(labels)):
+            #     box = dict(boxstyle='round,pad=.5',facecolor='yellow',alpha=0.5)
+            #     plt.annotate(labels[idx],
+            #                 xy=(recall[idx],precision[idx]), xycoords='data',
+            #                 xytext=vecPositions[idx], textcoords='offset points',
+            #                 arrowprops=dict(arrowstyle="->", connectionstyle="arc3"),
+            #                 bbox=box)
+            if savePath is not None:
+                plt.savefig(os.path.join(savePath, classId + '.png'))
+            if showGraphic is True:
+                plt.show()
+                # plt.waitforbuttonpress()
+                plt.pause(0.05)
+        return results
 
     @staticmethod
     def CalculateAveragePrecision(rec, prec):

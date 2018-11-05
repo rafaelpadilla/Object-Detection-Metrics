@@ -10,17 +10,18 @@
 #        Last modification: Oct 9th 2018                                                 #
 ###########################################################################################
 
+import argparse
+import glob
+import os
+import shutil
+# from argparse import RawTextHelpFormatter
+import sys
+
 import _init_paths
 from BoundingBox import BoundingBox
 from BoundingBoxes import BoundingBoxes
 from Evaluator import *
 from utils import BBFormat
-import argparse
-# from argparse import RawTextHelpFormatter
-import sys
-import os
-import glob
-import shutil
 
 
 # Validate formats
@@ -163,6 +164,7 @@ def getBoundingBoxes(directory,
         fh1.close()
     return allBoundingBoxes, allClasses
 
+
 # Get current path to set default folders
 currentPath = os.path.dirname(os.path.abspath(__file__))
 
@@ -182,14 +184,14 @@ parser.add_argument(
     '-gt',
     '--gtfolder',
     dest='gtFolder',
-    default=os.path.join(currentPath,'groundtruths'),
+    default=os.path.join(currentPath, 'groundtruths'),
     metavar='',
     help='folder containing your ground truth bounding boxes')
 parser.add_argument(
     '-det',
     '--detfolder',
     dest='detFolder',
-    default=os.path.join(currentPath,'detections'),
+    default=os.path.join(currentPath, 'detections'),
     metavar='',
     help='folder containing your detected bounding boxes')
 # Optional
@@ -237,8 +239,7 @@ parser.add_argument(
     metavar='',
     help='image size. Required if -gtcoords or -detcoords are \'rel\'')
 parser.add_argument(
-    '-sp', '--savepath', dest='savePath',
-    metavar='', help='folder where the plots are saved')
+    '-sp', '--savepath', dest='savePath', metavar='', help='folder where the plots are saved')
 parser.add_argument(
     '-np',
     '--noplot',
@@ -278,11 +279,11 @@ else:
     detFolder = os.path.join(currentPath, 'detections')
     if os.path.isdir(detFolder) is False:
         errors.append('folder %s not found' % detFolder)
-# Validate savePath
 if args.savePath is not None:
     savePath = ValidatePaths(args.savePath, '-sp/--savepath', errors)
 else:
     savePath = os.path.join(currentPath, 'results')
+# Validate savePath
 # If error, show error messages
 if len(errors) is not 0:
     print("""usage: Object Detection Metrics [-h] [-v] [-gt] [-det] [-t] [-gtformat]
@@ -315,25 +316,28 @@ allBoundingBoxes, allClasses = getBoundingBoxes(
     detFolder, False, detFormat, detCoordType, allBoundingBoxes, allClasses, imgSize=imgSize)
 allClasses.sort()
 
+evaluator = Evaluator()
+acc_AP = 0
+validClasses = 0
+
+# Plot Precision x Recall curve
+detections = evaluator.PlotPrecisionRecallCurve(
+    allBoundingBoxes,  # Object containing all bounding boxes (ground truths and detections)
+    IOUThreshold=iouThreshold,  # IOU threshold
+    method=MethodAveragePrecision.EveryPointInterpolation,
+    showAP=True,  # Show Average Precision in the title of the plot
+    showInterpolatedPrecision=False,  # Don't plot the interpolated precision curve
+    savePath=savePath,
+    showGraphic=showPlot)
+
 f = open(os.path.join(savePath, 'results.txt'), 'w')
 f.write('Object Detection Metrics\n')
 f.write('https://github.com/rafaelpadilla/Object-Detection-Metrics\n\n\n')
 f.write('Average Precision (AP), Precision and Recall per class:')
 
-evaluator = Evaluator()
-acc_AP = 0
-validClasses = 0
-# for each class
-for c in allClasses:
-    # Plot Precision x Recall curve
-    metricsPerClass = evaluator.PlotPrecisionRecallCurve(
-        c,  # Class to show
-        allBoundingBoxes,  # Object containing all bounding boxes (ground truths and detections)
-        IOUThreshold=iouThreshold,  # IOU threshold
-        showAP=True,  # Show Average Precision in the title of the plot
-        showInterpolatedPrecision=False,  # Don't plot the interpolated precision curve
-        savePath=os.path.join(savePath, c + '.png'),
-        showGraphic=showPlot)
+# each detection is a class
+for metricsPerClass in detections:
+
     # Get metric values per each class
     cl = metricsPerClass['class']
     ap = metricsPerClass['AP']
@@ -360,4 +364,3 @@ mAP = acc_AP / validClasses
 mAP_str = "{0:.2f}%".format(mAP * 100)
 print('mAP: %s' % mAP_str)
 f.write('\n\n\nmAP: %s' % mAP_str)
-f.close()
