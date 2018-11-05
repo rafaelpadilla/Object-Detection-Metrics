@@ -1,8 +1,8 @@
 ###########################################################################################
 #                                                                                         #
 # This sample shows how to evaluate object detections applying the following metrics:     #
-#  * Precision x Recall curve       ---->       used by VOC PASCAL 2012)                  #
-#  * Average Precision (AP)         ---->       used by VOC PASCAL 2012)                  #
+#  * Precision x Recall curve       ---->       used by VOC PASCAL 2012                   #
+#  * Average Precision (AP)         ---->       used by VOC PASCAL 2012                   #
 #                                                                                         #
 # Developed by: Rafael Padilla (rafael.padilla@smt.ufrj.br)                               #
 #        SMT - Signal Multimedia and Telecommunications Lab                               #
@@ -136,12 +136,11 @@ evaluator = Evaluator()
 ##############################################################
 # Plot Precision x Recall curve
 evaluator.PlotPrecisionRecallCurve(
-    'object',  # Class to show
     boundingboxes,  # Object containing all bounding boxes (ground truths and detections)
     IOUThreshold=0.3,  # IOU threshold
     method=MethodAveragePrecision.EveryPointInterpolation,  # As the official matlab code
     showAP=True,  # Show Average Precision in the title of the plot
-    showInterpolatedPrecision=True)  # Don't plot the interpolated precision curve
+    showInterpolatedPrecision=True)  # Plot the interpolated precision curve
 # Get metrics with PASCAL VOC metrics
 metricsPerClass = evaluator.GetPascalVOCMetrics(
     boundingboxes,  # Object containing all bounding boxes (ground truths and detections)

@@ -2,7 +2,8 @@
 #                                                                                         #
 # This sample demonstrates:                                                               #
 # * How to create your own bounding boxes (detections and ground truth) manually;         #
-# * Fill the object of the class BoundingBoxes with your bounding boxes;                  #
+# * Ground truth bounding boxes are drawn in green and detected boxes are drawn in red;   #
+# * Create objects of the class BoundingBoxes with your bounding boxes;                   #
 # * Create images with detections and ground truth;                                       #
 #                                                                                         #
 # Developed by: Rafael Padilla (rafael.padilla@smt.ufrj.br)                               #
@@ -11,12 +12,13 @@
 #        Last modification: May 24th 2018                                                 #
 ###########################################################################################
 
+import os
+
 import _init_paths
 import cv2
-import os
-from utils import *
 from BoundingBox import BoundingBox
 from BoundingBoxes import BoundingBoxes
+from utils import *
 
 ###########################
 # Defining bounding boxes #
