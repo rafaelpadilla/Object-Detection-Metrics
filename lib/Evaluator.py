@@ -23,6 +23,7 @@ from utils import *
 class Evaluator:
     def GetPascalVOCMetrics(self,
                             boundingboxes,
+                            scoreThreshold=0.0,
                             IOUThreshold=0.5,
                             method=MethodAveragePrecision.EveryPointInterpolation):
         """Get the metrics used by the VOC Pascal 2012 challenge.
@@ -30,6 +31,8 @@ class Evaluator:
         Args:
             boundingboxes: Object of the class BoundingBoxes representing ground truth and detected
             bounding boxes;
+            scoreThreshold: Score threshold indicating which detections will be considered TP or FP
+            (default value = 0.0)
             IOUThreshold: IOU threshold indicating which detections will be considered TP or FP
             (default value = 0.5);
             method (default = EveryPointInterpolation): It can be calculated as the implementation
@@ -65,7 +68,7 @@ class Evaluator:
                     bb.getClassId(), 1,
                     bb.getAbsoluteBoundingBox(BBFormat.XYX2Y2)
                 ])
-            else:
+            elif (bb.getConfidence() >= scoreThreshold):
                 detections.append([
                     bb.getImageName(),
                     bb.getClassId(),
@@ -147,6 +150,7 @@ class Evaluator:
 
     def PlotPrecisionRecallCurve(self,
                                  boundingBoxes,
+                                 scoreThreshold=0.0,
                                  IOUThreshold=0.5,
                                  method=MethodAveragePrecision.EveryPointInterpolation,
                                  showAP=False,
@@ -158,6 +162,8 @@ class Evaluator:
         Args:
             boundingBoxes: Object of the class BoundingBoxes representing ground truth and detected
             bounding boxes;
+            IOUThreshold (optional): Score threshold indicating which detections will be considered
+            TP or FP (default value = 0.0);
             IOUThreshold (optional): IOU threshold indicating which detections will be considered
             TP or FP (default value = 0.5);
             method (default = EveryPointInterpolation): It can be calculated as the implementation
@@ -184,7 +190,7 @@ class Evaluator:
             dict['total TP']: total number of True Positive detections;
             dict['total FP']: total number of False Negative detections;
         """
-        results = self.GetPascalVOCMetrics(boundingBoxes, IOUThreshold, method)
+        results = self.GetPascalVOCMetrics(boundingBoxes, scoreThreshold, IOUThreshold, method)
         result = None
         # Each resut represents a class
         for result in results:

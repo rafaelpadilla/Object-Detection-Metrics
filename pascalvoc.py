@@ -196,6 +196,14 @@ parser.add_argument(
     help='folder containing your detected bounding boxes')
 # Optional
 parser.add_argument(
+    '-st',
+    '--score-threshold',
+    dest='scoreThreshold',
+    type=float,
+    default=0.0,
+    metavar='',
+    help='Score threshold. Default 0.0')
+parser.add_argument(
     '-t',
     '--threshold',
     dest='iouThreshold',
@@ -248,6 +256,7 @@ parser.add_argument(
     help='no plot is shown during execution')
 args = parser.parse_args()
 
+scoreThreshold = args.scoreThreshold
 iouThreshold = args.iouThreshold
 
 # Arguments validation
@@ -323,6 +332,7 @@ validClasses = 0
 # Plot Precision x Recall curve
 detections = evaluator.PlotPrecisionRecallCurve(
     allBoundingBoxes,  # Object containing all bounding boxes (ground truths and detections)
+    scoreThreshold=scoreThreshold,  # score threshold
     IOUThreshold=iouThreshold,  # IOU threshold
     method=MethodAveragePrecision.EveryPointInterpolation,
     showAP=True,  # Show Average Precision in the title of the plot
