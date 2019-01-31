@@ -329,7 +329,7 @@ class Evaluator:
         # For each recallValues (0, 0.1, 0.2, ... , 1)
         for r in recallValues:
             # Obtain all recall values higher or equal than r
-            argGreaterRecalls = np.argwhere(mrec[:-1] >= r)
+            argGreaterRecalls = np.argwhere(mrec[:] >= r)
             pmax = 0
             # If there are recalls above r
             if argGreaterRecalls.size != 0:
