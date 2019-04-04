@@ -1,5 +1,5 @@
 <p align="left"> 
-<img src="https://zenodo.org/badge/134606465.svg">
+<img src="https://zenodo.org/badge/DOI/10.5281/zenodo.2554189.svg">
 </p>
 
 # Metrics for object detection
