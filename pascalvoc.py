@@ -22,6 +22,7 @@ from BoundingBox import BoundingBox
 from BoundingBoxes import BoundingBoxes
 from Evaluator import *
 from utils import BBFormat
+import xml.etree.ElementTree as ET
 
 
 # Validate formats
@@ -89,13 +90,51 @@ def ValidatePaths(arg, nameArg, errors):
     return arg
 
 
+def getBoundingBoxesFromXml(xml_path, coordType, bbFormat, allBoundingBoxes,
+                            allClasses, isGT):
+    assert coordType == CoordinatesType.Absolute
+    assert bbFormat == BBFormat.XYX2Y2
+    assert isGT is True
+
+    tree = ET.parse(xml_path)
+    root = tree.getroot()
+    size = root.find('size')
+    w = int(size.find('width').text)
+    h = int(size.find('height').text)
+    nameOfImage = xml_path.replace(".xml", "")
+
+    for obj in root.iter('object'):
+        difficult = obj.find('difficult').text
+        cls_name = obj.find('name').text
+        if int(difficult) == 1:
+          continue
+        xmlbox = obj.find('bndbox')
+        b = (float(xmlbox.find('xmin').text), float(xmlbox.find('xmax').text),
+             float(xmlbox.find('ymin').text), float(xmlbox.find('ymax').text))
+        bb = BoundingBox(
+            nameOfImage,
+            cls_name,
+            float(xmlbox.find('xmin').text),
+            float(xmlbox.find('ymin').text),
+            float(xmlbox.find('xmax').text),
+            float(xmlbox.find('ymax').text),
+            coordType,
+            (w, h),
+            BBType.GroundTruth,
+            format=bbFormat)
+        allBoundingBoxes.addBoundingBox(bb)
+        if cls_name not in allClasses:
+            allClasses.append(cls_name)
+
+
 def getBoundingBoxes(directory,
                      isGT,
                      bbFormat,
                      coordType,
                      allBoundingBoxes=None,
                      allClasses=None,
-                     imgSize=(0, 0)):
+                     imgSize=(0, 0),
+                     isXML=False):
     """Read txt files containing bounding boxes (ground truth and detections)."""
     if allBoundingBoxes is None:
         allBoundingBoxes = BoundingBoxes()
@@ -103,7 +142,10 @@ def getBoundingBoxes(directory,
         allClasses = []
     # Read ground truths
     os.chdir(directory)
-    files = glob.glob("*.txt")
+    if isXML:
+        files = glob.glob("*.xml")
+    else:
+        files = glob.glob("*.txt")
     files.sort()
     # Read GT detections from txt file
     # Each line of the files in the groundtruths folder represents a ground truth bounding box
@@ -113,6 +155,10 @@ def getBoundingBoxes(directory,
     # x, y represents the most top-left coordinates of the bounding box
     # x2, y2 represents the most bottom-right coordinates of the bounding box
     for f in files:
+        if isXML:
+            getBoundingBoxesFromXml(f, coordType, bbFormat, allBoundingBoxes,
+                                    allClasses, isGT)
+            continue
         nameOfImage = f.replace(".txt", "")
         fh1 = open(f, "r")
         for line in fh1:
