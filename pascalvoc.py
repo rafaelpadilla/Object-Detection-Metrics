@@ -16,7 +16,7 @@ import os
 import shutil
 # from argparse import RawTextHelpFormatter
 import sys
-
+import tqdm
 import _init_paths
 from BoundingBox import BoundingBox
 from BoundingBoxes import BoundingBoxes
@@ -90,7 +90,7 @@ def ValidatePaths(arg, nameArg, errors):
     return arg
 
 
-def getBoundingBoxesFromXml(xml_path, coordType, bbFormat, allBoundingBoxes,
+def get_bounding_boxes_from_xml(xml_path, coordType, bbFormat, allBoundingBoxes,
                             allClasses, isGT):
     assert coordType == CoordinatesType.Absolute
     assert bbFormat == BBFormat.XYX2Y2
@@ -154,9 +154,11 @@ def getBoundingBoxes(directory,
     # Class_id represents the class of the bounding box
     # x, y represents the most top-left coordinates of the bounding box
     # x2, y2 represents the most bottom-right coordinates of the bounding box
-    for f in files:
+    print('Generating boxes from {} files'.format(len(files)))
+    for file_idx in tqdm.tqdm(range(len(files))):
+        f = files[file_idx]
         if isXML:
-            getBoundingBoxesFromXml(f, coordType, bbFormat, allBoundingBoxes,
+            get_bounding_boxes_from_xml(f, coordType, bbFormat, allBoundingBoxes,
                                     allClasses, isGT)
             continue
         nameOfImage = f.replace(".txt", "")
@@ -222,7 +224,7 @@ parser = argparse.ArgumentParser(
     'algorithms.\nThe current implemention runs the Pascal VOC metrics.\nFor further references, '
     'please check:\nhttps://github.com/rafaelpadilla/Object-Detection-Metrics',
     epilog="Developed by: Rafael Padilla (rafael.padilla@smt.ufrj.br)")
-# formatter_class=RawTextHelpFormatter)
+
 parser.add_argument('-v', '--version', action='version', version='%(prog)s ' + VERSION)
 # Positional arguments
 # Mandatory
@@ -257,6 +259,8 @@ parser.add_argument(
     help='format of the coordinates of the ground truth bounding boxes: '
     '(\'xywh\': <left> <top> <width> <height>)'
     ' or (\'xyrb\': <left> <top> <right> <bottom>)')
+parser.add_argument('--gt_file_format', dest='gt_file_format', type=str,
+                    default='txt', help='Ground truth annotation file format')
 parser.add_argument(
     '-detformat',
     dest='detFormat',
@@ -265,6 +269,8 @@ parser.add_argument(
     help='format of the coordinates of the detected bounding boxes '
     '(\'xywh\': <left> <top> <width> <height>) '
     'or (\'xyrb\': <left> <top> <right> <bottom>)')
+parser.add_argument('--det_file_format', dest='det_file_format', type=str,
+                    default='txt', help='Detection file format')
 parser.add_argument(
     '-gtcoords',
     dest='gtCoordinates',
@@ -356,10 +362,16 @@ showPlot = args.showPlot
 
 # Get groundtruth boxes
 allBoundingBoxes, allClasses = getBoundingBoxes(
-    gtFolder, True, gtFormat, gtCoordType, imgSize=imgSize)
+    gtFolder, True, gtFormat, gtCoordType, imgSize=imgSize,
+  isXML= True if args.gt_file_format == 'xml' else False
+)
 # Get detected boxes
 allBoundingBoxes, allClasses = getBoundingBoxes(
-    detFolder, False, detFormat, detCoordType, allBoundingBoxes, allClasses, imgSize=imgSize)
+    detFolder, False, detFormat, detCoordType, allBoundingBoxes, allClasses,
+  imgSize=imgSize,
+  isXML=True if args.det_file_format == 'xml' else False
+)
+
 allClasses.sort()
 
 evaluator = Evaluator()
