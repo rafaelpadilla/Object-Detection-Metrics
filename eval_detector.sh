@@ -1,14 +1,13 @@
 #!/usr/bin/env bash
-script=$(dirname $0)/pascalvoc.py
+script=$(dirname $0)/eval.py
 python ${script} \
-    --gtfolder ${1}\
-    --detfolder ${2}\
+    --gt_dir ${1}\
+    --det_dir ${2}\
     --threshold 0.5\
-    -gtformat xyrb\
+    -gt_format xyrb\
     --gt_file_format xml\
-    -detformat xyrb\
+    -det_format xyrb\
     --det_file_format txt\
-    -gtcoords abs\
-    -detcoords abs\
-    --savepath ./results\
+    -gt_coords abs\
+    -det_coords abs\
 
