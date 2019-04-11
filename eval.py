@@ -9,11 +9,10 @@ import os
 import shutil
 import sys
 import tqdm
-import _init_paths
-from BoundingBox import BoundingBox
-from BoundingBoxes import BoundingBoxes
-from Evaluator import *
-from utils import BBFormat
+from external.object_detection_metrics.lib.BoundingBox import BoundingBox
+from external.object_detection_metrics.lib.BoundingBoxes import BoundingBoxes
+from external.object_detection_metrics.lib.Evaluator import *
+from external.object_detection_metrics.lib.utils import BBFormat
 import xml.etree.ElementTree as ET
 
 
@@ -69,7 +68,7 @@ def get_bounding_boxes_from_xml_file(xml_path, coord_type, box_format,
   size = root.find('size')
   w = int(size.find('width').text)
   h = int(size.find('height').text)
-  image_name = xml_path.replace(".xml", "")
+  image_name = os.path.basename(xml_path).replace('.xml', '')
 
   for obj in root.iter('object'):
     difficult = obj.find('difficult').text
@@ -190,11 +189,12 @@ def main(args):
   all_boxes, all_classes = create_bounding_boxes(args.gt_dir, True,
                                                  gt_box_format, gt_box_type,
                                                  None, None, is_xml=is_gt_xml)
+  print(all_boxes.count())
   all_boxes, all_classes = create_bounding_boxes(args.det_dir, False,
                                                  det_box_format, det_box_type,
                                                  all_boxes, all_classes,
                                                  is_xml=is_det_xml)
-
+  print(all_boxes.count(BBType.Detected))
   all_classes.sort()
   evaluator = Evaluator()
   acc_AP = 0
