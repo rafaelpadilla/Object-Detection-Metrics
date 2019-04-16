@@ -226,7 +226,7 @@ class Evaluator:
                 # ap_str = "{0:.4f}%".format(average_precision * 100)
                 plt.title('Precision x Recall curve \nClass: %s, AP: %s' % (str(classId), ap_str))
             else:
-                plt.title('Precision x Recall curve \nClass: %d' % classId)
+                plt.title('Precision x Recall curve \nClass: %s' % str(classId))
             plt.legend(shadow=True)
             plt.grid()
             ############################################################
