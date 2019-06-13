@@ -411,7 +411,7 @@ class Evaluator:
         xB = min(boxA[2], boxB[2])
         yB = min(boxA[3], boxB[3])
         # intersection area
-        return (xB - xA + 1) * (yB - yA + 1)
+        return max(0,xB - xA + 1) * max(0,yB - yA + 1)
 
     @staticmethod
     def _getUnionAreas(boxA, boxB, interArea=None):
