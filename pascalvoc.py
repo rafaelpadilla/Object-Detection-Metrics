@@ -22,7 +22,7 @@ from BoundingBox import BoundingBox
 from BoundingBoxes import BoundingBoxes
 from Evaluator import *
 from utils import BBFormat
-
+from sklearn.metrics import auc
 
 # Validate formats
 def ValidateFormats(argFormat, argName, errors):
@@ -360,7 +360,11 @@ for metricsPerClass in detections:
         f.write('\nPrecision: %s' % prec)
         f.write('\nRecall: %s' % rec)
 
+areaUnderCurve = auc(recall,precision)
+print("Area under Curve: {}".format(areaUnderCurve))
 mAP = acc_AP / validClasses
 mAP_str = "{0:.2f}%".format(mAP * 100)
 print('mAP: %s' % mAP_str)
 f.write('\n\n\nmAP: %s' % mAP_str)
+f.write('\nArea Under Curve: {}'.format(str(round(areaUnderCurve,4))))
+f.close()
