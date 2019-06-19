@@ -285,7 +285,7 @@ else:
     savePath = os.path.join(currentPath, 'results')
 # Validate savePath
 # If error, show error messages
-if len(errors) is not 0:
+if len(errors) != 0:
     print("""usage: Object Detection Metrics [-h] [-v] [-gt] [-det] [-t] [-gtformat]
                                 [-detformat] [-save]""")
     print('Object Detection Metrics: error(s): ')
