@@ -1,77 +1,163 @@
-from BoundingBox import *
-from utils import *
+from BoundingBox import BoundingBox
+from utils import BBType, add_bb_into_image
 
 
 class BoundingBoxes:
+    """ Class representing a group of bounding boxes. """
+
     def __init__(self):
-        self._boundingBoxes = []
+        self._bounding_boxes = []
 
-    def addBoundingBox(self, bb):
-        self._boundingBoxes.append(bb)
+    def add_bounding_box(self, bb):
+        """ Adds a bounding box to the list.
 
-    def removeBoundingBox(self, _boundingBox):
-        for d in self._boundingBoxes:
-            if BoundingBox.compare(d, _boundingBox):
-                del self._boundingBoxes[d]
+        Parameters
+        ----------
+            bb : BoundingBox
+                BoundingBox object.
+        """
+        self._bounding_boxes.append(bb)
+
+    def remove_bounding_box(self, bb):
+        """ Remove a bounding box from the list.
+
+        Parameters
+        ----------
+            bb : BoundingBox
+                BoundingBox object to be removed.
+        """
+        for d in self._bounding_boxes:
+            if BoundingBox.compare(d, bb):
+                del self._bounding_boxes[d]
                 return
 
-    def removeAllBoundingBoxes(self):
-        self._boundingBoxes = []
+    def get_bounding_boxes(self):
+        """ Get list of bounding boxes.
 
-    def getBoundingBoxes(self):
-        return self._boundingBoxes
+        Returns
+        -------
+            list
+                List containing the BoundingBox objects.
+        """
+        return self._bounding_boxes
 
-    def getBoundingBoxByClass(self, classId):
+    def get_bounding_box_by_class(self, class_id):
+        """ Returns all bounding boxes of a given class.
+
+        Parameters
+        ----------
+            class_id : str
+                Class of the object to be returned.
+        Returns
+        -------
+            list
+                List containing the BoundingBox objects of the specified class.
+        """
         boundingBoxes = []
-        for d in self._boundingBoxes:
-            if d.getClassId() == classId:  # get only specified bounding box type
+        for d in self._bounding_boxes:
+            if d.get_class_id() == class_id:  # get only specified bounding box type
                 boundingBoxes.append(d)
         return boundingBoxes
 
-    def getClasses(self):
+    def get_classes(self):
+        """ Returns a list of classes in the bounding boxes.
+
+        Returns
+        -------
+            list
+                List containing all classes represented by the BoundingBoxes object.
+        """
         classes = []
-        for d in self._boundingBoxes:
-            c = d.getClassId()
+        for d in self._bounding_boxes:
+            c = d.get_class_id()
             if c not in classes:
                 classes.append(c)
         return classes
 
-    def getBoundingBoxesByType(self, bbType):
-        # get only specified bb type
-        return [d for d in self._boundingBoxes if d.getBBType() == bbType]
+    def get_bounding_boxes_by_type(self, bb_type):
+        """ Returns all bounding boxes of a given type (GroundTruth or Detected).
 
-    def getBoundingBoxesByImageName(self, imageName):
+        Parameters
+        ----------
+            bb_type : Enum
+                Enum representing the type of the bounding box (GroundTruth or Detected).
+        Returns
+        -------
+            list
+                List containing the BoundingBox objects of the specified type.
+        """
         # get only specified bb type
-        return [d for d in self._boundingBoxes if d.getImageName() == imageName]
+        return [d for d in self._bounding_boxes if d.get_bb_type() == bb_type]
 
-    def count(self, bbType=None):
-        if bbType is None:  # Return all bounding boxes
-            return len(self._boundingBoxes)
+    def get_bounding_boxes_by_image_name(self, image_name):
+        """ Returns all bounding boxes of a given image.
+
+        Parameters
+        ----------
+            image_name : str
+                string representing the image.
+        Returns
+        -------
+            list
+                List containing the BoundingBox objects within the image.
+        """
+        # get only specified bb type
+        return [d for d in self._bounding_boxes if d.get_image_name() == image_name]
+
+    def count(self, bb_type=None):
+        """ Counts the amount of bounding boxes of a given type.
+
+        Parameters
+        ----------
+            bb_type : Enum
+                Enum representing the type of the bounding box (GroundTruth or Detected).
+        Returns
+        -------
+            int
+                Amount of bounding boxes of the specified type.
+        """
+        if bb_type is None:  # Return all bounding boxes
+            return len(self._bounding_boxes)
         count = 0
-        for d in self._boundingBoxes:
-            if d.getBBType() == bbType:  # get only specified bb type
+        for d in self._bounding_boxes:
+            if d.get_bb_type() == bb_type:  # get only specified bb type
                 count += 1
         return count
 
     def clone(self):
+        """ Clone the BoundingBoxes object.
+
+        Returns
+        -------
+            BoundingBoxes
+                Cloned boundingBoxes object.
+        """
         newBoundingBoxes = BoundingBoxes()
-        for d in self._boundingBoxes:
+        for d in self._bounding_boxes:
             det = BoundingBox.clone(d)
-            newBoundingBoxes.addBoundingBox(det)
+            newBoundingBoxes.add_bounding_box(det)
         return newBoundingBoxes
 
-    def drawAllBoundingBoxes(self, image, imageName):
-        bbxes = self.getBoundingBoxesByImageName(imageName)
+    def draw_all_bounding_boxes(self, image, image_name):
+        """ Draws a bounding box in the image given its name.
+        If the bounding box type is GroundTruth, the color of the bounding box is green.
+        If the bounding box type is a detection, the color of the bounding box is red.
+
+        Parameters
+        ----------
+            image : opencv image
+                Image to be added the bounding box.
+            image_name : str
+                Name of the image inserterd in the list of bounding boxes to be drawn.
+        Returns
+        -------
+            opencv image
+                Image with the bounding box drawn.
+        """
+        bbxes = self.get_bounding_boxes_by_image_name(image_name)
         for bb in bbxes:
-            if bb.getBBType() == BBType.GroundTruth:  # if ground truth
+            if bb.get_bb_type() == BBType.GroundTruth:  # if ground truth
                 image = add_bb_into_image(image, bb, color=(0, 255, 0))  # green
             else:  # if detection
                 image = add_bb_into_image(image, bb, color=(255, 0, 0))  # red
         return image
-
-    # def drawAllBoundingBoxes(self, image):
-    #     for gt in self.getBoundingBoxesByType(BBType.GroundTruth):
-    #         image = add_bb_into_image(image, gt ,color=(0,255,0))
-    #     for det in self.getBoundingBoxesByType(BBType.Detected):
-    #         image = add_bb_into_image(image, det ,color=(255,0,0))
-    #     return image

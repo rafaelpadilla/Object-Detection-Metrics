@@ -53,7 +53,7 @@ class BBFormat(Enum):
 
 # size => (width, height) of the image
 # box => (X1, X2, Y1, Y2) of the bounding box
-def convertToRelativeValues(size, box):
+def convert_to_relative_values(size, box):
     dw = 1. / (size[0])
     dh = 1. / (size[1])
     cx = (box[1] + box[0]) / 2.0
@@ -72,7 +72,7 @@ def convertToRelativeValues(size, box):
 
 # size => (width, height) of the image
 # box => (centerX, centerY, w, h) of the bounding box relative to the image
-def convertToAbsoluteValues(size, box):
+def convert_to_absolute_values(size, box):
     # w_box = round(size[0] * box[2])
     # h_box = round(size[1] * box[3])
     xIn = round(((2 * float(box[0]) - float(box[2])) * size[0] / 2))
@@ -99,7 +99,7 @@ def add_bb_into_image(image, bb, color=(255, 0, 0), thickness=2, label=None):
     fontScale = 0.5
     fontThickness = 1
 
-    x1, y1, x2, y2 = bb.getAbsoluteBoundingBox(BBFormat.XYX2Y2)
+    x1, y1, x2, y2 = bb.get_absolute_bounding_box(BBFormat.XYX2Y2)
     x1 = int(x1)
     y1 = int(y1)
     x2 = int(x2)
