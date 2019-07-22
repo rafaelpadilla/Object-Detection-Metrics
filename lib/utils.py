@@ -11,8 +11,8 @@ class MethodAveragePrecision(Enum):
         Developed by: Rafael Padilla
         Last modification: Apr 28 2018
     """
-    EveryPointInterpolation = 1
-    ElevenPointInterpolation = 2
+    EVERY_POINT_INTERPOLATION = 1
+    ELEVEN_POINT_INTERPOLATION = 2
 
 
 class CoordinatesType(Enum):
@@ -23,8 +23,8 @@ class CoordinatesType(Enum):
         Developed by: Rafael Padilla
         Last modification: Apr 28 2018
     """
-    Relative = 1
-    Absolute = 2
+    RELATIVE = 1
+    ABSOLUTE = 2
 
 
 class BBType(Enum):
@@ -34,8 +34,8 @@ class BBType(Enum):
         Developed by: Rafael Padilla
         Last modification: May 24 2018
     """
-    GroundTruth = 1
-    Detected = 2
+    GROUND_TRUTH = 1
+    DETECTED = 2
 
 
 class BBFormat(Enum):
