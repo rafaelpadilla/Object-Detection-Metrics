@@ -12,9 +12,9 @@ class BoundingBox:
                  y,
                  w,
                  h,
-                 type_coordinates=CoordinatesType.Absolute,
+                 type_coordinates=CoordinatesType.ABSOLUTE,
                  img_size=None,
-                 bb_type=BBType.GroundTruth,
+                 bb_type=BBType.GROUND_TRUTH,
                  class_confidence=None,
                  format=BBFormat.XYWH):
         """ Constructor.
@@ -53,15 +53,12 @@ class BoundingBox:
         """
         self._image_name = image_name
         self._type_coordinates = type_coordinates
-        if type_coordinates == CoordinatesType.Relative and img_size is None:
+        if type_coordinates == CoordinatesType.RELATIVE and img_size is None:
             raise IOError(
                 'Parameter \'img_size\' is required. It is necessary to inform the image size.')
-        if bb_type == BBType.Detected and class_confidence is None:
+        if bb_type == BBType.DETECTED and class_confidence is None:
             raise IOError(
                 'For bb_type=\'Detected\', it is necessary to inform the class_confidence value.')
-        # if class_confidence != None and (class_confidence < 0 or class_confidence > 1):
-        # raise IOError('class_confidence value must be a real value between 0 and 1. Value: %f' %
-        # class_confidence)
 
         self._class_confidence = class_confidence
         self._bb_type = bb_type
@@ -70,7 +67,7 @@ class BoundingBox:
 
         # If relative coordinates, convert to absolute values
         # For relative coords: (x,y,w,h)=(X_center/img_width , Y_center/img_height)
-        if (type_coordinates == CoordinatesType.Relative):
+        if (type_coordinates == CoordinatesType.RELATIVE):
             (self._x, self._y, self._w,
              self._h) = convert_to_absolute_values(img_size, (x, y, w, h))
             self._width_img = img_size[0]
@@ -163,7 +160,7 @@ class BoundingBox:
         return self._image_name
 
     def get_confidence(self):
-        """ Get the confidence level of the detection. If bounding box type is BBType.GroundTruth,
+        """ Get the confidence level of the detection. If bounding box type is BBType.GROUND_TRUTH,
         the confidence is None.
 
         Returns
@@ -206,13 +203,13 @@ class BoundingBox:
         return (self._width_img, self._height_img)
 
     def get_coordinates_type(self):
-        """ Get type of the coordinates (CoordinatesType.Relative or CoordinatesType.Absolute).
+        """ Get type of the coordinates (CoordinatesType.RELATIVE or CoordinatesType.ABSOLUTE).
 
         Returns
         -------
         Enum
             Enum representing if the bounding box coordinates (x,y,w,h) are absolute or relative
-                to size of the image (CoordinatesType.Relative or CoordinatesType.Absolute).
+                to size of the image (CoordinatesType.RELATIVE or CoordinatesType.ABSOLUTE).
         """
         return self._type_coordinates
 
@@ -222,7 +219,7 @@ class BoundingBox:
         Returns
         -------
         Enum
-            Enum representing the type of the bounding box (BBType.GroundTruth or BBType.Detected)
+            Enum representing the type of the bounding box (BBType.GROUND_TRUTH or BBType.DETECTED)
         """
         return self._bb_type
 
@@ -273,7 +270,7 @@ class BoundingBox:
         BoundingBox
             Cloned BoundingBox object.
         """
-        absBB = bounding_box.getAbsoluteBoundingBox(format=BBFormat.XYWH)
+        absBB = bounding_box.get_absolute_bounding_box(format=BBFormat.XYWH)
         # return (self._x,self._y,self._x2,self._y2)
         new_bounding_box = BoundingBox(bounding_box.get_image_name(),
                                        bounding_box.get_class_id(),

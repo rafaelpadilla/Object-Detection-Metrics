@@ -1,4 +1,4 @@
-from BoundingBox import BoundingBox
+from bounding_box import BoundingBox
 from utils import BBType, add_bb_into_image
 
 
@@ -156,7 +156,7 @@ class BoundingBoxes:
         """
         bbxes = self.get_bounding_boxes_by_image_name(image_name)
         for bb in bbxes:
-            if bb.get_bb_type() == BBType.GroundTruth:  # if ground truth
+            if bb.get_bb_type() == BBType.GROUND_TRUTH:  # if ground truth
                 image = add_bb_into_image(image, bb, color=(0, 255, 0))  # green
             else:  # if detection
                 image = add_bb_into_image(image, bb, color=(255, 0, 0))  # red
