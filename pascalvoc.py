@@ -20,9 +20,9 @@ import shutil
 import sys
 
 import _init_paths
-from BoundingBox import BoundingBox
-from BoundingBoxes import BoundingBoxes
-from Evaluator import Evaluator
+from bounding_box import BoundingBox
+from bounding_boxes import BoundingBoxes
+from evaluator import Evaluator
 from utils import BBFormat, BBType, CoordinatesType, MethodAveragePrecision
 
 
@@ -140,11 +140,11 @@ def validate_coordinates_types(arg, arg_name, errors):
             return None. If nothing is passed, default is CoordinatesType.Absolute.
     """
     if arg == 'abs':
-        return CoordinatesType.Absolute
+        return CoordinatesType.ABSOLUTE
     elif arg == 'rel':
-        return CoordinatesType.Relative
+        return CoordinatesType.RELATIVE
     elif arg is None:
-        return CoordinatesType.Absolute  # default when nothing is passed
+        return CoordinatesType.ABSOLUTE  # default when nothing is passed
     errors.append('argument %s: invalid value. It must be either \'rel\' or \'abs\'' % arg_name)
     return None
 
@@ -173,10 +173,11 @@ def validate_paths(arg, arg_name, errors):
     elif os.path.isdir(arg) is False and os.path.isdir(os.path.join(current_path, arg)) is False:
         errors.append(f'argument {arg_name}: directory does not exist \'{arg}\'')
         return None
-    elif os.path.isdir(os.path.join(current_path, arg)) is True:
+    elif os.path.isdir(arg) is True:
         arg = os.path.join(current_path, arg)
-    else:
         return arg
+    else:
+        return None
 
 
 def read_bounding_boxes(directory,
@@ -256,7 +257,7 @@ def read_bounding_boxes(directory,
                                  h,
                                  coord_type,
                                  img_size,
-                                 BBType.GroundTruth,
+                                 BBType.GROUND_TRUTH,
                                  format=bb_format)
             else:
                 # class_id = int(split_line[0]) #class
@@ -274,10 +275,10 @@ def read_bounding_boxes(directory,
                                  h,
                                  coord_type,
                                  img_size,
-                                 BBType.Detected,
+                                 BBType.DETECTED,
                                  confidence,
                                  format=bb_format)
-            all_bounding_boxes.addBoundingBox(bb)
+            all_bounding_boxes.add_bounding_box(bb)
             if class_id not in all_classes:
                 all_classes.append(class_id)
         fh1.close()
@@ -351,6 +352,7 @@ parser.add_argument('-img_size',
 parser.add_argument('-sp',
                     '--savepath',
                     dest='save_path',
+                    default=os.path.join(current_path, 'results'),
                     metavar='',
                     help='folder where the plots are saved')
 parser.add_argument('-np',
@@ -361,6 +363,10 @@ parser.add_argument('-np',
 args = parser.parse_args()
 
 iou_threshold = args.iou_threshold
+
+# AQUI TODO
+args.gt_format = 'xyrb'
+print(args.gt_format)
 
 # Arguments validation
 errors = []
@@ -377,23 +383,20 @@ else:
 # Coordinates types
 gt_coord_type = validate_coordinates_types(args.gt_coordinates, '-gtCoordinates', errors)
 det_coord_type = validate_coordinates_types(args.det_coordinates, '-detCoordinates', errors)
-img_size = (0, 0)
-if gt_coord_type == CoordinatesType.Relative:  # Image size is required
+img_size = None
+if gt_coord_type == CoordinatesType.RELATIVE:  # Image size is required
     img_size = validate_image_size(args.img_size, '-img_size', '-gtCoordinates', errors)
-if det_coord_type == CoordinatesType.Relative:  # Image size is required
+if det_coord_type == CoordinatesType.RELATIVE:  # Image size is required
     img_size = validate_image_size(args.img_size, '-img_size', '-detCoordinates', errors)
 # Detection folder
 if validate_mandatory_args(args.det_folder, '-det/--detfolder', errors):
     det_folder = validate_paths(args.det_folder, '-det/--detfolder', errors)
 else:
-    # errors.pop()
     det_folder = os.path.join(current_path, 'detections')
     if os.path.isdir(det_folder) is False:
         errors.append('folder %s not found' % det_folder)
 if args.save_path is not None:
     save_path = validate_paths(args.save_path, '-sp/--savepath', errors)
-else:
-    save_path = os.path.join(current_path, 'results')
 # Validate save_path
 # If error, show error messages
 if len(errors) != 0:
@@ -409,7 +412,7 @@ os.makedirs(save_path)
 # Show plot during execution
 show_plot = args.show_plot
 
-# Uncomment the lines below to display the parameters
+# Uncomment the lines below to print out the parameters
 # print('iou_threshold= %f' % iou_threshold)
 # print('save_path = %s' % save_path)
 # print('gt_format = %s' % gt_format)
@@ -441,14 +444,14 @@ acc_AP = 0
 count_validated_classes = 0
 
 # Plot Precision x Recall curve
-detections = evaluator.PlotPrecisionRecallCurve(
+detections = evaluator.plot_precision_recall_curve(
     all_bounding_boxes,  # Object containing all bounding boxes (ground truths and detections)
-    IOUThreshold=iou_threshold,  # IOU threshold
-    method=MethodAveragePrecision.EveryPointInterpolation,
-    showAP=True,  # Show Average Precision in the title of the plot
-    showInterpolatedPrecision=False,  # Don't plot the interpolated precision curve
-    savePath=save_path,
-    showGraphic=show_plot)
+    IOU_threshold=iou_threshold,  # IOU threshold
+    method=MethodAveragePrecision.EVERY_POINT_INTERPOLATION,
+    show_AP=True,  # Show Average Precision in the title of the plot
+    show_interpolated_precision=False,  # Don't plot the interpolated precision curve
+    save_path=save_path,
+    show_graphic=show_plot)
 
 f = open(os.path.join(save_path, 'results.txt'), 'w')
 f.write('Object Detection Metrics\n')
