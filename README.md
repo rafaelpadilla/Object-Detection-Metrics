@@ -184,7 +184,7 @@ The following table shows the bounding boxes with their corresponding confidence
 
 In some images there are more than one detection overlapping a ground truth (Images 2, 3, 4, 5, 6 and 7). For those cases the detection with the highest IOU is considered TP and the others are considered FP. This rule is applied by the PASCAL VOC 2012 metric: "e.g. 5 detections (TP) of a single object is counted as 1 correct detection and 4 false detections”.
 
-The Precision x Recall curve is plotted by calculating the precision and recall values of the accumulated TP or FP detections. For this, first we need to order the detections by their confidences, then we calculate the precision and recall for each accumulated detection as shown in the table below: 
+The Precision x Recall curve is plotted by calculating the precision and recall values of the accumulated TP or FP detections.  For this, first we need to order the detections by their confidences, then we calculate the precision and recall for each accumulated detection as shown in the table below (Note that for recall computation, the denominator term ("Acc TP + Acc FN" or "All ground truths") is constant at 15 since GT boxes are constant irrespective of detections).: 
 
 <!--- Table 2 --->
 <p align="center">
@@ -218,6 +218,8 @@ The Precision x Recall curve is plotted by calculating the precision and recall 
 | Image 3 |	G	| 18% | 1 | 0 | 7 | 16 | 0.3043 | 0.4666 |
 | Image 4 |	O	| 14% | 0 | 1 | 7 | 17 | 0.2916 | 0.4666 |
 --->
+ 
+ Example computation for the 2nd row (Image 7):  Precision = TP/(TP+FP) = 1/2 = 0.5 and Recall = TP/(TP+FN) = 1/15 = 0.066
  
  Plotting the precision and recall values we have the following *Precision x Recall curve*:
  
