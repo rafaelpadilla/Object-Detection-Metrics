@@ -1,0 +1,1054 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>841</width>
+    <height>725</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Object Detection Metrics</string>
+  </property>
+  <widget class="QTabWidget" name="tab_metrics">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>330</y>
+     <width>761</width>
+     <height>311</height>
+    </rect>
+   </property>
+   <property name="currentIndex">
+    <number>0</number>
+   </property>
+   <widget class="QWidget" name="tab">
+    <attribute name="title">
+     <string>PASCAL VOC</string>
+    </attribute>
+    <widget class="QPushButton" name="pushButton_3">
+     <property name="geometry">
+      <rect>
+       <x>270</x>
+       <y>220</y>
+       <width>131</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>The configurations will be applied in a random ground truth image.</string>
+     </property>
+     <property name="text">
+      <string>mAP</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lbl_groundtruth_dir_5">
+     <property name="geometry">
+      <rect>
+       <x>40</x>
+       <y>220</y>
+       <width>221</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Mean Average Precision (mAP):</string>
+     </property>
+    </widget>
+    <widget class="QFrame" name="frame_5">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>10</y>
+       <width>371</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <widget class="QRadioButton" name="radioButton_9">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>70</y>
+        <width>351</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>All points interpolation</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="radioButton_10">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>40</y>
+        <width>351</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>11-point interpolation</string>
+      </property>
+      <property name="checked">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lbl_detections_dir_6">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>181</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Interpolation method:</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QFrame" name="frame_7">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>120</y>
+       <width>371</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <widget class="QLabel" name="lbl_detections_dir_9">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>181</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>IOU threshold:</string>
+      </property>
+     </widget>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="tab_2">
+    <attribute name="title">
+     <string>COCO</string>
+    </attribute>
+    <widget class="QFrame" name="frame_8">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>351</width>
+       <height>121</height>
+      </rect>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <widget class="QLabel" name="lbl_groundtruth_dir_6">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>100</y>
+        <width>221</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>AP@50:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lbl_groundtruth_dir_7">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>70</y>
+        <width>221</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>AP@75:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lbl_groundtruth_dir_8">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>40</y>
+        <width>131</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>AP@[.50: .05: .95]</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lbl_groundtruth_dir_18">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>201</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Average Precision (AP):</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QFrame" name="frame_9">
+     <property name="geometry">
+      <rect>
+       <x>370</x>
+       <y>10</y>
+       <width>381</width>
+       <height>121</height>
+      </rect>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <widget class="QLabel" name="lbl_groundtruth_dir_9">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>40</y>
+        <width>221</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>AP small:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lbl_groundtruth_dir_11">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>100</y>
+        <width>221</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>AP large:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lbl_groundtruth_dir_10">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>70</y>
+        <width>221</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>AP medium:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lbl_groundtruth_dir_20">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>221</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>AP Across Scales:</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QFrame" name="frame_10">
+     <property name="geometry">
+      <rect>
+       <x>370</x>
+       <y>140</y>
+       <width>381</width>
+       <height>131</height>
+      </rect>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <widget class="QLabel" name="lbl_groundtruth_dir_13">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>100</y>
+        <width>221</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>AR large:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lbl_groundtruth_dir_14">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>40</y>
+        <width>221</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>AR small:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lbl_groundtruth_dir_12">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>70</y>
+        <width>221</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>AR medium:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lbl_groundtruth_dir_21">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>221</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>AR Across Scales:</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QFrame" name="frame_11">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>140</y>
+       <width>351</width>
+       <height>131</height>
+      </rect>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <widget class="QLabel" name="lbl_groundtruth_dir_15">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>100</y>
+        <width>221</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>AR max=100:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lbl_groundtruth_dir_16">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>40</y>
+        <width>221</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>AR max=1:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lbl_groundtruth_dir_17">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>70</y>
+        <width>221</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>AR max=10:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lbl_groundtruth_dir_19">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>221</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Average Recall (AR):</string>
+      </property>
+     </widget>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QTabWidget" name="tabWidget">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>761</width>
+     <height>311</height>
+    </rect>
+   </property>
+   <property name="currentIndex">
+    <number>0</number>
+   </property>
+   <widget class="QWidget" name="tab_3">
+    <attribute name="title">
+     <string>Ground truth</string>
+    </attribute>
+    <widget class="QLabel" name="lbl_groundtruth_dir">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>45</y>
+       <width>101</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Annotations:</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btn_gt_dir">
+     <property name="geometry">
+      <rect>
+       <x>720</x>
+       <y>40</y>
+       <width>31</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>...</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="txb_gt_dir">
+     <property name="geometry">
+      <rect>
+       <x>110</x>
+       <y>40</y>
+       <width>601</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QFrame" name="frame_2">
+     <property name="geometry">
+      <rect>
+       <x>390</x>
+       <y>100</y>
+       <width>361</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <widget class="QRadioButton" name="rad_gt_type_absolute">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>40</y>
+        <width>181</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>absolute</string>
+      </property>
+      <property name="checked">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lbl_detections_dir_2">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>10</y>
+        <width>151</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Coordinates values:</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="rad_gt_type_relative">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>70</y>
+        <width>181</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>relative</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QFrame" name="frame">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>100</y>
+       <width>371</width>
+       <height>131</height>
+      </rect>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <widget class="QRadioButton" name="rad_gt_format_xywh">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>70</y>
+        <width>351</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>&lt;class_name&gt; &lt;left&gt; &lt;top&gt; &lt;width&gt; &lt;height&gt;</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="rad_gt_format_xyx2y2">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>40</y>
+        <width>351</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>&lt;class_name&gt; &lt;left&gt; &lt;top&gt; &lt;right&gt; &lt;bottom&gt;</string>
+      </property>
+      <property name="checked">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lbl_detections_dir_3">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>151</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Coordinates format:</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="rad_gt_format_pascal">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>100</y>
+        <width>351</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Ground-truth format provided by PASCAL VOC annotated files (.XML).&lt;/p&gt;&lt;p&gt;Reference:&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;http://host.robots.ox.ac.uk/pascal/VOC/voc2012/htmldoc/devkit_doc.html#SECTION00035000000000000000&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://host.robots.ox.ac.uk/pascal/VOC/voc2012/htmldoc/devkit_doc.html#SECTION00035000000000000000&lt;/span&gt;&lt;/a&gt;</string>
+      </property>
+      <property name="text">
+       <string>PASCAL VOC format (XML)</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QPushButton" name="btn_gt_images_dir">
+     <property name="geometry">
+      <rect>
+       <x>720</x>
+       <y>70</y>
+       <width>31</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>...</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="txb_gt_images_dir">
+     <property name="geometry">
+      <rect>
+       <x>110</x>
+       <y>70</y>
+       <width>601</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lbl_groundtruth_dir_2">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>75</y>
+       <width>101</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Images:</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btn_stats_gt">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>240</y>
+       <width>741</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>The configurations will be applied in a random ground truth image.</string>
+     </property>
+     <property name="text">
+      <string>view ground-truth statistics</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lbl_groundtruth_dir_3">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>731</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>18</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Ground truth</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="tab_4">
+    <attribute name="title">
+     <string>Detections</string>
+    </attribute>
+    <widget class="QPushButton" name="btn_groundtruth_dir_3">
+     <property name="geometry">
+      <rect>
+       <x>720</x>
+       <y>40</y>
+       <width>31</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>...</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="txb_det_dir">
+     <property name="geometry">
+      <rect>
+       <x>110</x>
+       <y>40</y>
+       <width>601</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lbl_groundtruth_dir_4">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>45</y>
+       <width>101</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Annotations:</string>
+     </property>
+    </widget>
+    <widget class="QFrame" name="frame_3">
+     <property name="geometry">
+      <rect>
+       <x>390</x>
+       <y>80</y>
+       <width>361</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <widget class="QRadioButton" name="rad_det_type_absolute">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>40</y>
+        <width>181</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>absolute</string>
+      </property>
+      <property name="checked">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lbl_detections_dir_4">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>10</y>
+        <width>151</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Coordinates values:</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="rad_det_type_relative">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>70</y>
+        <width>181</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>relative</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QFrame" name="frame_4">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>80</y>
+       <width>371</width>
+       <height>131</height>
+      </rect>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <widget class="QRadioButton" name="rad_det_format_xywh">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>70</y>
+        <width>351</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>&lt;class_name&gt; &lt;left&gt; &lt;top&gt; &lt;width&gt; &lt;height&gt;</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="rad_det_format_xyx2y2">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>40</y>
+        <width>351</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>&lt;class_name&gt; &lt;left&gt; &lt;top&gt; &lt;right&gt; &lt;bottom&gt;</string>
+      </property>
+      <property name="checked">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lbl_detections_dir_5">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>151</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Coordinates format:</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="rad_det_format_pascal">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>100</y>
+        <width>351</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Request format by PASCAL VOC competition to submit results:&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;&amp;lt;image identifier&amp;gt; &amp;lt;confidence&amp;gt; &amp;lt;left&amp;gt; &amp;lt;top&amp;gt; &amp;lt;right&amp;gt; &amp;lt;bottom&amp;gt;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Reference: &lt;a href=&quot;http://host.robots.ox.ac.uk/pascal/VOC/voc2012/htmldoc/devkit_doc.html#SECTION00053000000000000000&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://host.robots.ox.ac.uk/pascal/VOC/voc2012/htmldoc/devkit_doc.html#SECTION00053000000000000000&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="text">
+       <string>PASCAL VOC (submission results)</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QPushButton" name="btn_stats_det">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>220</y>
+       <width>741</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>The configurations will be applied in a random ground truth image.</string>
+     </property>
+     <property name="text">
+      <string>view detections statistics</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lbl_groundtruth_dir_22">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>731</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>18</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Detections</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>btn_gt_dir</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>btn_gt_dir_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>753</x>
+     <y>66</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>809</x>
+     <y>24</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_gt_images_dir</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>btn_gt_images_dir_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>743</x>
+     <y>91</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>812</x>
+     <y>90</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_groundtruth_dir_3</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>btn_det_dir_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>750</x>
+     <y>61</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>795</x>
+     <y>28</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_stats_gt</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>btn_statistics_gt_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>691</x>
+     <y>275</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>732</x>
+     <y>351</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_stats_det</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>btn_statistics_det_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>713</x>
+     <y>265</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>809</x>
+     <y>266</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>btn_gt_dir_clicked()</slot>
+  <slot>btn_gt_images_dir_clicked()</slot>
+  <slot>btn_det_dir_clicked()</slot>
+  <slot>btn_statistics_gt_clicked()</slot>
+  <slot>btn_statistics_det_clicked()</slot>
+ </slots>
+</ui>

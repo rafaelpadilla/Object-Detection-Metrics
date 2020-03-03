@@ -1,6 +1,10 @@
+import fnmatch
+import os
 from enum import Enum
 
 import cv2
+import numpy as np
+from PyQt5 import QtCore, QtGui
 
 
 class MethodAveragePrecision(Enum):
@@ -123,3 +127,51 @@ def add_bb_into_image(image, bb, color=(255, 0, 0), thickness=2, label=None):
         cv2.putText(image, label, (xin_bb, yin_bb), font, fontScale, (0, 0, 0), fontThickness,
                     cv2.LINE_AA)
     return image
+
+
+def remove_file_extension(filename):
+    return os.path.join(os.path.dirname(filename), os.path.splitext(filename)[0])
+
+
+def get_files_dir(directory, extensions=['*']):
+    ret = []
+    for extension in extensions:
+        if extension == '*':
+            ret += [f for f in os.listdir(directory)]
+            continue
+        elif extension is None:
+            # accepts all extensions
+            extension = ''
+        elif '.' not in extension:
+            extension = f'.{extension}'
+        ret += [f for f in os.listdir(directory) if f.endswith(extension)]
+    return ret
+
+
+def get_files_recursively(directory, extension="*"):
+    if '.' not in extension:
+        extension = '*.' + extension
+    files = [
+        os.path.join(dirpath, f) for dirpath, dirnames, files in os.walk(directory)
+        for f in fnmatch.filter(files, extension)
+    ]
+    return files
+
+
+def image_to_pixmap(image):
+    image = image.astype(np.uint8)
+    if image.shape[2] == 4:
+        qformat = QtGui.QImage.Format_RGBA8888
+    else:
+        qformat = QtGui.QImage.Format_RGB888
+
+    image = QtGui.QImage(image.data, image.shape[1],\
+                    image.shape[0], image.strides[0], qformat)
+    # image= image.rgbSwapped()
+    return QtGui.QPixmap(image)
+
+
+def show_image_in_qt_component(image, label_component):
+    pix = image_to_pixmap((image).astype(np.uint8))
+    label_component.setPixmap(pix)
+    label_component.setAlignment(QtCore.Qt.AlignCenter)

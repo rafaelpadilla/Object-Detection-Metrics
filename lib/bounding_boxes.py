@@ -1,9 +1,9 @@
-from bounding_box import BoundingBox
-from utils import BBType, add_bb_into_image
+from .bounding_box import BoundingBox
+from .utils import BBType, add_bb_into_image
 
 
 class BoundingBoxes:
-    """ Class representing a group of bounding boxes. """
+    """ Class representing multiple bounding boxes. """
 
     def __init__(self):
         self._bounding_boxes = []
@@ -16,6 +16,7 @@ class BoundingBoxes:
             bb : BoundingBox
                 BoundingBox object.
         """
+        assert isinstance(bb, BoundingBox)
         self._bounding_boxes.append(bb)
 
     def remove_bounding_box(self, bb):
@@ -41,6 +42,33 @@ class BoundingBoxes:
         """
         return self._bounding_boxes
 
+    def get_total_images(self):
+        """ Get amount of different images among the bounding boxes.
+
+        Returns
+        -------
+            int
+                Total amount of images.
+        """
+        images = []
+        for bb in self._bounding_boxes:
+            if bb._image_name not in images:
+                images.append(bb._image_name)
+        return len(images)
+
+    def get_average_area(self):
+        """ Get the average area amoung all bounding boxes (total area / amount of bounding boxes).
+
+        Returns
+        -------
+            float
+                Average area.
+        """
+        area = 0
+        for bb in self._bounding_boxes:
+            area += bb.get_area()
+        return area / len(self._bounding_boxes)
+
     def get_bounding_box_by_class(self, class_id):
         """ Returns all bounding boxes of a given class.
 
@@ -58,6 +86,23 @@ class BoundingBoxes:
             if d.get_class_id() == class_id:  # get only specified bounding box type
                 boundingBoxes.append(d)
         return boundingBoxes
+
+    def get_bounding_box_all_classes(self):
+        """ Returns amount of bounding boxes among all classes.
+
+        Returns
+        -------
+            dict
+                Dictionary containing the classes (key) and the amount of bounding box of the
+                class (value).
+        """
+        ret = {}
+        classes = self.get_classes()
+        for c in classes:
+            ret[c] = len(self.get_bounding_box_by_class(c))
+        # Sort dictionary by the amount of bounding boxes
+        ret = {k: v for k, v in sorted(ret.items(), key=lambda item: item[1], reverse=True)}
+        return ret
 
     def get_classes(self):
         """ Returns a list of classes in the bounding boxes.

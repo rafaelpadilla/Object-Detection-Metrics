@@ -15,9 +15,9 @@ from collections import Counter
 import matplotlib.pyplot as plt
 import numpy as np
 
-from bounding_box import BoundingBox
-from bounding_boxes import BoundingBoxes
-from utils import BBFormat, BBType, MethodAveragePrecision
+from .bounding_box import BoundingBox
+from .bounding_boxes import BoundingBoxes
+from .utils import BBFormat, BBType, MethodAveragePrecision
 
 
 class Evaluator:
@@ -93,7 +93,8 @@ class Evaluator:
             det = Counter([cc[0] for cc in gts])
             for key, val in det.items():
                 det[key] = np.zeros(val)
-            print("Evaluating class: %s (%d detections)" % (str(c), len(dects)))
+            print("Evaluating class: %s (%d detections and %d groundtruths)" %
+                  (str(c), len(dects), len(gts)))
             # Loop through detections
             for d in range(len(dects)):
                 print('dect %s => %s' % (

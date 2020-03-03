@@ -1,5 +1,5 @@
-from utils import (BBFormat, BBType, CoordinatesType,
-                   convert_to_absolute_values, convert_to_relative_values)
+from .utils import (BBFormat, BBType, CoordinatesType, convert_to_absolute_values,
+                    convert_to_relative_values)
 
 
 class BoundingBox:
@@ -7,11 +7,8 @@ class BoundingBox:
 
     def __init__(self,
                  image_name,
-                 class_id,
-                 x,
-                 y,
-                 w,
-                 h,
+                 class_id=None,
+                 coordinates=None,
                  type_coordinates=CoordinatesType.ABSOLUTE,
                  img_size=None,
                  bb_type=BBType.GROUND_TRUTH,
@@ -25,14 +22,12 @@ class BoundingBox:
                 String representing the image name.
             class_id : str
                 String value representing class id.
-            x : float
-                Float value representing the X upper-left coordinate of the bounding box.
-            y : float
-                Float value representing the Y upper-left coordinate of the bounding box.
-            w : float
-                Float value representing the width bounding box.
-            h : float
-                Float value representing the height bounding box.
+            coordinates : tuple
+                Tuple with 4 elements whose values (float) represent coordinates of the bounding \\
+                    box.
+                The coordinates can be (x, y, w, h)=>(float,float,float,float) or(x1, y1, x2, y2)\\
+                    =>(float,float,float,float).
+                See parameter `format`.
             type_coordinates : Enum (optional)
                 Enum representing if the bounding box coordinates (x,y,w,h) are absolute or relative
                 to size of the image. Default:'Absolute'.
@@ -51,28 +46,41 @@ class BoundingBox:
                 BBFormat.XYWH: <left> <top> <width> <height>
                 BBFomat.XYX2Y2: <left> <top> <right> <bottom>.
         """
+
         self._image_name = image_name
+        self._type_coordinates = type_coordinates
+        self._class_confidence = class_confidence
+        self._class_id = class_id
+        self._format = format
+        if bb_type == BBType.DETECTED and class_confidence is None:
+            raise IOError(
+                'For bb_type=\'Detected\', it is necessary to inform the class_confidence value.')
+        self._bb_type = bb_type
+
+        if img_size is None:
+            self._width_img = None
+            self._height_img = None
+        else:
+            self._width_img = img_size[0]
+            self._height_img = img_size[1]
+
+        self.set_coordinates(coordinates,
+                             img_size=img_size,
+                             type_coordinates=self._type_coordinates)
+
+    def set_coordinates(self, coordinates, type_coordinates, img_size=None):
         self._type_coordinates = type_coordinates
         if type_coordinates == CoordinatesType.RELATIVE and img_size is None:
             raise IOError(
                 'Parameter \'img_size\' is required. It is necessary to inform the image size.')
-        if bb_type == BBType.DETECTED and class_confidence is None:
-            raise IOError(
-                'For bb_type=\'Detected\', it is necessary to inform the class_confidence value.')
-
-        self._class_confidence = class_confidence
-        self._bb_type = bb_type
-        self._class_id = class_id
-        self._format = format
 
         # If relative coordinates, convert to absolute values
         # For relative coords: (x,y,w,h)=(X_center/img_width , Y_center/img_height)
         if (type_coordinates == CoordinatesType.RELATIVE):
-            (self._x, self._y, self._w,
-             self._h) = convert_to_absolute_values(img_size, (x, y, w, h))
+            (self._x, self._y, self._w, self._h) = convert_to_absolute_values(img_size, coordinates)
             self._width_img = img_size[0]
             self._height_img = img_size[1]
-            if format == BBFormat.XYWH:
+            if self._format == BBFormat.XYWH:
                 self._x2 = self._w
                 self._y2 = self._h
                 self._w = self._x2 - self._x
@@ -82,24 +90,18 @@ class BoundingBox:
                     'For relative coordinates, the format must be XYWH (x,y,width,height)')
         # For absolute coords: (x,y,w,h)=real bb coords
         else:
-            self._x = x
-            self._y = y
-            if format == BBFormat.XYWH:
-                self._w = w
-                self._h = h
+            self._x = coordinates[0]
+            self._y = coordinates[1]
+            if self._format == BBFormat.XYWH:
+                self._w = coordinates[2]
+                self._h = coordinates[3]
                 self._x2 = self._x + self._w
                 self._y2 = self._y + self._h
-            else:  # format == BBFormat.XYX2Y2: <left> <top> <right> <bottom>.
-                self._x2 = w
-                self._y2 = h
+            else:  # self._format == BBFormat.XYX2Y2: <left> <top> <right> <bottom>.
+                self._x2 = coordinates[2]
+                self._y2 = coordinates[3]
                 self._w = self._x2 - self._x
                 self._h = self._y2 - self._y
-        if img_size is None:
-            self._width_img = None
-            self._height_img = None
-        else:
-            self._width_img = img_size[0]
-            self._height_img = img_size[1]
 
     def get_absolute_bounding_box(self, format=BBFormat.XYWH):
         """ Get bounding box in its absolute format.
@@ -182,6 +184,9 @@ class BoundingBox:
         """
         return self._format
 
+    def set_class_id(self, class_id):
+        self._class_id = class_id
+
     def get_class_id(self):
         """ Get the class of the object the bounding box represents.
 
@@ -201,6 +206,12 @@ class BoundingBox:
             Image size in pixels in the format (width, height)=>(int, int)
         """
         return (self._width_img, self._height_img)
+
+    def get_area(self):
+        assert (self._w * self._h) == (self._x2 - self._x) * (self._y2 - self._y)
+        assert (self._x2 > self._x)
+        assert (self._y2 > self._y)
+        return (self._x2 - self._x) * (self._y2 - self._y)
 
     def get_coordinates_type(self):
         """ Get type of the coordinates (CoordinatesType.RELATIVE or CoordinatesType.ABSOLUTE).

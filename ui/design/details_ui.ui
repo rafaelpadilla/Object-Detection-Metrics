@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>892</width>
+    <height>442</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Bounding-boxes statistics</string>
+  </property>
+  <widget class="QLabel" name="lbl_sample_image">
+   <property name="geometry">
+    <rect>
+     <x>520</x>
+     <y>30</y>
+     <width>361</width>
+     <height>341</height>
+    </rect>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::Box</enum>
+   </property>
+   <property name="text">
+    <string>[image]</string>
+   </property>
+   <property name="textFormat">
+    <enum>Qt::AutoText</enum>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_random_image">
+   <property name="geometry">
+    <rect>
+     <x>520</x>
+     <y>410</y>
+     <width>211</width>
+     <height>27</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>The configurations will be applied in a random ground truth image.</string>
+   </property>
+   <property name="text">
+    <string>load another random image</string>
+   </property>
+  </widget>
+  <widget class="QTextEdit" name="txb_statistics">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>30</y>
+     <width>501</width>
+     <height>371</height>
+    </rect>
+   </property>
+   <property name="readOnly">
+    <bool>true</bool>
+   </property>
+   <property name="html">
+    <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;* 53392 bounding boxes were found in 12345 images.&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;* In 33 images no bounding boxes were found.&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;* The average area of the bounding boxes is 1212 pixels.&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;* The amount of bounding boxes per class is:&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;[car]: 123 bounding boxes in 23 images.&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;[person]: 231 bounding boxes in 93 images.&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;[dog]: 231 bounding boxes in 90 images.&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;[cat]: 231 bounding boxes in 393 images.&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;(ordenar classes por ordem alfabética)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lbl_groundtruth_dir_5">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>161</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Statistics:</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_3">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>410</y>
+     <width>231</width>
+     <height>27</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>The configurations will be applied in a random ground truth image.</string>
+   </property>
+   <property name="text">
+    <string>plot bounding boxes per class</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_save_image">
+   <property name="geometry">
+    <rect>
+     <x>740</x>
+     <y>410</y>
+     <width>141</width>
+     <height>27</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>The configurations will be applied in a random ground truth image.</string>
+   </property>
+   <property name="text">
+    <string>save</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lbl_groundtruth_dir_6">
+   <property name="geometry">
+    <rect>
+     <x>520</x>
+     <y>10</y>
+     <width>161</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Sample image:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lbl_image_file_name">
+   <property name="geometry">
+    <rect>
+     <x>520</x>
+     <y>380</y>
+     <width>361</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>no image to show</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>pushButton_3</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>btn_plot_bb_per_classes_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>67</x>
+     <y>424</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>5</x>
+     <y>424</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_random_image</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>btn_load_random_image_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>579</x>
+     <y>425</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>489</x>
+     <y>421</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_save_image</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>btn_save_image_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>818</x>
+     <y>426</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>885</x>
+     <y>402</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>btn_plot_bb_per_classes_clicked()</slot>
+  <slot>btn_plot_images_per_classes_clicked()</slot>
+  <slot>btn_load_random_image_clicked()</slot>
+  <slot>btn_save_image_clicked()</slot>
+ </slots>
+</ui>
