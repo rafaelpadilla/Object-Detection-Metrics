@@ -1,5 +1,5 @@
-from .utils import (BBFormat, BBType, CoordinatesType, convert_to_absolute_values,
-                    convert_to_relative_values)
+from .utils import (BBFormat, BBType, CoordinatesType,
+                    convert_to_absolute_values, convert_to_relative_values)
 
 
 class BoundingBox:
@@ -257,7 +257,7 @@ class BoundingBox:
         det2img_size = det2.getImageSize()
 
         if det1.get_class_id() == det2.get_class_id() and \
-           det1.class_confidence == det2.classConfidenc() and \
+           det1.get_confidence() == det2.get_confidence() and \
            det1BB[0] == det2BB[0] and \
            det1BB[1] == det2BB[1] and \
            det1BB[2] == det2BB[2] and \
