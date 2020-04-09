@@ -2,6 +2,17 @@
 <img src="https://zenodo.org/badge/DOI/10.5281/zenodo.2554189.svg">
 </p>
 
+## Citation
+This work was accepted to be presented at IWSSIP 2020. If you use this code for your research, please consider citing:
+```
+@article{padillaCITE2020,
+title = {Survey on Performance Metrics for Object-Detection Algorithms},
+author = {Rafael Padilla, Sergio Lima Netto and Eduardo A. B. da Silva},
+booktitle  = {International Conference on Systems, Signals and Image Processing (IWSSIP)},
+year = {2020}
+}
+```
+
 # Metrics for object detection
   
 The motivation of this project is the lack of consensus used by different works and implementations concerning the **evaluation metrics of the object detection problem**. Although on-line competitions use their own metrics to evaluate the task of object detection, just some of them offer reference code snippets to calculate the accuracy of the detected objects.  
