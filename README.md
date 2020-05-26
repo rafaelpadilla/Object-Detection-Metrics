@@ -55,8 +55,12 @@ Intersection Over Union (IOU) is measure based on Jaccard Index that evaluates t
 IOU is given by the overlapping area between the predicted bounding box and the ground truth bounding box divided by the area of union between them:  
 
 <p align="center"> 
-<img src="http://latex.codecogs.com/gif.latex?%5Ctext%7BIOU%7D%20%3D%20%5Cfrac%7B%5Ctext%7Barea%7D%20%5Cleft%28B_p%20%5Ccap%20B_%7Bgt%7D%5Cright%29%7D%7B%5Ctext%7Barea%7D%20%5Cleft%28B_p%20%5Ccup%20B_%7Bgt%7D%5Cright%29%7D">
+<img src="https://latex.codecogs.com/gif.latex?%5Ctext%7BIOU%7D%3D%5Cfrac%7B%5Ctext%7Barea%7D%5Cleft%28B_%7Bp%7D%20%5Ccap%20B_%7Bgt%7D%20%5Cright%29%7D%7B%5Ctext%7Barea%7D%5Cleft%28B_%7Bp%7D%20%5Ccup%20B_%7Bgt%7D%20%5Cright%29%7D">
 </p>
+
+<!---
+\text{IOU}=\frac{\text{area}\left(B_{p} \cap B_{gt} \right)}{\text{area}\left(B_{p} \cup B_{gt} \right)} 
+--->
 
 The image below illustrates the IOU between a ground truth bounding box (in green) and a detected bounding box (in red).
 
@@ -80,16 +84,23 @@ _threshold_: depending on the metric, it is usually set to 50%, 75% or 95%.
 Precision is the ability of a model to identify **only** the relevant objects. It is the percentage of correct positive predictions and is given by:
 
 <p align="center"> 
-<img src="http://latex.codecogs.com/gif.latex?Precision%20%3D%20%5Cfrac%7BTP%7D%7BTP&plus;FP%7D%3D%5Cfrac%7BTP%7D%7B%5Ctext%7Ball%20detections%7D%7D">
+<img src="https://latex.codecogs.com/gif.latex?%5Ctext%7BPrecision%7D%20%3D%20%5Cfrac%7B%5Ctext%7BTP%7D%7D%7B%5Ctext%7BTP%7D&plus;%5Ctext%7BFP%7D%7D%3D%5Cfrac%7B%5Ctext%7BTP%7D%7D%7B%5Ctext%7Ball%20detections%7D%7D">
 </p>
+
+<!---
+\text{Precision} = \frac{\text{TP}}{\text{TP}+\text{FP}}=\frac{\text{TP}}{\text{all detections}}
+--->
 
 ### Recall 
 
 Recall is the ability of a model to find all the relevant cases (all ground truth bounding boxes). It is the percentage of true positive detected among all relevant ground truths and is given by:
 
 <p align="center"> 
-<img src="http://latex.codecogs.com/gif.latex?Recall%20%3D%20%5Cfrac%7BTP%7D%7BTP&plus;FN%7D%3D%5Cfrac%7BTP%7D%7B%5Ctext%7Ball%20ground%20truths%7D%7D">
+<img src="https://latex.codecogs.com/gif.latex?%5Ctext%7BRecall%7D%20%3D%20%5Cfrac%7B%5Ctext%7BTP%7D%7D%7B%5Ctext%7BTP%7D&plus;%5Ctext%7BFN%7D%7D%3D%5Cfrac%7B%5Ctext%7BTP%7D%7D%7B%5Ctext%7Ball%20ground%20truths%7D%7D">
 </p>
+<!--- 
+\text{Recall} = \frac{\text{TP}}{\text{TP}+\text{FN}}=\frac{\text{TP}}{\text{all ground truths}}
+--->
 
 ## Metrics
 
@@ -111,15 +122,21 @@ From 2010 on, the method of computing AP by the PASCAL VOC challenge has changed
 
 The 11-point interpolation tries to summarize the shape of the Precision x Recall curve by averaging the precision at a set of eleven equally spaced recall levels [0, 0.1, 0.2, ... , 1]:
 
-<p align="center"> 
-<img src="http://latex.codecogs.com/gif.latex?AP%20%3D%20%5Cfrac%7B1%7D%7B11%7D%5Csum_%7Br%5Cin%5C%7B0%2C0.1%2C...%2C1%5C%7D%7D%5Crho_%7B%5Ctext%7Binterp%7D%5Cleft%20%28r%5Cright%20%29%7D">
+<p align="center">
+<img src="https://latex.codecogs.com/gif.latex?%5Ctext%7BAP%7D%3D%5Cfrac%7B1%7D%7B11%7D%20%5Csum_%7Br%5Cin%20%5Cleft%20%5C%7B%200%2C%200.1%2C%20...%2C1%20%5Cright%20%5C%7D%7D%5Crho_%7B%5Ctext%7Binterp%7D%5Cleft%20%28%20r%20%5Cright%20%29%7D">
 </p>
+<!---
+\text{AP}=\frac{1}{11} \sum_{r\in \left \{ 0, 0.1, ...,1 \right \}}\rho_{\text{interp}\left ( r \right )}
+--->
 
 with
 
 <p align="center"> 
-<img src="http://latex.codecogs.com/gif.latex?%5Crho_%7B%5Ctext%7Binterp%7D%5Cleft%20%28r%5Cright%20%29%7D%3D%5Cmax_%7B%5Cwidetilde%7Br%7D%3A%5Cwidetilde%7Br%7D%5Cgeqslant%7Br%7D%7D%20%5Crho%20%5Cleft%20%28%5Cwidetilde%7Br%7D%20%5Cright%29">
+<img src="https://latex.codecogs.com/gif.latex?%5Crho_%7B%5Ctext%7Binterp%7D%7D%20%3D%20%5Cmax_%7B%5Ctilde%7Br%7D%3A%5Ctilde%7Br%7D%20%5Cgeq%20r%7D%20%5Crho%5Cleft%20%28%20%5Ctilde%7Br%7D%20%5Cright%20%29">
 </p>
+<!--- 
+\rho_{\text{interp}} = \max_{\tilde{r}:\tilde{r} \geq r} \rho\left ( \tilde{r} \right )
+--->
 
 where ![](http://latex.codecogs.com/gif.latex?%5Crho%5Cleft%20%28%20%5Ctilde%7Br%7D%20%5Cright%20%29) is the measured precision at recall ![](http://latex.codecogs.com/gif.latex?%5Ctilde%7Br%7D).
 
@@ -127,18 +144,24 @@ Instead of using the precision observed at each point, the AP is obtained by int
 
 #### Interpolating all points
 
-Instead of interpolating only in the 11 equally spaced points, you could interpolate through all points in such way that:
+Instead of interpolating only in the 11 equally spaced points, you could interpolate through all points <img src="https://latex.codecogs.com/gif.latex?n"> in such way that:
 
 <p align="center"> 
-<img src="http://latex.codecogs.com/gif.latex?%5Csum_%7Br%3D0%7D%5E%7B1%7D%20%5Cleft%20%28%20r_%7Bn&plus;1%7D%20-%20r_n%5Cright%20%29%20%5Crho_%7Binterp%7D%5Cleft%20%28%20r_%7Bn&plus;1%7D%20%5Cright%20%29">
+<img src="https://latex.codecogs.com/gif.latex?%5Csum_%7Bn%3D0%7D%20%5Cleft%20%28%20r_%7Bn&plus;1%7D%20-%20r_%7Bn%7D%20%5Cright%20%29%20%5Crho_%7B%5Ctext%7Binterp%7D%7D%5Cleft%20%28%20r_%7Bn&plus;1%7D%20%5Cright%20%29">
 </p>
-
+<!---
+\sum_{n=0} \left ( r_{n+1} - r_{n} \right ) \rho_{\text{interp}}\left ( r_{n+1} \right )
+--->
  
 with
 
 <p align="center"> 
-<img src="http://latex.codecogs.com/gif.latex?%5Crho_%7Binterp%7D%5Cleft%20%28%20r_%7Bn&plus;1%7D%20%5Cright%20%29%20%3D%20%5Cmax_%7B%5Ctilde%7Br%7D%3A%5Ctilde%7Br%7D%5Cgeq%20r_%7Bn&plus;1%7D%7D%5Crho%5Cleft%20%28%20%5Ctilde%7Br%7D%20%5Cright%20%29">
+<img src="https://latex.codecogs.com/gif.latex?%5Crho_%7B%5Ctext%7Binterp%7D%7D%5Cleft%20%28%20r_%7Bn&plus;1%7D%20%5Cright%20%29%20%3D%20%5Cmax_%7B%5Ctilde%7Br%7D%3A%5Ctilde%7Br%7D%20%5Cge%20r_%7Bn&plus;1%7D%7D%20%5Crho%20%5Cleft%20%28%20%5Ctilde%7Br%7D%20%5Cright%20%29">
 </p>
+
+<!---
+\rho_{\text{interp}}\left ( r_{n+1} \right ) = \max_{\tilde{r}:\tilde{r} \ge r_{n+1}} \rho \left ( \tilde{r} \right )
+--->
 
 
 where ![](http://latex.codecogs.com/gif.latex?%5Crho%5Cleft%20%28%20%5Ctilde%7Br%7D%20%5Cright%20%29) is the measured precision at recall ![](http://latex.codecogs.com/gif.latex?%5Ctilde%7Br%7D).
