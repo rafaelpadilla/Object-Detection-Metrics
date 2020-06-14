@@ -246,6 +246,10 @@ parser.add_argument(
     dest='showPlot',
     action='store_false',
     help='no plot is shown during execution')
+parser.add_argument('--imagesDirectory', default='', type=str,
+                    help='Path to the directory containing the images to draw the bounding boxes on.')
+parser.add_argument('--drawBoundingBoxes', action='store_true',
+                    help='Draw the bounding boxes.')
 args = parser.parse_args()
 
 iouThreshold = args.iouThreshold
@@ -364,3 +368,25 @@ mAP = acc_AP / validClasses
 mAP_str = "{0:.2f}%".format(mAP * 100)
 print('mAP: %s' % mAP_str)
 f.write('\n\n\nmAP: %s' % mAP_str)
+f.close()
+
+# draw the bounding boxes
+if args.drawBoundingBoxes:
+    if not os.path.isdir(args.imagesDirectory):
+        print(f"The directory '{args.imagesDirectory}' can't be found.")
+    else:
+        print(f"Creating and saving the images with all their BoundingBoxes to the disk...")
+        imagesPath = os.path.join(savePath, 'images')
+        os.makedirs(imagesPath)
+        listImages = [d.getImageName() for d in allBoundingBoxes._boundingBoxes]
+        for imageName in listImages:
+            try:
+                im = cv2.imread(os.path.join(args.imagesDirectory, imageName) + '.jpg')
+            except:
+                print(f"Impossible to load image '{os.path.join(args.imagesDirectory, imageName) + '.jpg'}'")
+                continue
+            # Add bounding boxes
+            im = allBoundingBoxes.drawAllBoundingBoxes(im, imageName)
+            # cv2.imshow(imageName+'.jpg', im)
+            # cv2.waitKey(0)
+            cv2.imwrite(os.path.join(imagesPath, imageName + '.jpg'), im)
