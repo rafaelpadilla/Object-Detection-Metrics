@@ -5,11 +5,11 @@
 ## Citation
 This work was accepted to be presented at IWSSIP 2020. If you use this code for your research, please consider citing:
 ```
-@article{padillaCITE2020,
-title = {Survey on Performance Metrics for Object-Detection Algorithms},
-author = {Rafael Padilla, Sergio Lima Netto and Eduardo A. B. da Silva},
-booktitle  = {International Conference on Systems, Signals and Image Processing (IWSSIP)},
-year = {2020}
+@ARTICLE {padillaCITE2020,
+    author  = "Rafael Padilla; Sergio Lima Netto; Eduardo A. B. da Silva",
+    title   = "Survey on Performance Metrics for Object-Detection Algorithms",
+    journal = "International Conference on Systems, Signals and Image Processing (IWSSIP)",
+    year    = "2020"
 }
 ```
 
