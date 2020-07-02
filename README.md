@@ -20,7 +20,7 @@ This work was accepted to be presented at IWSSIP 2020. If you use this code for 
     year    = "2020"
 }
 ```
-Download the paper [here]()
+Download the paper [here](https://github.com/rafaelpadilla/Object-Detection-Metrics/raw/master/paper_survey_on_performance_metrics_for_object_detection_algorithms.pdf)
 
 # Metrics for object detection
   
