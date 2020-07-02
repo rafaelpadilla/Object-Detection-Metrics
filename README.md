@@ -1,6 +1,14 @@
-<p align="left"> 
-<img src="https://zenodo.org/badge/DOI/10.5281/zenodo.2554189.svg">
+
+
+<p align="left">
+    <a href="https://zenodo.org/badge/latestdoi/134606465">
+        <img src="https://zenodo.org/badge/134606465.svg"/></a>
+    <a href="https://opensource.org/licenses/MIT" >
+        <img src="https://img.shields.io/badge/License-MIT-yellow.svg" /></a>
+    <a href="https://github.com/rafaelpadilla/Object-Detection-Metrics/raw/master/paper_survey_on_performance_metrics_for_object_detection_algorithms.pdf">
+        <img src="https://img.shields.io/badge/paper-published-red"/></a>
 </p>
+
 
 ## Citation
 This work was accepted to be presented at IWSSIP 2020. If you use this code for your research, please consider citing:
@@ -12,6 +20,7 @@ This work was accepted to be presented at IWSSIP 2020. If you use this code for 
     year    = "2020"
 }
 ```
+Download the paper [here]()
 
 # Metrics for object detection
   
