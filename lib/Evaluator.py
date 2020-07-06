@@ -94,6 +94,17 @@ class Evaluator:
             det = Counter([cc[0] for cc in gts])
             for key, val in det.items():
                 det[key] = np.zeros(val)
+
+            # Record the maximum iou value 
+            det_iou = Counter([cc[0] for cc in gts])
+            for key, val in det_iou.items():
+                det_iou[key] = np.zeros(val)
+
+            # Record the position of maximum iou value
+            det_pos = Counter([cc[0] for cc in gts])
+            for key, val in det_pos.items():
+                det_pos[key] = np.zeros(val)
+
             # print("Evaluating class: %s (%d detections)" % (str(c), len(dects)))
             # Loop through detections
             for d in range(len(dects)):
@@ -109,13 +120,32 @@ class Evaluator:
                         jmax = j
                 # Assign detection as true positive/don't care/false positive
                 if iouMax >= IOUThreshold:
+                    # If it hasn't seen
                     if det[dects[d][0]][jmax] == 0:
                         TP[d] = 1  # count as true positive
                         det[dects[d][0]][jmax] = 1  # flag as already 'seen'
-                        # print("TP")
-                    else:
-                        FP[d] = 1  # count as false positive
-                        # print("FP")
+                        det_iou[dects[d][0]][jmax] = iouMax # Record the maximum iou value
+                        det_pos[dects[d][0]][jmax] = d # Record the position of maximum iou value
+                    
+                    # If it has seen
+                    elif det[dects[d][0]][jmax] == 1:
+                        # If this case IOU value is bigger than previous one 
+                        if iouMax > det_iou[dects[d][0]][jmax]:
+                            # Count as true positive
+                            TP[d] = 1  
+                            # Get the position of last maximum iou value
+                            previous_position = int(det_pos[dects[d][0]][jmax]) 
+                            # Modify FP of last maximum iou value to be 1
+                            FP[previous_position] = 1
+                            # Modify TP of last maximum iou value to be 0
+                            TP[previous_position] = 0
+                            # Record the maximum iou value of this case
+                            det_iou[dects[d][0]][jmax] = iouMax
+                            # Record the position of this maximum iou value
+                            det_pos[dects[d][0]][jmax] = d
+                        else:
+                        # If this case IOU value is smaller than previous one
+                            FP[d] = 1  # Count as false positive
                 # - A detected "cat" is overlaped with a GT "cat" with IOU >= IOUThreshold.
                 else:
                     FP[d] = 1  # count as false positive
