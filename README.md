@@ -13,12 +13,12 @@
 ## Citation
 This work was accepted to be presented at IWSSIP 2020. If you use this code for your research, please consider citing:
 ```
-@ARTICLE {padillaCITE2020,
-    author  = "Rafael Padilla; Sergio Lima Netto; Eduardo A. B. da Silva",
-    title   = "Survey on Performance Metrics for Object-Detection Algorithms",
-    journal = "International Conference on Systems, Signals and Image Processing (IWSSIP)",
-    year    = "2020"
-}
+@INPROCEEDINGS {padillaCITE2020,
+    author    = {R. {Padilla} and S. L. {Netto} and E. A. B. {da Silva}},
+    title     = {A Survey on Performance Metrics for Object-Detection Algorithms}, 
+    booktitle = {2020 International Conference on Systems, Signals and Image Processing (IWSSIP)}, 
+    year      = {2020},
+    pages     = {237-242},}
 ```
 Download the paper [here](https://github.com/rafaelpadilla/Object-Detection-Metrics/raw/master/paper_survey_on_performance_metrics_for_object_detection_algorithms.pdf)
 
