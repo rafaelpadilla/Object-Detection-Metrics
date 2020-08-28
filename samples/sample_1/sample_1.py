@@ -16,9 +16,9 @@ import os
 
 import _init_paths
 import cv2
-from BoundingBox import BoundingBox
-from BoundingBoxes import BoundingBoxes
-from utils import *
+from lib.BoundingBox import BoundingBox
+from lib.BoundingBoxes import BoundingBoxes
+from lib.utils import *
 
 ###########################
 # Defining bounding boxes #
