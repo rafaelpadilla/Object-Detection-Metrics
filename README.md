@@ -11,7 +11,7 @@
 
 
 ## Citation
-This work was accepted to be presented at IWSSIP 2020. If you use this code for your research, please consider citing:
+This work was presented at IWSSIP 2020. If you use this code for your research, please consider citing:
 ```
 @INPROCEEDINGS {padillaCITE2020,
     author    = {R. {Padilla} and S. L. {Netto} and E. A. B. {da Silva}},
