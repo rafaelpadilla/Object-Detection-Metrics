@@ -372,7 +372,7 @@ If you prefer, you can also have your bounding boxes in the format: `<class_name
     tvmonitor 0.070565 388 89 500 196  
     ```
 
-Also if you prefer, you could have your bounding boxes in the format: `<class_name> <left> <top> <width> <height>`.
+Also if you prefer, you could have your bounding boxes in the format: `<class_name> <confidence> <left> <top> <width> <height>`.
 
 ### Optional arguments
 
