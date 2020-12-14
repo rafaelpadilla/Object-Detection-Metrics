@@ -48,7 +48,7 @@ In the topics below you can find an overview of the most popular metrics used in
 ## Different competitions, different metrics 
 
 * **[PASCAL VOC Challenge](http://host.robots.ox.ac.uk/pascal/VOC/)** offers a Matlab script in order to evaluate the quality of the detected objects. Participants of the competition can use the provided Matlab script to measure the accuracy of their detections before submitting their results. The official documentation explaining their criteria for object detection metrics can be accessed [here](http://host.robots.ox.ac.uk/pascal/VOC/voc2012/htmldoc/devkit_doc.html#SECTION00050000000000000000). The current metrics used by the current PASCAL VOC object detection challenge are the **Precision x Recall curve** and **Average Precision**.  
-The PASCAL VOC Matlab evaluation code reads the ground truth bounding boxes from XML files, requiring changes in the code if you want to apply it to other datasets or to your speficic cases. Even though projects such as [Faster-RCNN](https://github.com/rbgirshick/py-faster-rcnn) implement PASCAL VOC evaluation metrics, it is also necessary to convert the detected bounding boxes into their specific format. [Tensorflow](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/evaluation_protocols.md) framework also has their PASCAL VOC metrics implementation.  
+The PASCAL VOC Matlab evaluation code reads the ground truth bounding boxes from XML files, requiring changes in the code if you want to apply it to other datasets or to your specific cases. Even though projects such as [Faster-RCNN](https://github.com/rbgirshick/py-faster-rcnn) implement PASCAL VOC evaluation metrics, it is also necessary to convert the detected bounding boxes into their specific format. [Tensorflow](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/evaluation_protocols.md) framework also has their PASCAL VOC metrics implementation.  
 
 * **[COCO Detection Challenge](https://competitions.codalab.org/competitions/5181)** uses different metrics to evaluate the accuracy of object detection of different algorithms. [Here](http://cocodataset.org/#detection-eval) you can find a documentation explaining the 12 metrics used for characterizing the performance of an object detector on COCO. This competition offers Python and Matlab codes so users can verify their scores before submitting the results. It is also necessary to convert the results to a [format](http://cocodataset.org/#format-results) required by the competition.  
 
@@ -60,7 +60,9 @@ The PASCAL VOC Matlab evaluation code reads the ground truth bounding boxes from
 
 ### Intersection Over Union (IOU)
 
-Intersection Over Union (IOU) is measure based on Jaccard Index that evaluates the overlap between two bounding boxes. It requires a ground truth bounding box ![](http://latex.codecogs.com/gif.latex?B_%7Bgt%7D) and a predicted bounding box ![](http://latex.codecogs.com/gif.latex?B_p). By applying the IOU we can tell if a detection is valid (True Positive) or not (False Positive).  highest
+
+Intersection Over Union (IOU) is a measure based on Jaccard Index that evaluates the overlap between two bounding boxes. It requires a ground truth bounding box ![](http://latex.codecogs.com/gif.latex?B_%7Bgt%7D) and a predicted bounding box ![](http://latex.codecogs.com/gif.latex?B_p). By applying the IOU we can tell if a detection is valid (True Positive) or not (False Positive).  
+
 IOU is given by the overlapping area between the predicted bounding box and the ground truth bounding box divided by the area of union between them:  
 
 <p align="center"> 
@@ -227,7 +229,7 @@ The following table shows the bounding boxes with their corresponding confidence
 
 In some images there are more than one detection overlapping a ground truth (Images 2, 3, 4, 5, 6 and 7). For those cases the first detection is considered TP while the others are FP. This rule is applied by the PASCAL VOC 2012 metric: "e.g. 5 detections (TP) of a single object is counted as 1 correct detection and 4 false detections”.
 
-The Precision x Recall curve is plotted by calculating the precision and recall values of the accumulated TP or FP detections. For this, first we need to order the detections by their confidences, then we calculate the precision and recall for each accumulated detection as shown in the table below: 
+The Precision x Recall curve is plotted by calculating the precision and recall values of the accumulated TP or FP detections.  For this, first we need to order the detections by their confidences, then we calculate the precision and recall for each accumulated detection as shown in the table below (Note that for recall computation, the denominator term ("Acc TP + Acc FN" or "All ground truths") is constant at 15 since GT boxes are constant irrespective of detections).: 
 
 <!--- Table 2 --->
 <p align="center">
@@ -261,6 +263,8 @@ The Precision x Recall curve is plotted by calculating the precision and recall 
 | Image 3 |	G	| 18% | 1 | 0 | 7 | 16 | 0.3043 | 0.4666 |
 | Image 4 |	O	| 14% | 0 | 1 | 7 | 17 | 0.2916 | 0.4666 |
 --->
+ 
+ Example computation for the 2nd row (Image 7):  Precision = TP/(TP+FP) = 1/2 = 0.5 and Recall = TP/(TP+FN) = 1/15 = 0.066
  
  Plotting the precision and recall values we have the following *Precision x Recall curve*:
  
