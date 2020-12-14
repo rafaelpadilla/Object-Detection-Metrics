@@ -47,7 +47,7 @@ class Evaluator:
             dict['interpolated recall']: interpolated recall values;
             dict['total positives']: total number of ground truth positives;
             dict['total TP']: total number of True Positive detections;
-            dict['total FP']: total number of False Negative detections;
+            dict['total FP']: total number of False Positive detections;
         """
         ret = []  # list containing metrics (precision, recall, average precision) of each class
         # List with all ground truths (Ex: [imageName,class,confidence=1, (bb coordinates XYX2Y2)])
