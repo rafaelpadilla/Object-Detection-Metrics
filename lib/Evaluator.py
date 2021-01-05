@@ -306,7 +306,7 @@ class Evaluator:
                 ii.append(i + 1)
         ap = 0
         for i in ii:
-            ap = ap + np.sum((mrec[i] - mrec[i - 1]) * mpre[i])
+            ap = ap + ((mrec[i] - mrec[i - 1]) * mpre[i])
         # return [ap, mpre[1:len(mpre)-1], mrec[1:len(mpre)-1], ii]
         return [ap, mpre[0:len(mpre) - 1], mrec[0:len(mpre) - 1], ii]
 
