@@ -301,9 +301,13 @@ class Evaluator:
         for i in range(len(mpre) - 1, 0, -1):
             mpre[i - 1] = max(mpre[i - 1], mpre[i])
         ii = []
+        mrec_forward = mrec[1:]
+        mrec_backward = mrec[0:-1]
         for i in range(len(mrec) - 1):
-            if mrec[1:][i] != mrec[0:-1][i]:
+            # if mrec[1:][i] != mrec[0:-1][i]:
+            if mrec_forward[i] != mrec_backward[i]:
                 ii.append(i + 1)
+
         ap = 0
         for i in ii:
             ap = ap + np.sum((mrec[i] - mrec[i - 1]) * mpre[i])
