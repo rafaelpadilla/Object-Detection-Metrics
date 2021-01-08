@@ -88,19 +88,14 @@ class Evaluator:
             for g in groundTruths:
                 if g[1] == c:
                     npos += 1
-                    if g[0] in gts:
-                        gts[g[0]].append(g)
-                    else:
-                        gts[g[0]] = [ g ]
+                    gts[g[0]] = gts.get(g[0], []) + [g]
 
             # sort detections by decreasing confidence
             dects = sorted(dects, key=lambda conf: conf[2], reverse=True)
             TP = np.zeros(len(dects))
             FP = np.zeros(len(dects))
             # create dictionary with amount of gts for each image
-            det = { }
-            for key in gts:
-                det[key] = np.zeros(len(gts[key]))
+            det = {key: np.zeros(len(gts[key])) for key in gts}
 
             # print("Evaluating class: %s (%d detections)" % (str(c), len(dects)))
             # Loop through detections
