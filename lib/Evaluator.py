@@ -113,14 +113,17 @@ class Evaluator:
                         TP[d] = 1  # count as true positive
                         det[dects[d][0]][jmax] = 1  # flag as already 'seen'
                         # print("TP")
-                    else:
-                        FP[d] = 1  # count as false positive
+#                     else:
+#                         FP[d] = 1  # count as false positive
                         # print("FP")
                 # - A detected "cat" is overlaped with a GT "cat" with IOU >= IOUThreshold.
-                else:
-                    FP[d] = 1  # count as false positive
+#                 else:
+#                     FP[d] = 1  # count as false positive
                     # print("FP")
             # compute precision, recall and average precision
+            
+            FP = 1 - TP
+            
             acc_FP = np.cumsum(FP)
             acc_TP = np.cumsum(TP)
             rec = acc_TP / npos
