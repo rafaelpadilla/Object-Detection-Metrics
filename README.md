@@ -22,6 +22,21 @@ This work was presented at IWSSIP 2020. If you use this code for your research, 
 ```
 Download the paper [here](https://github.com/rafaelpadilla/Object-Detection-Metrics/raw/master/paper_survey_on_performance_metrics_for_object_detection_algorithms.pdf)
 
+-----------------
+
+<h2>
+
+```diff
+- Attention: A new version of this tool has been published!
+```
+</h2>
+
+The new version includes **all COCO metrics**, supports **other file formats**, provides a **User Interface (UI)** to guide the evaluation process, and presents the **STT-AP metric** to evaluate object detection in videos. 
+
+**You can access the new version [here](https://github.com/rafaelpadilla/review_object_detection_metrics)**.
+
+-----------------
+
 # Metrics for object detection
   
 The motivation of this project is the lack of consensus used by different works and implementations concerning the **evaluation metrics of the object detection problem**. Although on-line competitions use their own metrics to evaluate the task of object detection, just some of them offer reference code snippets to calculate the accuracy of the detected objects.  
