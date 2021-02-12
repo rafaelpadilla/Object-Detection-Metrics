@@ -7,14 +7,48 @@
 # Developed by: Rafael Padilla (rafael.padilla@smt.ufrj.br)                               #
 #        SMT - Signal Multimedia and Telecommunications Lab                               #
 #        COPPE - Universidade Federal do Rio de Janeiro                                   #
-#        Last modification: Oct 9th 2018                                                 #
+#        Last modification: Feb 12th 2021                                                 #
 ###########################################################################################
+
+####################################################################################################
+#                                                                                                  #
+# THE CURRENT VERSION WAS UPDATED WITH A VISUAL INTERFACE, INCLUDING MORE METRICS AND SUPPORTING   #
+# OTHER FILE FORMATS. PLEASE ACCESS IT ACCESSED AT:                                                #
+#                                                                                                  #
+# https://github.com/rafaelpadilla/review_object_detection_metrics                                 #
+#                                                                                                  #
+# @Article{electronics10030279,                                                                    #
+#     author         = {Padilla, Rafael and Passos, Wesley L. and Dias, Thadeu L. B. and Netto,    #
+#                       Sergio L. and da Silva, Eduardo A. B.},                                    #
+#     title          = {A Comparative Analysis of Object Detection Metrics with a Companion        #
+#                       Open-Source Toolkit},                                                      #
+#     journal        = {Electronics},                                                              #
+#     volume         = {10},                                                                       #
+#     year           = {2021},                                                                     #
+#     number         = {3},                                                                        #
+#     article-number = {279},                                                                      #
+#     url            = {https://www.mdpi.com/2079-9292/10/3/279},                                  #
+#     issn           = {2079-9292},                                                                #
+#     doi            = {10.3390/electronics10030279}, }                                            #
+####################################################################################################
+
+####################################################################################################
+# If you use this project, please consider citing:                                                 #
+#                                                                                                  #
+# @INPROCEEDINGS {padillaCITE2020,                                                                 #
+#    author    = {R. {Padilla} and S. L. {Netto} and E. A. B. {da Silva}},                         #
+#    title     = {A Survey on Performance Metrics for Object-Detection Algorithms},                #
+#    booktitle = {2020 International Conference on Systems, Signals and Image Processing (IWSSIP)},#
+#    year      = {2020},                                                                           #
+#    pages     = {237-242},}                                                                       #
+#                                                                                                  #
+# This work is published at: https://github.com/rafaelpadilla/Object-Detection-Metrics             #
+####################################################################################################
 
 import argparse
 import glob
 import os
 import shutil
-# from argparse import RawTextHelpFormatter
 import sys
 
 import _init_paths
@@ -33,8 +67,8 @@ def ValidateFormats(argFormat, argName, errors):
     elif argFormat is None:
         return BBFormat.XYWH  # default when nothing is passed
     else:
-        errors.append(
-            'argument %s: invalid value. It must be either \'xywh\' or \'xyrb\'' % argName)
+        errors.append('argument %s: invalid value. It must be either \'xywh\' or \'xyrb\'' %
+                      argName)
 
 
 # Validate mandatory args
@@ -54,8 +88,8 @@ def ValidateImageSize(arg, argName, argInformed, errors):
         arg = arg.replace('(', '').replace(')', '')
         args = arg.split(',')
         if len(args) != 2:
-            errors.append(
-                '%s. It must be in the format \'width,height\' (e.g. \'600,400\')' % errorMsg)
+            errors.append('%s. It must be in the format \'width,height\' (e.g. \'600,400\')' %
+                          errorMsg)
         else:
             if not args[0].isdigit() or not args[1].isdigit():
                 errors.append(
@@ -127,17 +161,16 @@ def getBoundingBoxes(directory,
                 y = float(splitLine[2])
                 w = float(splitLine[3])
                 h = float(splitLine[4])
-                bb = BoundingBox(
-                    nameOfImage,
-                    idClass,
-                    x,
-                    y,
-                    w,
-                    h,
-                    coordType,
-                    imgSize,
-                    BBType.GroundTruth,
-                    format=bbFormat)
+                bb = BoundingBox(nameOfImage,
+                                 idClass,
+                                 x,
+                                 y,
+                                 w,
+                                 h,
+                                 coordType,
+                                 imgSize,
+                                 BBType.GroundTruth,
+                                 format=bbFormat)
             else:
                 # idClass = int(splitLine[0]) #class
                 idClass = (splitLine[0])  # class
@@ -146,18 +179,17 @@ def getBoundingBoxes(directory,
                 y = float(splitLine[3])
                 w = float(splitLine[4])
                 h = float(splitLine[5])
-                bb = BoundingBox(
-                    nameOfImage,
-                    idClass,
-                    x,
-                    y,
-                    w,
-                    h,
-                    coordType,
-                    imgSize,
-                    BBType.Detected,
-                    confidence,
-                    format=bbFormat)
+                bb = BoundingBox(nameOfImage,
+                                 idClass,
+                                 x,
+                                 y,
+                                 w,
+                                 h,
+                                 coordType,
+                                 imgSize,
+                                 BBType.Detected,
+                                 confidence,
+                                 format=bbFormat)
             allBoundingBoxes.addBoundingBox(bb)
             if idClass not in allClasses:
                 allClasses.append(idClass)
@@ -168,84 +200,83 @@ def getBoundingBoxes(directory,
 # Get current path to set default folders
 currentPath = os.path.dirname(os.path.abspath(__file__))
 
-VERSION = '0.1 (beta)'
+VERSION = '0.2 (beta)'
+
+with open('message.txt', 'r') as f:
+    message = f'\n\n{f.read()}\n\n'
+
+print(message)
 
 parser = argparse.ArgumentParser(
     prog='Object Detection Metrics - Pascal VOC',
-    description='This project applies the most popular metrics used to evaluate object detection '
+    description=
+    f'{message}\nThis project applies the most popular metrics used to evaluate object detection '
     'algorithms.\nThe current implemention runs the Pascal VOC metrics.\nFor further references, '
     'please check:\nhttps://github.com/rafaelpadilla/Object-Detection-Metrics',
     epilog="Developed by: Rafael Padilla (rafael.padilla@smt.ufrj.br)")
-# formatter_class=RawTextHelpFormatter)
 parser.add_argument('-v', '--version', action='version', version='%(prog)s ' + VERSION)
 # Positional arguments
 # Mandatory
-parser.add_argument(
-    '-gt',
-    '--gtfolder',
-    dest='gtFolder',
-    default=os.path.join(currentPath, 'groundtruths'),
-    metavar='',
-    help='folder containing your ground truth bounding boxes')
-parser.add_argument(
-    '-det',
-    '--detfolder',
-    dest='detFolder',
-    default=os.path.join(currentPath, 'detections'),
-    metavar='',
-    help='folder containing your detected bounding boxes')
+parser.add_argument('-gt',
+                    '--gtfolder',
+                    dest='gtFolder',
+                    default=os.path.join(currentPath, 'groundtruths'),
+                    metavar='',
+                    help='folder containing your ground truth bounding boxes')
+parser.add_argument('-det',
+                    '--detfolder',
+                    dest='detFolder',
+                    default=os.path.join(currentPath, 'detections'),
+                    metavar='',
+                    help='folder containing your detected bounding boxes')
 # Optional
-parser.add_argument(
-    '-t',
-    '--threshold',
-    dest='iouThreshold',
-    type=float,
-    default=0.5,
-    metavar='',
-    help='IOU threshold. Default 0.5')
-parser.add_argument(
-    '-gtformat',
-    dest='gtFormat',
-    metavar='',
-    default='xywh',
-    help='format of the coordinates of the ground truth bounding boxes: '
-    '(\'xywh\': <left> <top> <width> <height>)'
-    ' or (\'xyrb\': <left> <top> <right> <bottom>)')
-parser.add_argument(
-    '-detformat',
-    dest='detFormat',
-    metavar='',
-    default='xywh',
-    help='format of the coordinates of the detected bounding boxes '
-    '(\'xywh\': <left> <top> <width> <height>) '
-    'or (\'xyrb\': <left> <top> <right> <bottom>)')
-parser.add_argument(
-    '-gtcoords',
-    dest='gtCoordinates',
-    default='abs',
-    metavar='',
-    help='reference of the ground truth bounding box coordinates: absolute '
-    'values (\'abs\') or relative to its image size (\'rel\')')
-parser.add_argument(
-    '-detcoords',
-    default='abs',
-    dest='detCoordinates',
-    metavar='',
-    help='reference of the ground truth bounding box coordinates: '
-    'absolute values (\'abs\') or relative to its image size (\'rel\')')
-parser.add_argument(
-    '-imgsize',
-    dest='imgSize',
-    metavar='',
-    help='image size. Required if -gtcoords or -detcoords are \'rel\'')
-parser.add_argument(
-    '-sp', '--savepath', dest='savePath', metavar='', help='folder where the plots are saved')
-parser.add_argument(
-    '-np',
-    '--noplot',
-    dest='showPlot',
-    action='store_false',
-    help='no plot is shown during execution')
+parser.add_argument('-t',
+                    '--threshold',
+                    dest='iouThreshold',
+                    type=float,
+                    default=0.5,
+                    metavar='',
+                    help='IOU threshold. Default 0.5')
+parser.add_argument('-gtformat',
+                    dest='gtFormat',
+                    metavar='',
+                    default='xywh',
+                    help='format of the coordinates of the ground truth bounding boxes: '
+                    '(\'xywh\': <left> <top> <width> <height>)'
+                    ' or (\'xyrb\': <left> <top> <right> <bottom>)')
+parser.add_argument('-detformat',
+                    dest='detFormat',
+                    metavar='',
+                    default='xywh',
+                    help='format of the coordinates of the detected bounding boxes '
+                    '(\'xywh\': <left> <top> <width> <height>) '
+                    'or (\'xyrb\': <left> <top> <right> <bottom>)')
+parser.add_argument('-gtcoords',
+                    dest='gtCoordinates',
+                    default='abs',
+                    metavar='',
+                    help='reference of the ground truth bounding box coordinates: absolute '
+                    'values (\'abs\') or relative to its image size (\'rel\')')
+parser.add_argument('-detcoords',
+                    default='abs',
+                    dest='detCoordinates',
+                    metavar='',
+                    help='reference of the ground truth bounding box coordinates: '
+                    'absolute values (\'abs\') or relative to its image size (\'rel\')')
+parser.add_argument('-imgsize',
+                    dest='imgSize',
+                    metavar='',
+                    help='image size. Required if -gtcoords or -detcoords are \'rel\'')
+parser.add_argument('-sp',
+                    '--savepath',
+                    dest='savePath',
+                    metavar='',
+                    help='folder where the plots are saved')
+parser.add_argument('-np',
+                    '--noplot',
+                    dest='showPlot',
+                    action='store_false',
+                    help='no plot is shown during execution')
 args = parser.parse_args()
 
 iouThreshold = args.iouThreshold
@@ -293,7 +324,7 @@ if len(errors) != 0:
     sys.exit()
 
 # Check if path to save results already exists and is not empty
-if os.path.isdir(savePath) and os.listdir(savePath) :
+if os.path.isdir(savePath) and os.listdir(savePath):
     key_pressed = ''
     while key_pressed.upper() not in ['Y', 'N']:
         print(f'Folder {savePath} already exists and may contain important results.\n')
@@ -322,11 +353,19 @@ showPlot = args.showPlot
 # print('showPlot %s' % showPlot)
 
 # Get groundtruth boxes
-allBoundingBoxes, allClasses = getBoundingBoxes(
-    gtFolder, True, gtFormat, gtCoordType, imgSize=imgSize)
+allBoundingBoxes, allClasses = getBoundingBoxes(gtFolder,
+                                                True,
+                                                gtFormat,
+                                                gtCoordType,
+                                                imgSize=imgSize)
 # Get detected boxes
-allBoundingBoxes, allClasses = getBoundingBoxes(
-    detFolder, False, detFormat, detCoordType, allBoundingBoxes, allClasses, imgSize=imgSize)
+allBoundingBoxes, allClasses = getBoundingBoxes(detFolder,
+                                                False,
+                                                detFormat,
+                                                detCoordType,
+                                                allBoundingBoxes,
+                                                allClasses,
+                                                imgSize=imgSize)
 allClasses.sort()
 
 evaluator = Evaluator()

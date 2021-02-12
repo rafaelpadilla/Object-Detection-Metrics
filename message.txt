@@ -1,0 +1,23 @@
+####################################################################################################
+#                                                                                                  #
+# THE CURRENT VERSION WAS UPDATED WITH A VISUAL INTERFACE, INCLUDING MORE METRICS AND SUPPORTING   #
+# OTHER FILE FORMATS.                                                                              #
+#                                                                                                  #
+# PLEASE ACCESS IT ACCESSED AT:                                                                    #
+# https://github.com/rafaelpadilla/review_object_detection_metrics                                 #
+#                                                                                                  #
+# @Article{electronics10030279,                                                                    #
+#     author         = {Padilla, Rafael and Passos, Wesley L. and Dias, Thadeu L. B. and Netto,    #
+#                       Sergio L. and da Silva, Eduardo A. B.},                                    #
+#     title          = {A Comparative Analysis of Object Detection Metrics with a Companion        #
+#                       Open-Source Toolkit},                                                      #
+#     journal        = {Electronics},                                                              #
+#     volume         = {10},                                                                       #
+#     year           = {2021},                                                                     #
+#     number         = {3},                                                                        #
+#     article-number = {279},                                                                      #
+#     url            = {https://www.mdpi.com/2079-9292/10/3/279},                                  #
+#     issn           = {2079-9292},                                                                #
+#     doi            = {10.3390/electronics10030279}, }                                            #
+#                                                                                                  #
+####################################################################################################
