@@ -82,24 +82,27 @@ class Evaluator:
             # Get only detection of class c
             dects = []
             [dects.append(d) for d in detections if d[1] == c]
-            # Get only ground truths of class c
-            gts = []
-            [gts.append(g) for g in groundTruths if g[1] == c]
-            npos = len(gts)
+            # Get only ground truths of class c, use filename as key
+            gts = {}
+            npos = 0
+            for g in groundTruths:
+                if g[1] == c:
+                    npos += 1
+                    gts[g[0]] = gts.get(g[0], []) + [g]
+
             # sort detections by decreasing confidence
             dects = sorted(dects, key=lambda conf: conf[2], reverse=True)
             TP = np.zeros(len(dects))
             FP = np.zeros(len(dects))
             # create dictionary with amount of gts for each image
-            det = Counter([cc[0] for cc in gts])
-            for key, val in det.items():
-                det[key] = np.zeros(val)
+            det = {key: np.zeros(len(gts[key])) for key in gts}
+
             # print("Evaluating class: %s (%d detections)" % (str(c), len(dects)))
             # Loop through detections
             for d in range(len(dects)):
                 # print('dect %s => %s' % (dects[d][0], dects[d][3],))
                 # Find ground truth image
-                gt = [gt for gt in gts if gt[0] == dects[d][0]]
+                gt = gts[dects[d][0]] if dects[d][0] in gts else []
                 iouMax = sys.float_info.min
                 for j in range(len(gt)):
                     # print('Ground truth gt => %s' % (gt[j][3],))
@@ -302,7 +305,7 @@ class Evaluator:
             mpre[i - 1] = max(mpre[i - 1], mpre[i])
         ii = []
         for i in range(len(mrec) - 1):
-            if mrec[1:][i] != mrec[0:-1][i]:
+            if mrec[1+i] != mrec[i]:
                 ii.append(i + 1)
         ap = 0
         for i in ii:
