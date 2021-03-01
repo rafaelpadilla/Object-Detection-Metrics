@@ -11,7 +11,25 @@
 
 
 ## Citation
-This work was presented at IWSSIP 2020. If you use this code for your research, please consider citing:
+
+If you use this code for your research, please consider citing:
+
+``` 
+@Article{electronics10030279,
+AUTHOR = {Padilla, Rafael and Passos, Wesley L. and Dias, Thadeu L. B. and Netto, Sergio L. and da Silva, Eduardo A. B.},
+TITLE = {A Comparative Analysis of Object Detection Metrics with a Companion Open-Source Toolkit},
+JOURNAL = {Electronics},
+VOLUME = {10},
+YEAR = {2021},
+NUMBER = {3},
+ARTICLE-NUMBER = {279},
+URL = {https://www.mdpi.com/2079-9292/10/3/279},
+ISSN = {2079-9292},
+DOI = {10.3390/electronics10030279}
+}
+```
+Download the paper [here](https://github.com/rafaelpadilla/review_object_detection_metrics/blob/main/published_paper.pdf).
+
 ```
 @INPROCEEDINGS {padillaCITE2020,
     author    = {R. {Padilla} and S. L. {Netto} and E. A. B. {da Silva}},
