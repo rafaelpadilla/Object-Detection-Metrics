@@ -28,7 +28,7 @@ ISSN = {2079-9292},
 DOI = {10.3390/electronics10030279}
 }
 ```
-Download the paper [here](https://github.com/rafaelpadilla/review_object_detection_metrics/blob/main/published_paper.pdf).
+Download the paper [here](https://www.mdpi.com/2079-9292/10/3/279/pdf) or [here](https://github.com/rafaelpadilla/review_object_detection_metrics/blob/main/published_paper.pdf).
 
 ```
 @INPROCEEDINGS {padillaCITE2020,
@@ -42,14 +42,8 @@ Download the paper [here](https://github.com/rafaelpadilla/Object-Detection-Metr
 
 -----------------
 
-<h2>
-
-```diff
-- Attention: A new version of this tool has been published!
-```
-</h2>
-
-**You can access the new version [here](https://github.com/rafaelpadilla/review_object_detection_metrics)**.
+Attention! A new version of this tool is available [here](https://github.com/rafaelpadilla/review_object_detection_metrics)
+=======
 
 The new version includes **all COCO metrics**, supports **other file formats**, provides a **User Interface (UI)** to guide the evaluation process, and presents the **STT-AP metric** to evaluate object detection in videos. 
 
