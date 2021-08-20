@@ -138,8 +138,8 @@ class BoundingBox:
            det1BB[1] == det2BB[1] and \
            det1BB[2] == det2BB[2] and \
            det1BB[3] == det2BB[3] and \
-           det1ImgSize[0] == det1ImgSize[0] and \
-           det2ImgSize[1] == det2ImgSize[1]:
+           det1ImgSize[0] == det2ImgSize[0] and \
+           det1ImgSize[1] == det2ImgSize[1]:
             return True
         return False
 
@@ -147,16 +147,15 @@ class BoundingBox:
     def clone(boundingBox):
         absBB = boundingBox.getAbsoluteBoundingBox(format=BBFormat.XYWH)
         # return (self._x,self._y,self._x2,self._y2)
-        newBoundingBox = BoundingBox(
-            boundingBox.getImageName(),
-            boundingBox.getClassId(),
-            absBB[0],
-            absBB[1],
-            absBB[2],
-            absBB[3],
-            typeCoordinates=boundingBox.getCoordinatesType(),
-            imgSize=boundingBox.getImageSize(),
-            bbType=boundingBox.getBBType(),
-            classConfidence=boundingBox.getConfidence(),
-            format=BBFormat.XYWH)
+        newBoundingBox = BoundingBox(boundingBox.getImageName(),
+                                     boundingBox.getClassId(),
+                                     absBB[0],
+                                     absBB[1],
+                                     absBB[2],
+                                     absBB[3],
+                                     typeCoordinates=boundingBox.getCoordinatesType(),
+                                     imgSize=boundingBox.getImageSize(),
+                                     bbType=boundingBox.getBBType(),
+                                     classConfidence=boundingBox.getConfidence(),
+                                     format=BBFormat.XYWH)
         return newBoundingBox
