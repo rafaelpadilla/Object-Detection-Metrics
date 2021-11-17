@@ -113,7 +113,7 @@ Some basic concepts used by the metrics:
 * **True Positive (TP)**: A correct detection. Detection with IOU ≥ _threshold_  
 * **False Positive (FP)**: A wrong detection. Detection with IOU < _threshold_  
 * **False Negative (FN)**: A ground truth not detected  
-* **True Negative (TN)**: Does not apply. It would represent a corrected misdetection. In the object detection task there are many possible bounding boxes that should not be detected within an image. Thus, TN would be all possible bounding boxes that were corrrectly not detected (so many possible boxes within an image). That's why it is not used by the metrics.
+* **True Negative (TN)**: Does not apply. It would represent a corrected misdetection. In the object detection task there are many possible bounding boxes that should not be detected within an image. Thus, TN would be all possible bounding boxes that were correctly not detected (so many possible boxes within an image). That's why it is not used by the metrics.
 
 _threshold_: depending on the metric, it is usually set to 50%, 75% or 95%.
 
