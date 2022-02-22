@@ -56,7 +56,7 @@ from BoundingBox import BoundingBox
 from BoundingBoxes import BoundingBoxes
 from Evaluator import *
 from utils import BBFormat
-
+from pathlib import Path
 
 # Validate formats
 def ValidateFormats(argFormat, argName, errors):
@@ -136,8 +136,7 @@ def getBoundingBoxes(directory,
     if allClasses is None:
         allClasses = []
     # Read ground truths
-    os.chdir(directory)
-    files = glob.glob("*.txt")
+    files = glob.glob(os.path.join(directory, "*.txt"))
     files.sort()
     # Read GT detections from txt file
     # Each line of the files in the groundtruths folder represents a ground truth bounding box
@@ -147,7 +146,7 @@ def getBoundingBoxes(directory,
     # x, y represents the most top-left coordinates of the bounding box
     # x2, y2 represents the most bottom-right coordinates of the bounding box
     for f in files:
-        nameOfImage = f.replace(".txt", "")
+        nameOfImage = Path(f).stem
         fh1 = open(f, "r")
         for line in fh1:
             line = line.replace("\n", "")
