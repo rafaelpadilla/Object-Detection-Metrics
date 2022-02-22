@@ -51,11 +51,10 @@ import os
 import shutil
 import sys
 
-import _init_paths
-from BoundingBox import BoundingBox
-from BoundingBoxes import BoundingBoxes
-from Evaluator import *
-from utils import BBFormat
+from lib.BoundingBox import BoundingBox
+from lib.BoundingBoxes import BoundingBoxes
+from lib.Evaluator import *
+from lib.utils import BBFormat
 
 
 # Validate formats
