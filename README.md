@@ -12,7 +12,7 @@
 
 ## Citation
 
-If you use this code for your research, please consider citing:
+If you use this code for your research, please consider citing this source:
 
 ``` 
 @Article{electronics10030279,
