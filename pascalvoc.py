@@ -398,6 +398,8 @@ for metricsPerClass in detections:
     totalPositives = metricsPerClass['total positives']
     total_TP = metricsPerClass['total TP']
     total_FP = metricsPerClass['total FP']
+    #total_recall = (total number of True Positive detections) / (total number of ground truth positives) 
+    total_recall = total_TP / totalPositives 
 
     if totalPositives > 0:
         validClasses = validClasses + 1
@@ -409,6 +411,8 @@ for metricsPerClass in detections:
         print('AP: %s (%s)' % (ap_str, cl))
         f.write('\n\nClass: %s' % cl)
         f.write('\nAP: %s' % ap_str)
+        #total_recall = (total number of True Positive detections) / (total number of ground truth positives)
+        f.write('\nOverall recall(sensetivity): %.2f' % total_recall)
         f.write('\nPrecision: %s' % prec)
         f.write('\nRecall: %s' % rec)
 
